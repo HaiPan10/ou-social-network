@@ -17,8 +17,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
+// import jakarta.validation.constraints.Email;
+// import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -40,13 +40,13 @@ public class Account implements Serializable {
     @Column(name = "id")
     private Integer id;
 
-    @NotBlank(message = "Email must not be blank")
-    @Email(message = "Please provide a valid email address")
+    // @NotBlank(message = "Email must not be blank")
+    // @Email(message = "Please provide a valid email address")
     @Size(min = 1, max = 45, message = "Email must be between 1 and 45 characters")
     @Column(name = "email")
     private String email;
 
-    @NotBlank(message = "password must not be blank")
+    // @NotBlank(message = "password must not be blank")
     @Size(min = 1, max = 45, message = "Password must be between 1 and 45 characters")
     @Column(name = "password")
     private String password;
