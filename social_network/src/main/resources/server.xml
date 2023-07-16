@@ -162,7 +162,7 @@
             unpackWARs="true" autoDeploy="false"
             deployOnStartup="false">
 
-            <Context path="" docBase="webapp"></Context>
+            <Context path="" docBase="social_network"></Context>
 
         <!-- SingleSignOn valve, share authentication between web applications
              Documentation at: /docs/config/valve.html -->
