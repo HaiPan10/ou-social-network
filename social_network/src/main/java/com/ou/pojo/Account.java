@@ -41,14 +41,14 @@ public class Account implements Serializable {
     @Column(name = "id")
     private Integer id;
 
-    @NotBlank(message = "Email must not be blank")
-    @Email(message = "Please provide a valid email address")
-    @Size(min = 1, max = 45, message = "Email must be between 1 and 45 characters")
+    @NotBlank(message = "{account.email.notBlank}")
+    @Email(message = "{account.email.invalid}")
+    @Size(min = 1, max = 45, message = "{account.email.invalidSize}")
     @Column(name = "email")
     private String email;
 
-    @NotBlank(message = "password must not be blank")
-    @Size(min = 1, max = 45, message = "Password must be between 1 and 45 characters")
+    @NotBlank(message = "{account.password.notBlank}")
+    @Size(min = 1, max = 45, message = "{account.password.invalidSize}")
     @Column(name = "password")
     private String password;
 

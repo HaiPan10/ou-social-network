@@ -40,15 +40,15 @@ public class User implements Serializable {
     @Column(name = "id")
     private Integer id;
 
-    @NotBlank(message = "first name could not be blank")
+    @NotBlank(message = "{user.firstName.notBlank}")
     @NotNull
-    @Size(min = 1, max = 45, message = "first name could be from 1 to 45 characters")
+    @Size(min = 1, max = 45, message = "{user.firstName.invalidSize}")
     @Column(name = "first_name")
     private String firstName;
 
-    @NotBlank(message = "last name could not be blank")
+    @NotBlank(message = "{user.lastName.notBlank}")
     @NotNull
-    @Size(min = 1, max = 45, message = "last name could be from 1 to 45 characters")
+    @Size(min = 1, max = 45, message = "{user.lastName.invalidSize}")
     @Column(name = "last_name")
     private String lastName;
 

@@ -1,5 +1,7 @@
 package com.ou.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,11 @@ public class AccountServiceImpl implements AccountService{
     @Override
     public Account getAccountById(Long id) {
         return accountRepository.getAccountById(id);
+    }
+
+    @Override
+    public List<Account> getAccounts() {
+        return accountRepository.getAccounts();
     }
     
 }

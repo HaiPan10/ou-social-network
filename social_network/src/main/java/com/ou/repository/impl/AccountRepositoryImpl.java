@@ -37,5 +37,16 @@ public class AccountRepositoryImpl implements AccountRepository{
         Query query = session.createQuery(criteriaQuery);
         return (Account) query.getSingleResult();
     }
-    
+
+    @Override
+    public List<Account> getAccounts() {
+        Session session = sessionFactoryBean.getObject().openSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Account> criteriaQuery = builder.createQuery(Account.class);
+        Root<Account> root = criteriaQuery.from(Account.class);
+        criteriaQuery.select(root);
+
+        Query query = session.createQuery(criteriaQuery);
+        return query.getResultList();
+    }
 }

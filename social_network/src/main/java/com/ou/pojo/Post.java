@@ -40,8 +40,8 @@ public class Post implements Serializable {
     @Column(name = "id")
     private Integer id;
 
-    @NotNull(message = "content should not be null")
-    @Size(max = 255, message = "content should be less than 255 characters")
+    @NotNull(message = "{post.content.notNull}")
+    @Size(max = 255, message = "{post.content.invalidSize}")
     @Column(name = "content")
     private String content;
 

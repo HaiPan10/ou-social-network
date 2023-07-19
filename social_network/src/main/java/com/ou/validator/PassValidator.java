@@ -23,6 +23,7 @@ public class PassValidator implements Validator{
         Account account = (Account) target;
         if(!account.getPassword().equals(account.getConfirmPassword())){
             errors.rejectValue("password", "user.password.error.notMatchMsg");
+            
         }
     }
     
