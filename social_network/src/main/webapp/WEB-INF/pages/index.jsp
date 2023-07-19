@@ -9,5 +9,7 @@
     <body>
         <h1>Hello world</h1>
         <h1>aaa</h1>
+        <h1>${msg}</h1>
+        <h1>${account.id} - ${account.email} - ${account.roleId.id}</h1>
     </body>
 </html>
