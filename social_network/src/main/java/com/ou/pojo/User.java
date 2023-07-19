@@ -85,6 +85,10 @@ public class User implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Collection<CommentReaction> commentReactionCollection;
 
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
+    private UserStudent userStudent;
+
     public User(Integer id, String firstName, String lastName) {
         this.id = id;
         this.firstName = firstName;
