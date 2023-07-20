@@ -15,10 +15,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -46,10 +47,13 @@ public class Account implements Serializable {
     @Column(name = "email")
     private String email;
 
-    @NotBlank(message = "password must not be blank")
+    @NotBlank(message = "Password must not be blank")
     @Size(min = 1, max = 45, message = "Password must be between 1 and 45 characters")
     @Column(name = "password")
     private String password;
+
+    @Transient
+    private String confirmPassword;
 
     @Column(name = "created_date")
     @Temporal(TemporalType.TIMESTAMP)

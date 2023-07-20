@@ -11,6 +11,7 @@
     <class>com.ou.pojo.PostReaction</class>
     <class>com.ou.pojo.Account</class>
     <class>com.ou.pojo.ImageInPost</class>
+    <class>com.ou.pojo.UserStudent</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://34.101.138.124:3306/ou-social-network?zeroDateTimeBehavior=CONVERT_TO_NULL"/>

@@ -15,12 +15,12 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -40,15 +40,15 @@ public class User implements Serializable {
     @Column(name = "id")
     private Integer id;
 
-    @NotBlank(message = "first name could not be blank")
+    @NotBlank(message = "First name could not be blank")
     @NotNull
-    @Size(min = 1, max = 45, message = "first name could be from 1 to 45 characters")
+    @Size(min = 1, max = 45, message = "First name could be from 1 to 45 characters")
     @Column(name = "first_name")
     private String firstName;
 
-    @NotBlank(message = "last name could not be blank")
+    @NotBlank(message = "Last name could not be blank")
     @NotNull
-    @Size(min = 1, max = 45, message = "last name could be from 1 to 45 characters")
+    @Size(min = 1, max = 45, message = "Last name could be from 1 to 45 characters")
     @Column(name = "last_name")
     private String lastName;
 
@@ -86,8 +86,12 @@ public class User implements Serializable {
     private Collection<CommentReaction> commentReactionCollection;
 
     @JsonIgnore
+<<<<<<< HEAD
     @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
     @OneToOne(optional = false)
+=======
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
+>>>>>>> 641bc84320599c5d54f40ef10ac9ef030e2392f1
     private UserStudent userStudent;
 
     public User(Integer id, String firstName, String lastName) {
