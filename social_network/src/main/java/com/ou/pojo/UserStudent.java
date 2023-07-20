@@ -28,9 +28,9 @@ public class UserStudent implements Serializable{
     @Column(name = "id")
     private Integer id;
 
-    @NotBlank(message = "{userStudent.studentIdentical.notBlank}")
+    @NotBlank(message = "Student identical must not be blank")
     @NotNull
-    @Size(min = 10, max = 10, message = "{userStudent.studentIdentical.invalid}")
+    @Size(min = 10, max = 10, message = "Invalid student identical")
     @Column(name = "student_identical")
     private String studentIdentical;
 
