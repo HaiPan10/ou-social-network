@@ -20,7 +20,8 @@ import com.cloudinary.utils.ObjectUtils;
 @ComponentScan(basePackages = {
     "com.ou.controller",
     "com.ou.repository",
-    "com.ou.service"
+    "com.ou.service",
+    "com.ou.api",
 })
 @PropertySource("classpath:configs.properties")
 public class WebApplicationContextConfig implements WebMvcConfigurer{

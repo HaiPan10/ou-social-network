@@ -1,7 +1,6 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Login } from "./pages/login/Login";
 import { Register } from "./pages/register/Register";
-import { Header } from "./Header";
 import { AuthenBackground } from "./components/authenBackground/AuthenBackground";
 import { Home } from "./pages/home/Home";
 

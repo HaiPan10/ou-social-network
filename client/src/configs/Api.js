@@ -1,7 +1,7 @@
 import axios from "axios";
 
-export let endpoints = {
-    'account': '/account/'
+export const endpoints = {
+    "signin": "/api/account/signin",
 }
 
 export default axios.create({
