@@ -1,11 +1,20 @@
 package com.ou.configs;
 
+import org.springframework.validation.Validator;
+
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
+import org.springframework.format.FormatterRegistry;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -14,18 +23,20 @@ import org.springframework.web.servlet.view.JstlView;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.ou.validator.PassValidator;
+import com.ou.validator.WebAppValidator;
 
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = {
-    "com.ou.controller",
-    "com.ou.repository",
-    "com.ou.service",
-    "com.ou.validator",
-    "com.ou.api"
+        "com.ou.controller",
+        "com.ou.repository",
+        "com.ou.service",
+        "com.ou.validator",
+        "com.ou.api"
 })
 @PropertySource("classpath:configs.properties")
-public class WebApplicationContextConfig implements WebMvcConfigurer{
+public class WebApplicationContextConfig implements WebMvcConfigurer {
     @Autowired
     private Environment environment;
 
@@ -45,12 +56,51 @@ public class WebApplicationContextConfig implements WebMvcConfigurer{
     }
 
     @Bean
-    public Cloudinary getCloudinary(){
+    public Cloudinary getCloudinary() {
         return new Cloudinary(ObjectUtils.asMap(
-            "cloud_name", environment.getProperty("CLOUDINARY_CLOUD_NAME"),
-            "api_key", environment.getProperty("CLOUDINARY_API_KEY"),
-            "api_secret", environment.getProperty("CLOUDINARY_API_SECRET"),
-            "secure", true
-        ));
+                "cloud_name", environment.getProperty("CLOUDINARY_CLOUD_NAME"),
+                "api_key", environment.getProperty("CLOUDINARY_API_KEY"),
+                "api_secret", environment.getProperty("CLOUDINARY_API_SECRET"),
+                "secure", true));
     }
+
+    @Bean(name = "validator")
+    public LocalValidatorFactoryBean validator() {
+        LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
+        bean.setValidationMessageSource(messageSource());
+        return bean;
+    }
+
+    @Override
+    public Validator getValidator() {
+        return validator();
+    }
+
+    @Bean
+    public MessageSource messageSource() {
+        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        messageSource.setBasename("classpath:messages.properties");
+        messageSource.setDefaultEncoding("UTF-8");
+        return messageSource;
+    }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        // registry.addFormatter(new CategoryFormatter());
+        // In case of needed to format fields of pojo
+        // create new class and
+        // implements the Formatter<T> interface
+        // might not necessary
+    }
+
+    @Bean
+    public WebAppValidator getWebAppValidator(){
+        Set<Validator> springValidators = new HashSet<>();
+        springValidators.add(new PassValidator());
+
+        WebAppValidator webAppValidator = new WebAppValidator();
+        webAppValidator.setSpringValidators(springValidators);
+        return webAppValidator;
+    }
+
 }
