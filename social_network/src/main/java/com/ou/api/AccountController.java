@@ -5,6 +5,8 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,11 +35,18 @@ public class AccountController {
     }
     
     @PostMapping(path = "/register")
-    public Account register(@RequestBody @Valid Account account, BindingResult result) {
-        System.out.println("This is user request:" + account);
+    public ResponseEntity<Account> register(@RequestBody @Valid Account account,
+    BindingResult result) throws Exception {
         passValidator.validate(account, result);
-         Account acc = accountService.create(account);
-        System.out.println("This is saved account: " + acc);
-        return acc;
+        if(result.hasErrors()){
+            return new ResponseEntity<>(
+                account,
+                HttpStatus.BAD_REQUEST
+            );
+        }
+        return new ResponseEntity<>( 
+            accountService.create(account),
+            HttpStatus.CREATED
+        );        
     }
 }
