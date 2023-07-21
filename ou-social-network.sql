@@ -1,0 +1,168 @@
+DROP DATABASE IF EXISTS `ou-social-network`;
+CREATE DATABASE `ou-social-network`;
+USE `ou-social-network`;
+
+DROP TABLE IF EXISTS `ou-social-network`.`role`;
+CREATE TABLE `role` (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name VARCHAR(45) NOT NULL,
+    
+    PRIMARY KEY (id)
+    
+)   ENGINE=INNODB;
+
+DROP TABLE IF EXISTS `ou-social-network`.`account`;
+CREATE TABLE `account` (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    email VARCHAR(45) NOT NULL UNIQUE,
+    password VARCHAR(45) NOT NULL,
+    created_date DATETIME,
+    status ENUM('LOCKED', 'ACTIVE', 'PENDING') DEFAULT 'ACTIVE',
+    role_id INT UNSIGNED NOT NULL,
+    
+    PRIMARY KEY (id),
+    INDEX (role_id),
+    FOREIGN KEY (role_id)
+        REFERENCES role(id)
+        ON DELETE CASCADE
+    
+)   ENGINE=INNODB;
+
+DROP TABLE IF EXISTS `ou-social-network`.`user`;
+CREATE TABLE `user` (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    first_name VARCHAR(45) NOT NULL,
+    last_name VARCHAR(45) NOT NULL,
+    dob DATETIME,
+    avatar VARCHAR(300),
+    cover_avatar VARCHAR(300),
+
+    PRIMARY KEY (id),
+    FOREIGN KEY (id)
+		REFERENCES account(id)
+        ON DELETE CASCADE
+    
+)   ENGINE=INNODB;
+
+DROP TABLE IF EXISTS `ou-social-network`.`user_student`;
+CREATE TABLE `user_student` (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    student_identical VARCHAR(10) NOT NULL UNIQUE,
+
+    PRIMARY KEY (id),
+    FOREIGN KEY (id)
+		REFERENCES user(id)
+        ON DELETE CASCADE
+    
+)   ENGINE=INNODB;
+
+DROP TABLE IF EXISTS `ou-social-network`.`post`;
+CREATE TABLE `post` (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    content VARCHAR(255),
+    created_at DATETIME,
+    updated_at DATETIME,
+    is_active_comment BOOLEAN DEFAULT true,
+    user_id INT UNSIGNED NOT NULL,
+
+    PRIMARY KEY (id),
+    INDEX (user_id),
+    FOREIGN KEY (user_id)
+		REFERENCES user(id)
+        ON DELETE CASCADE
+    
+)   ENGINE=INNODB;
+
+DROP TABLE IF EXISTS `ou-social-network`.`image_in_post`;
+CREATE TABLE `image_in_post` (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    image_url VARCHAR(300),
+    created_at DATETIME,
+    updated_at DATETIME,
+    post_id INT UNSIGNED NOT NULL,
+
+    PRIMARY KEY (id),
+	INDEX (post_id),
+    FOREIGN KEY (post_id)
+		REFERENCES post(id)
+        ON DELETE CASCADE
+    
+)   ENGINE=INNODB;
+
+DROP TABLE IF EXISTS `ou-social-network`.`reaction`;
+CREATE TABLE `reaction` (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name VARCHAR(10) NOT NULL,
+
+    PRIMARY KEY (id)
+    
+)   ENGINE=INNODB;
+
+DROP TABLE IF EXISTS `ou-social-network`.`comment`;
+CREATE TABLE `comment` (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    content VARCHAR(255) NOT NULL,
+    created_at DATETIME,
+    updated_at DATETIME,
+    post_id INT UNSIGNED NOT NULL,
+    user_id INT UNSIGNED NOT NULL,
+
+    PRIMARY KEY (id),
+    INDEX (post_id),
+    INDEX (user_id),
+    FOREIGN KEY (post_id)
+		REFERENCES post(id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (user_id)
+		REFERENCES user(id)
+        ON DELETE CASCADE
+    
+)   ENGINE=INNODB;
+
+DROP TABLE IF EXISTS `ou-social-network`.`post_reaction`;
+CREATE TABLE `post_reaction` (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    created_at DATETIME,
+    post_id INT UNSIGNED NOT NULL,
+    user_id INT UNSIGNED NOT NULL,
+    reaction_id INT UNSIGNED NOT NULL,
+
+    PRIMARY KEY (id),
+    INDEX (post_id),
+    INDEX (user_id),
+    INDEX (reaction_id),
+    FOREIGN KEY (post_id)
+		REFERENCES post(id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (user_id)
+		REFERENCES user(id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (reaction_id)
+		REFERENCES reaction(id)
+        ON DELETE CASCADE
+    
+)   ENGINE=INNODB;
+
+DROP TABLE IF EXISTS `ou-social-network`.`comment_reaction`;
+CREATE TABLE `comment_reaction` (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    created_at DATETIME,
+    comment_id INT UNSIGNED NOT NULL,
+    user_id INT UNSIGNED NOT NULL,
+    reaction_id INT UNSIGNED NOT NULL,
+
+    PRIMARY KEY (id),
+    INDEX (comment_id),
+    INDEX (user_id),
+    INDEX (reaction_id),
+    FOREIGN KEY (comment_id)
+		REFERENCES comment(id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (user_id)
+		REFERENCES user(id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (reaction_id)
+		REFERENCES reaction(id)
+        ON DELETE CASCADE
+    
+)   ENGINE=INNODB;
