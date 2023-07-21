@@ -27,8 +27,8 @@ public class AccountServiceImpl implements AccountService{
     private UserService userService;
     @Autowired
     private UserStudentService userStudentService;
-    // @Autowired
-    // private RoleService roleService;
+    @Autowired
+    private RoleService roleService;
 
     @Override
     public Account retrieve(Integer id) {
@@ -54,8 +54,9 @@ public class AccountServiceImpl implements AccountService{
     public Account createPendingAccount(Account account, User user, UserStudent userStudent) throws Exception {
         try {
             // Chỉ có cựu sinh viên mới dùng api này nên role id là 1
-            // Role formerStudentRole = roleService.retrieve(1);
-            // account.setRoleId(formerStudentRole);
+            Role formerStudentRole = roleService.retrieve(1);
+            account.setRoleId(formerStudentRole);
+            account.setStatus("PENDING");
             accountRepository.create(account);
             userService.create(user, account);
             userStudentService.create(userStudent, user);
