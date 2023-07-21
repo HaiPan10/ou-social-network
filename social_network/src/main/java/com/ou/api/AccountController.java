@@ -21,10 +21,11 @@ public class AccountController {
     private AccountService accountService;
     
     @PostMapping(path = "/register")
-    public ResponseEntity<Account> register(@RequestBody Account account) throws Exception {
-        return new ResponseEntity<>( 
-            accountService.create(account),
-            HttpStatus.CREATED
-        );        
+    public ResponseEntity<Object> register(@RequestBody Account account) throws Exception {
+        try {
+            return ResponseEntity.ok(accountService.create(account));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

@@ -53,16 +53,10 @@ public class AccountRepositoryImpl implements AccountRepository{
     }
 
     @Override
-    public Account create(Account account) throws Exception {
+    public Account create(Account account) {
         Session s = this.sessionFactoryBean.getObject().getCurrentSession();
-        System.out.println("FROM REPO");
-        try {
-            account.setId((Integer) s.save(account));
-            return account;
-        } catch (Exception e) {
-            System.out.println("CATCH FROM REPO");
-            throw new Exception("CATCH FROM REPO");
-        }
+        account.setId((Integer) s.save(account));
+        return account;
     }
 
     
