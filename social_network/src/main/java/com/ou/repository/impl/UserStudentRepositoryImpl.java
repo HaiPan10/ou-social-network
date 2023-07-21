@@ -1,10 +1,10 @@
 package com.ou.repository.impl;
 
-import com.ou.repository.UserStudentRepository;
 
 import javax.persistence.Query;
 
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ou.pojo.User;
 import com.ou.pojo.UserStudent;
-import com.ou.repository.UserRepository;
+import com.ou.repository.interfaces.UserStudentRepository;
 
 @Repository
 @Transactional
@@ -28,7 +28,7 @@ public class UserStudentRepositoryImpl implements UserStudentRepository {
     @Override
     public UserStudent create(UserStudent userStudent) {
         Session s = this.factory.getObject().getCurrentSession();
-        return (UserStudent) s.save(userStudent);
+        UserStudent returnUserStudent = (UserStudent) s.save(userStudent);
+        return returnUserStudent;
     }
-    
 }

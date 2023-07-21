@@ -15,6 +15,7 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 
 import com.ou.pojo.Account;
+import com.ou.pojo.UserStudent;
 import com.ou.repository.interfaces.AccountRepository;
 
 @Repository
@@ -49,4 +50,12 @@ public class AccountRepositoryImpl implements AccountRepository{
         Query query = session.createQuery(criteriaQuery);
         return query.getResultList();
     }
+
+    @Override
+    public Account create(Account account) {
+        Session s = this.sessionFactoryBean.getObject().getCurrentSession();
+        return (Account) s.save(account);
+    }
+
+    
 }

@@ -1,7 +1,7 @@
-package com.ou.repository;
+package com.ou.service.interfaces;
 
 import com.ou.pojo.UserStudent;
 
-public interface UserStudentRepository {
+public interface UserStudentService {
     UserStudent create(UserStudent userStudent);
 }

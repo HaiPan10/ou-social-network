@@ -1,4 +1,4 @@
-package com.ou.repository;
+package com.ou.repository.interfaces;
 
 import com.ou.pojo.User;
 

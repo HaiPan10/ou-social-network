@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ou.pojo.User;
-import com.ou.repository.UserRepository;
+import com.ou.repository.interfaces.UserRepository;
 
 @Repository
 @Transactional

@@ -1,4 +1,4 @@
-package com.ou.service;
+package com.ou.service.interfaces;
 
 import com.ou.pojo.User;
 

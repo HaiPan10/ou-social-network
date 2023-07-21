@@ -8,14 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ou.pojo.Account;
-import com.ou.pojo.User;
-import com.ou.pojo.UserStudent;
-import com.ou.repository.UserStudentRepository;
-import com.ou.service.AccountService;
-import com.ou.service.UserStudentService;
+import com.ou.service.interfaces.AccountService;
 
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -23,11 +17,9 @@ import lombok.RequiredArgsConstructor;
 public class AccountController {
     @Autowired
     private AccountService accountService;
-    @Autowired
-    private UserStudentService userStudentService;
-
+    
     @PostMapping(path = "/register")
-    public UserStudent register(@RequestBody UserStudent userStudent) {
-        return userStudentService.create(userStudent);
+    public Account register(@RequestBody Account account) {
+        return accountService.create(account);
     }
 }

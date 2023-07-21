@@ -86,17 +86,12 @@ public class User implements Serializable {
     private Collection<CommentReaction> commentReactionCollection;
 
     @JsonIgnore
-<<<<<<< HEAD
-    @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
-    @OneToOne(optional = false)
-=======
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
->>>>>>> 641bc84320599c5d54f40ef10ac9ef030e2392f1
     private UserStudent userStudent;
 
-    public User(Integer id, String firstName, String lastName) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
+    // public User(Integer id, String firstName, String lastName) {
+    //     this.id = id;
+    //     this.firstName = firstName;
+    //     this.lastName = lastName;
+    // }
 }
