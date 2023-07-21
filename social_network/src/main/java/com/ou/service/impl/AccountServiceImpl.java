@@ -1,8 +1,12 @@
 package com.ou.service.impl;
 
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
+import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.ou.pojo.Account;
@@ -25,9 +29,14 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
-    public Account create(Account account) {
-        System.out.printf("DEBUG FROM SERVICE: %s\n", account.toString());
-        return accountRepository.create(account);
+    public Account create(Account account) throws Exception {
+        try {
+            System.out.println("CREATE");
+            return accountRepository.create(account);
+        } catch (Exception e) {
+            System.out.println("CATCH");
+            throw new Exception("Catch");
+        }
     }
     
 }

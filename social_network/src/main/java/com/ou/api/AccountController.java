@@ -1,6 +1,8 @@
 package com.ou.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +21,10 @@ public class AccountController {
     private AccountService accountService;
     
     @PostMapping(path = "/register")
-    public Account register(@RequestBody Account account) {
-        return accountService.create(account);
+    public ResponseEntity<Account> register(@RequestBody Account account) throws Exception {
+        return new ResponseEntity<>( 
+            accountService.create(account),
+            HttpStatus.CREATED
+        );        
     }
 }
