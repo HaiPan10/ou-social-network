@@ -32,6 +32,10 @@ CREATE TABLE `account` (
     
 )   ENGINE=INNODB;
 
+-- role_id 3 is the ADMIN role
+INSERT INTO account(email, password, created_date, role_id)
+VALUES ('admin123@gmail.com', '123456', now(), 3);
+
 DROP TABLE IF EXISTS `ou-social-network`.`user`;
 CREATE TABLE `user` (
     id INT UNSIGNED NOT NULL,
@@ -47,6 +51,10 @@ CREATE TABLE `user` (
         ON DELETE CASCADE
     
 )   ENGINE=INNODB;
+
+INSERT INTO user(id, first_name, last_name, dob, avatar)
+VALUES (1, 'Hai', 'Phan Thanh', '2002-05-18',
+'https://res.cloudinary.com/dxjkpbzmo/image/upload/v1669639320/aukutc1ioxrflkionglc.png');
 
 DROP TABLE IF EXISTS `ou-social-network`.`user_student`;
 CREATE TABLE `user_student` (
