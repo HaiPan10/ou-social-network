@@ -23,11 +23,11 @@ import com.cloudinary.utils.ObjectUtils;
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = {
-        "com.ou.controller",
-        "com.ou.repository",
-        "com.ou.service",
-        "com.ou.validator",
-        "com.ou.api"
+    "com.ou.controller",
+    "com.ou.repository",
+    "com.ou.service",
+    "com.ou.validator",
+    "com.ou.api"
 })
 @PropertySource("classpath:configs.properties")
 public class WebApplicationContextConfig implements WebMvcConfigurer {
