@@ -8,7 +8,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ou.pojo.Account;
-import com.ou.pojo.UserStudent;
 import com.ou.repository.interfaces.AccountRepository;
 
 @Repository
@@ -27,7 +25,7 @@ public class AccountRepositoryImpl implements AccountRepository{
 
     @Override
     public Account getAccountById(Long id) {
-        Session session = sessionFactoryBean.getObject().openSession();
+        Session session = sessionFactoryBean.getObject().getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Account> criteriaQuery = builder.createQuery(Account.class);
         Root<Account> root = criteriaQuery.from(Account.class);
@@ -43,7 +41,7 @@ public class AccountRepositoryImpl implements AccountRepository{
 
     @Override
     public List<Account> getAccounts() {
-        Session session = sessionFactoryBean.getObject().openSession();
+        Session session = sessionFactoryBean.getObject().getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Account> criteriaQuery = builder.createQuery(Account.class);
         Root<Account> root = criteriaQuery.from(Account.class);
@@ -55,7 +53,10 @@ public class AccountRepositoryImpl implements AccountRepository{
 
     @Override
     public Account create(Account account) {
-        Session session = sessionFactoryBean.getObject().openSession();
-        return (Account) session.save(account);
-    }    
+        Session s = this.sessionFactoryBean.getObject().getCurrentSession();
+        account.setId((Integer) s.save(account));
+        return account;
+    }
+
+    
 }

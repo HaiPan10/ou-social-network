@@ -9,6 +9,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
@@ -30,6 +31,7 @@ import com.cloudinary.utils.ObjectUtils;
     "com.ou.api"
 })
 @PropertySource("classpath:configs.properties")
+@EnableTransactionManagement
 public class WebApplicationContextConfig implements WebMvcConfigurer {
     @Autowired
     private Environment environment;
