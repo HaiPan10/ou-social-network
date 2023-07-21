@@ -30,7 +30,7 @@ CREATE TABLE `account` (
 
 DROP TABLE IF EXISTS `ou-social-network`.`user`;
 CREATE TABLE `user` (
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    id INT UNSIGNED NOT NULL,
     first_name VARCHAR(45) NOT NULL,
     last_name VARCHAR(45) NOT NULL,
     dob DATETIME,
@@ -46,7 +46,7 @@ CREATE TABLE `user` (
 
 DROP TABLE IF EXISTS `ou-social-network`.`user_student`;
 CREATE TABLE `user_student` (
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    id INT UNSIGNED NOT NULL,
     student_identical VARCHAR(10) NOT NULL UNIQUE,
 
     PRIMARY KEY (id),
