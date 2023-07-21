@@ -26,6 +26,7 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public Account create(Account account) {
+        System.out.printf("DEBUG FROM SERVICE: %s\n", account.toString());
         return accountRepository.create(account);
     }
     

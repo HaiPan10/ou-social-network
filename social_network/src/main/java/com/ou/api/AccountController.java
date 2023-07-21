@@ -20,6 +20,7 @@ public class AccountController {
     
     @PostMapping(path = "/register")
     public Account register(@RequestBody Account account) {
+        System.out.printf("DEBUG FROM CONTROLLER: %s\n", account.toString());
         return accountService.create(account);
     }
 }

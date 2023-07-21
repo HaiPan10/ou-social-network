@@ -13,12 +13,14 @@ import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ou.pojo.Account;
 import com.ou.pojo.UserStudent;
 import com.ou.repository.interfaces.AccountRepository;
 
 @Repository
+@Transactional
 public class AccountRepositoryImpl implements AccountRepository{
     @Autowired
     private LocalSessionFactoryBean sessionFactoryBean;
@@ -53,9 +55,7 @@ public class AccountRepositoryImpl implements AccountRepository{
 
     @Override
     public Account create(Account account) {
-        Session s = this.sessionFactoryBean.getObject().getCurrentSession();
-        return (Account) s.save(account);
-    }
-
-    
+        Session session = sessionFactoryBean.getObject().openSession();
+        return (Account) session.save(account);
+    }    
 }
