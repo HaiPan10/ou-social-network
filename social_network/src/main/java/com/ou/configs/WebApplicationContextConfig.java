@@ -27,7 +27,7 @@ import com.cloudinary.utils.ObjectUtils;
     "com.ou.controller",
     "com.ou.repository",
     "com.ou.service",
-    "com.ou.validator",
+    // "com.ou.validator",
     "com.ou.api"
 })
 @PropertySource("classpath:configs.properties")
