@@ -18,16 +18,14 @@ import com.ou.repository.interfaces.UserRepository;
 @PropertySource("classpath:configs.properties")
 public class UserRepositoryImpl implements UserRepository {
     @Autowired
-    private LocalSessionFactoryBean factory;
-    @Autowired
-    private Environment env;
+    private LocalSessionFactoryBean sessionFactoryBean;
 
     @Override
     public User create(User user) {
-        Session s = this.factory.getObject().getCurrentSession();
-        // Create user student
-        // Query q = s.createQuery("INSERT INTO user(firstName, lastName, )");
-        return new User();
+        Session s = sessionFactoryBean.getObject().getCurrentSession();
+        user.setId(user.getAccount().getId());
+        s.save(user);
+        return user;
     }
     
 }

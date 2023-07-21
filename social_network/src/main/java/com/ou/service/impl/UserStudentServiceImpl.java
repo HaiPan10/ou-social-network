@@ -1,8 +1,10 @@
 package com.ou.service.impl;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ou.pojo.User;
 import com.ou.pojo.UserStudent;
 import com.ou.repository.interfaces.UserStudentRepository;
 import com.ou.service.interfaces.UserStudentService;
@@ -13,8 +15,13 @@ public class UserStudentServiceImpl implements UserStudentService {
     private UserStudentRepository userStudentRepository;
 
     @Override
-    public UserStudent create(UserStudent userStudent) {
-        return userStudentRepository.create(userStudent);
+    public UserStudent create(UserStudent userStudent, User user) throws Exception {
+        try {
+            userStudent.setUser(user);
+            return userStudentRepository.create(userStudent);
+        } catch (ConstraintViolationException e) {
+            throw new Exception("Mã số sinh viên này đã được sử dụng!");
+        }
     }
 
 

@@ -33,7 +33,7 @@ import lombok.Setter;
 @Table(name = "user_student")
 public class UserStudent implements Serializable{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull
     @Column(name = "id")
     private Integer id;
 

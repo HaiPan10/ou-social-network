@@ -17,14 +17,13 @@ import com.ou.repository.interfaces.UserStudentRepository;
 @PropertySource("classpath:configs.properties")
 public class UserStudentRepositoryImpl implements UserStudentRepository {
     @Autowired
-    private LocalSessionFactoryBean factory;
-    @Autowired
-    private Environment env;
+    private LocalSessionFactoryBean sessionFactoryBean;
 
     @Override
     public UserStudent create(UserStudent userStudent) {
-        Session s = this.factory.getObject().getCurrentSession();
-        UserStudent returnUserStudent = (UserStudent) s.save(userStudent);
-        return returnUserStudent;
+        Session s = sessionFactoryBean.getObject().getCurrentSession();
+        userStudent.setId(userStudent.getUser().getId());
+        s.save(userStudent);
+        return userStudent;
     }
 }
