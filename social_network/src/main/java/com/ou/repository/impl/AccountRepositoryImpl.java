@@ -54,9 +54,8 @@ public class AccountRepositoryImpl implements AccountRepository{
     @Override
     public Account create(Account account) {
         Session s = this.sessionFactoryBean.getObject().getCurrentSession();
-        s.save(account);
-        System.out.println("Account is saved");
-        return new Account(); 
+        account.setId((Integer) s.save(account));
+        return account;
     }
 
     
