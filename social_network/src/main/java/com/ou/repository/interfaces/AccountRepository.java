@@ -5,7 +5,7 @@ import java.util.List;
 import com.ou.pojo.Account;
 
 public interface AccountRepository {
-    Account retrieve(Long id);
+    Account retrieve(Integer id);
     List<Account> list();
     Account create(Account account);
 }

@@ -4,14 +4,17 @@ import java.util.List;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ou.pojo.Account;
+import com.ou.pojo.Role;
 import com.ou.pojo.User;
 import com.ou.pojo.UserStudent;
 import com.ou.repository.interfaces.AccountRepository;
 import com.ou.service.interfaces.AccountService;
+import com.ou.service.interfaces.RoleService;
 import com.ou.service.interfaces.UserService;
 import com.ou.service.interfaces.UserStudentService;
 
@@ -24,9 +27,11 @@ public class AccountServiceImpl implements AccountService{
     private UserService userService;
     @Autowired
     private UserStudentService userStudentService;
+    // @Autowired
+    // private RoleService roleService;
 
     @Override
-    public Account retrieve(Long id) {
+    public Account retrieve(Integer id) {
         return accountRepository.retrieve(id);
     }
 
@@ -48,8 +53,10 @@ public class AccountServiceImpl implements AccountService{
     @Override
     public Account createPendingAccount(Account account, User user, UserStudent userStudent) throws Exception {
         try {
+            // Chỉ có cựu sinh viên mới dùng api này nên role id là 1
+            // Role formerStudentRole = roleService.retrieve(1);
+            // account.setRoleId(formerStudentRole);
             accountRepository.create(account);
-            System.out.println(account.toString());
             userService.create(user, account);
             userStudentService.create(userStudent, user);
             return account;

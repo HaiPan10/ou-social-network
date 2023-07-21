@@ -7,7 +7,7 @@ import com.ou.pojo.User;
 import com.ou.pojo.UserStudent;
 
 public interface AccountService {
-    Account retrieve(Long id);
+    Account retrieve(Integer id);
     List<Account> list();
     Account create(Account account) throws Exception;
     Account createPendingAccount(Account account, User user, UserStudent userStudent) throws Exception;

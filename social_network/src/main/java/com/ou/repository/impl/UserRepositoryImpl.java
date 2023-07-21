@@ -15,7 +15,6 @@ import com.ou.repository.interfaces.UserRepository;
 
 @Repository
 @Transactional
-@PropertySource("classpath:configs.properties")
 public class UserRepositoryImpl implements UserRepository {
     @Autowired
     private LocalSessionFactoryBean sessionFactoryBean;

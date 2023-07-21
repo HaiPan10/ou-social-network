@@ -25,7 +25,7 @@ public class AccountRepositoryImpl implements AccountRepository{
     private LocalSessionFactoryBean sessionFactoryBean;
 
     @Override
-    public Account retrieve(Long id) {
+    public Account retrieve(Integer id) {
         Session session = sessionFactoryBean.getObject().getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Account> criteriaQuery = builder.createQuery(Account.class);
