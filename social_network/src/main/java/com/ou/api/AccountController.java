@@ -35,21 +35,11 @@ public class AccountController {
     // }
     
     @PostMapping(path = "/register")
-    public ResponseEntity<Account> register(@RequestBody @Valid Account account,
-    BindingResult result) throws Exception {
-        // passValidator.validate(account, result);
-        if(result.hasErrors()){
-            result.getAllErrors().forEach(
-                e -> System.out.println(e.getDefaultMessage())
-            );
-            return new ResponseEntity<>(
-                account,
-                HttpStatus.BAD_REQUEST
-            );
+    public ResponseEntity<Object> register(@RequestBody Account account) throws Exception {
+        try {
+            return ResponseEntity.ok(accountService.create(account));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return new ResponseEntity<>( 
-            accountService.create(account),
-            HttpStatus.CREATED
-        );        
     }
 }
