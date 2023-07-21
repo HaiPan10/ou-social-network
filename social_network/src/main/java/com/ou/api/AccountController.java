@@ -26,19 +26,22 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
-    @Autowired
-    private PassValidator passValidator;
+    // @Autowired
+    // private PassValidator passValidator;
 
-    @InitBinder
-    public void initBinder(WebDataBinder binder){
-        binder.setValidator(passValidator);
-    }
+    // @InitBinder
+    // public void initBinder(WebDataBinder binder){
+    //     binder.setValidator(passValidator);
+    // }
     
     @PostMapping(path = "/register")
     public ResponseEntity<Account> register(@RequestBody @Valid Account account,
     BindingResult result) throws Exception {
-        passValidator.validate(account, result);
+        // passValidator.validate(account, result);
         if(result.hasErrors()){
+            result.getAllErrors().forEach(
+                e -> System.out.println(e.getDefaultMessage())
+            );
             return new ResponseEntity<>(
                 account,
                 HttpStatus.BAD_REQUEST

@@ -11,6 +11,10 @@ CREATE TABLE `role` (
     
 )   ENGINE=INNODB;
 
+INSERT INTO role(name) VALUES("FORMER_STUDENT");
+INSERT INTO role(name) VALUES("TEACHER");
+INSERT INTO role(name) VALUES("ADMIN");
+
 DROP TABLE IF EXISTS `ou-social-network`.`account`;
 CREATE TABLE `account` (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
