@@ -15,14 +15,14 @@ public class IndexController {
 
     @RequestMapping("/")
     public String index(Model model){
-        Account account = accountService.getAccountById(1L);
+        // Account account = accountService.getAccountById(1L);
         String msg = "Success";
-        if(account != null){
-            model.addAttribute("account", account);
-        }
-        else {
-            msg = "Failure";
-        }
+        // if(account != null){
+        //     model.addAttribute("account", account);
+        // }
+        // else {
+        //     msg = "Failure";
+        // }
         model.addAttribute("msg", msg);
         return "index";
     }

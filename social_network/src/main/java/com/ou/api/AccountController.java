@@ -20,6 +20,9 @@ public class AccountController {
     
     @PostMapping(path = "/register")
     public Account register(@RequestBody Account account) {
-        return accountService.create(account);
+        System.out.println("This is user request:" + account);
+        Account acc = accountService.create(account);
+        System.out.println("This is saved account: " + acc);
+        return acc;
     }
 }
