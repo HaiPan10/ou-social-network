@@ -23,7 +23,7 @@ public class PassValidator implements Validator{
         if(target instanceof Account){
             Account account = (Account) target;
             if(!account.getPassword().equals(account.getConfirmPassword())){
-                errors.reject("user.password.notMatchMsg", "Password don't match");
+                errors.reject("{account.password.notMatchMsg}", "Password don't match");
             }
         }
     }

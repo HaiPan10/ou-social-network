@@ -1,7 +1,6 @@
 package com.ou.validator;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -32,8 +31,7 @@ public class WebAppValidator implements Validator{
     public boolean supports(Class<?> clazz) {
         return Account.class.isAssignableFrom(clazz) ||
             User.class.isAssignableFrom(clazz) ||
-            UserStudent.class.isAssignableFrom(clazz) ||
-            Map.class.isAssignableFrom(clazz);
+            UserStudent.class.isAssignableFrom(clazz);
     }
 
     @Override

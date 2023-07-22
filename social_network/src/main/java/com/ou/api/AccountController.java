@@ -18,7 +18,7 @@ import com.ou.pojo.Account;
 import com.ou.pojo.User;
 import com.ou.pojo.UserStudent;
 import com.ou.service.interfaces.AccountService;
-import com.ou.validator.WebAppValidator;
+import com.ou.validator.MapValidator;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -28,26 +28,18 @@ public class AccountController {
     private AccountService accountService;
 
     @Autowired
-    private WebAppValidator webAppValidator;
+    private MapValidator mapValidator;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
-        binder.setValidator(webAppValidator);
+        binder.setValidator(mapValidator);
     }
 
     @PostMapping(path = "/register")
     public ResponseEntity<Object> createPendingAccount(@RequestBody Map<String, Object> params,
             BindingResult bindingResult) throws Exception {
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            Account account = mapper.convertValue(params.get("account"), Account.class);
-            User user = mapper.convertValue(params.get("user"), User.class);
-            UserStudent userStudent = mapper.convertValue(params.get("userStudent"), UserStudent.class);
-            // Spring Validation
-            webAppValidator.validate(account, bindingResult);
-            webAppValidator.validate(user, bindingResult);
-            webAppValidator.validate(userStudent, bindingResult);
-
+            mapValidator.validate(params, bindingResult);
             if (bindingResult.hasErrors()) {
                 // Print log
                 System.out.println("============================================");
@@ -63,6 +55,11 @@ public class AccountController {
 
                 return ResponseEntity.badRequest().body(invalidMessage);
             }
+
+            ObjectMapper mapper = new ObjectMapper();
+            Account account = mapper.convertValue(params.get("account"), Account.class);
+            User user = mapper.convertValue(params.get("user"), User.class);
+            UserStudent userStudent = mapper.convertValue(params.get("userStudent"), UserStudent.class);
 
             return ResponseEntity.ok(accountService.createPendingAccount(account, user, userStudent));
         } catch (Exception e) {
