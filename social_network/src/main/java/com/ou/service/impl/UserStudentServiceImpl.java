@@ -18,8 +18,10 @@ public class UserStudentServiceImpl implements UserStudentService {
     public UserStudent create(UserStudent userStudent, User user) throws Exception {
         try {
             userStudent.setUser(user);
+            System.out.println("CREATE FROM USERSTUDENT SERVICE");
             return userStudentRepository.create(userStudent);
         } catch (ConstraintViolationException e) {
+            System.out.println("EXCEPTION FROM USERSTUDENT SERVICE");
             throw new Exception("Mã số sinh viên này đã được sử dụng!");
         }
     }
