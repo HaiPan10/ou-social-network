@@ -34,7 +34,7 @@ import lombok.Setter;
 @Table(name = "user")
 public class User implements Serializable {
     @Id
-    @NotNull
+    // @NotNull
     @Column(name = "id")
     private Integer id;
 

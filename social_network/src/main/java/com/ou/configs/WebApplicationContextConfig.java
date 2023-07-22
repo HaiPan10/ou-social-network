@@ -1,8 +1,5 @@
 package com.ou.configs;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -23,8 +20,6 @@ import org.springframework.web.servlet.view.JstlView;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.ou.validator.PassValidator;
-import com.ou.validator.WebAppValidator;
 
 @Configuration
 @EnableWebMvc

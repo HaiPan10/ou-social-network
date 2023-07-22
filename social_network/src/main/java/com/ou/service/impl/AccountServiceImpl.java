@@ -5,18 +5,15 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ou.pojo.Account;
-import com.ou.pojo.Role;
 import com.ou.pojo.User;
 import com.ou.pojo.UserStudent;
 import com.ou.repository.interfaces.AccountRepository;
 import com.ou.service.interfaces.AccountService;
-import com.ou.service.interfaces.RoleService;
 import com.ou.service.interfaces.UserService;
 import com.ou.service.interfaces.UserStudentService;
 
@@ -42,16 +39,18 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public Account create(Account account) throws Exception {
-        if (!account.getPassword().equals(account.getConfirmPassword())) {
-            throw new Exception("mật khẩu không khớp!");
-        } else {
-            try {
-                account.setCreatedDate(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
-                return accountRepository.create(account);
-            } catch (ConstraintViolationException e) {
-                throw new Exception("email này đã được sử dụng");
-            }
-        }
+        // if (!account.getPassword().equals(account.getConfirmPassword())) {
+        //     throw new Exception("mật khẩu không khớp!");
+        // } else {
+        //     try {
+        //         account.setCreatedDate(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+        //         return accountRepository.create(account);
+        //     } catch (ConstraintViolationException e) {
+        //         throw new Exception("email này đã được sử dụng");
+        //     }
+        // }
+        account.setCreatedDate(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+        return accountRepository.create(account);
     }
 
     // Hàm gọi khi sinh viên gởi yêu cầu tạo tài khoản

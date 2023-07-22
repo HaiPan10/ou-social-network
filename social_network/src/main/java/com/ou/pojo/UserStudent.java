@@ -23,7 +23,7 @@ import lombok.Setter;
 @Table(name = "user_student")
 public class UserStudent implements Serializable{
     @Id
-    @NotNull
+    // @NotNull
     @Column(name = "id")
     private Integer id;
 

@@ -20,10 +20,11 @@ public class PassValidator implements Validator{
 
     @Override
     public void validate(Object target, Errors errors) {
-        Account account = (Account) target;
-        if(!account.getPassword().equals(account.getConfirmPassword())){
-            errors.rejectValue("password", "user.password.error.notMatchMsg");
-            
+        if(target instanceof Account){
+            Account account = (Account) target;
+            if(!account.getPassword().equals(account.getConfirmPassword())){
+                errors.reject("user.password.notMatchMsg", "Password don't match");
+            }
         }
     }
     
