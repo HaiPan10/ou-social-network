@@ -2,6 +2,8 @@ package com.ou.api;
 
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.http.HttpStatus;
@@ -19,7 +21,7 @@ import com.ou.pojo.UserStudent;
 import com.ou.service.interfaces.AccountService;
 // import com.ou.validator.PassValidator;
 
-import jakarta.validation.Valid;
+
 
 
 @RestController
@@ -37,7 +39,7 @@ public class AccountController {
     //     binder.setValidator(passValidator);
     // }
     
-    @PostMapping(path = "/register")
+    @PostMapping(path = "/register/")
     public ResponseEntity<Object> createPendingAccount(@RequestBody Map<String, Object> params) throws Exception {
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -52,9 +54,11 @@ public class AccountController {
 
     @PostMapping(path = "/test_account/")
     public ResponseEntity<Account> testValid(@RequestBody @Valid Account account, BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
+        if(bindingResult.hasErrors()) {
+            System.out.println("Validation failed!");            
             return new ResponseEntity<>(account, HttpStatus.BAD_REQUEST);
         }
+        System.out.println("Validation success!");
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
 }

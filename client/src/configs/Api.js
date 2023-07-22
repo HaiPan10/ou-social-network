@@ -1,10 +1,10 @@
 import axios from "axios";
 
 export const endpoints = {
-    "signin": "/api/account/signin",
+    "register": "/accounts/register/",
 }
 
 export default axios.create({
-    baseURL: 'http://127.0.0.1:8080/',
+    baseURL: 'http://127.0.0.1:8080/social_network/api',
 
 })

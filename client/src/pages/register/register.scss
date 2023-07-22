@@ -57,13 +57,13 @@ $primaryColor: #07689f;
             }
             
             button {
-            width: 50%;
-            padding: 10px;
-            border: none;
-            background-color: white;
-            color: rebeccapurple;
-            font-weight: bold;
-            cursor: pointer;
+              width: 50%;
+              padding: 8px;
+              border: none;
+              background-color: white;
+              color: $primaryColor;
+              font-weight: bold;
+              cursor: pointer;
             }
         }
       }
@@ -73,32 +73,57 @@ $primaryColor: #07689f;
         padding: 50px;
         display: flex;
         flex-direction: column;
-        gap: 50px;
+        gap: 30px;
         justify-content: center;
   
         h1 {
             color: $primaryColor;
         }
+
+        p {
+          color: $primaryColor;
+          font-size: 18px;
+          line-height: 22px;
+        }
         
         form {
           display: flex;
           flex-direction: column;
-          gap: 30px;
-          
-          input {
-          border: none;
-          border-bottom: 1px solid lightgray;
-          padding: 20px 10px;
+          // gap: 0px;
+
+          .alert {
+            
           }
-          
-          button {
-            width: 50%;
-            padding: 10px;
-            border: none;
-            background-color: $primaryColor;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
+
+          .input-field {
+            input {
+              width: 100%;
+              border: none;
+              border-bottom: 1px solid lightgray;
+              padding: 20px 10px;
+            }
+          }
+
+          .btn-field {
+            margin-top: 30px;
+            button {
+              margin-right: 5px;
+              width: 30%;
+              padding: 10px;
+              border: none;              
+              font-weight: bold;
+              cursor: pointer;
+            }
+
+            .btn-back {
+              background-color: #bbbbbb;
+              color: white;
+            }
+
+            .btn-submit, .btn-next {
+              background-color: $primaryColor;
+              color: white;
+            }
           }
         }
       }

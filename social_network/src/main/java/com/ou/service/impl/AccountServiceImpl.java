@@ -1,5 +1,8 @@
 package com.ou.service.impl;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.exception.ConstraintViolationException;
@@ -27,8 +30,6 @@ public class AccountServiceImpl implements AccountService{
     private UserService userService;
     @Autowired
     private UserStudentService userStudentService;
-    @Autowired
-    private RoleService roleService;
 
     @Override
     public Account retrieve(Integer id) {
@@ -42,10 +43,15 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public Account create(Account account) throws Exception {
-        try {
-            return accountRepository.create(account);
-        } catch (ConstraintViolationException e) {
-            throw new Exception("email này đã được sử dụng");
+        if (!account.getPassword().equals(account.getConfirmPassword())) {
+            throw new Exception("mật khẩu không khớp!");
+        } else {
+            try {
+                account.setCreatedDate(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+                return accountRepository.create(account);
+            } catch (ConstraintViolationException e) {
+                throw new Exception("email này đã được sử dụng");
+            }
         }
     }
 
@@ -53,11 +59,8 @@ public class AccountServiceImpl implements AccountService{
     @Override
     public Account createPendingAccount(Account account, User user, UserStudent userStudent) throws Exception {
         try {
-            // Chỉ có cựu sinh viên mới dùng api này nên role id là 1
-            Role formerStudentRole = roleService.retrieve(1);
-            account.setRoleId(formerStudentRole);
             account.setStatus("PENDING");
-            accountRepository.create(account);
+            create(account);
             userService.create(user, account);
             userStudentService.create(userStudent, user);
             return account;
