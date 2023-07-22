@@ -30,7 +30,7 @@ export const Login = () => {
             <button>Đăng nhập</button>
             {/* <button onClick={handleLogin}>Login</button> */}
           </form>
-          <p>Mạng xã hội cựu sinh viên trường đại học Mở TP.HCM được hình thành năm 2023 nhằm đáp ứng nhu cầu giao tiếp giữa trường và các cựu sinh viên sau khi ra trường.</p>
+          <p>Chức năng đăng ký chỉ giành cho cựu sinh viên trường Đại học Mở TP.HCM! Vui lòng cung cấp thông tin chính xác.</p>
         </div>        
       </div>
     </div>
