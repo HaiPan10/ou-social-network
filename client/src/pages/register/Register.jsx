@@ -15,11 +15,7 @@ export const Register = () => {
   const [account, setAccount] = useState({
     "email": "",
     "password": "",
-    "confirmPassword": "",
-    "roleId": {
-      "id": 1,
-      "name": "FORMER_STUDENT"
-    }
+    "confirmPassword": ""
   })
 
   const [user, setUser] = useState({
