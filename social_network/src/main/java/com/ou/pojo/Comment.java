@@ -40,8 +40,8 @@ public class Comment implements Serializable {
     @Column(name = "id")
     private Integer id;
 
-    @NotNull(message = "Content should not be null")
-    @Size(min = 1, max = 255, message = "Content should be from 1 to 255 characters")
+    @NotNull(message = "{comment.content.notNull}")
+    @Size(min = 1, max = 255, message = "{comment.content.invalidSize}")
     @Column(name = "content")
     private String content;
 

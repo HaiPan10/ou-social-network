@@ -37,8 +37,8 @@ public class Role implements Serializable {
     @Column(name = "id")
     private Integer id;
 
-    @NotNull(message = "Role name could not be null")
-    @Size(min = 1, max = 45, message = "Role name could be from 1 to 45 characters")
+    @NotNull(message = "{role.name.notNull}")
+    @Size(min = 1, max = 45, message = "{role.name.invalidSize}")
     @Column(name = "name")
     private String name;
 

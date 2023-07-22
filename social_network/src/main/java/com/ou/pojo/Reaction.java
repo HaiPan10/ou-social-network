@@ -35,8 +35,8 @@ public class Reaction implements Serializable {
     @Column(name = "id")
     private Integer id;
 
-    @NotNull(message = "Reaction name could not be null")
-    @Size(min = 1, max = 10, message = "Reaction name should be from 1 to 10 characters")
+    @NotNull(message = "{reaction.name.notNull}")
+    @Size(min = 1, max = 10, message = "{reaction.name.invalidSize}")
     @Column(name = "name")
     private String name;
 

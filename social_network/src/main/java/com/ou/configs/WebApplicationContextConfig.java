@@ -1,5 +1,8 @@
 package com.ou.configs;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +23,8 @@ import org.springframework.web.servlet.view.JstlView;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.ou.validator.PassValidator;
+import com.ou.validator.WebAppValidator;
 
 @Configuration
 @EnableWebMvc
@@ -27,7 +32,7 @@ import com.cloudinary.utils.ObjectUtils;
     "com.ou.controller",
     "com.ou.repository",
     "com.ou.service",
-    // "com.ou.validator",
+    "com.ou.validator",
     "com.ou.api"
 })
 @PropertySource("classpath:configs.properties")
@@ -60,24 +65,35 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
                 "secure", true));
     }
 
-    // @Bean(name = "validator")
-    // public LocalValidatorFactoryBean validator() {
-    //     LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
-    //     bean.setValidationMessageSource(messageSource());
-    //     return bean;
-    // }
+    @Bean(name = "validator")
+    public LocalValidatorFactoryBean validator() {
+        LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
+        bean.setValidationMessageSource(messageSource());
+        return bean;
+    }
+
+    @Bean
+    public MessageSource messageSource() {
+        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        messageSource.setBasename("classpath:messages");
+        messageSource.setDefaultEncoding("UTF-8");
+        return messageSource;
+    }
+
+    @Override
+    public Validator getValidator(){
+        return validator();
+    }
 
     // @Bean
-    // public MessageSource messageSource() {
-    //     ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-    //     messageSource.setBasename("classpath:messages.properties");
-    //     messageSource.setDefaultEncoding("UTF-8");
-    //     return messageSource;
-    // }
+    // public WebAppValidator getWebAppValidator(){
+    //     Set<Validator> springValidators = new HashSet<>();
+    //     springValidators.add(new PassValidator());
 
-    // @Override
-    // public Validator getValidator(){
-    //     return validator();
+    //     WebAppValidator validator = new WebAppValidator();
+    //     validator.setSpringValidators(springValidators);
+
+    //     return validator;
     // }
 
     @Override

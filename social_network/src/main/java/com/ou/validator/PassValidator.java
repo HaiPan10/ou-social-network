@@ -10,7 +10,7 @@ import com.ou.pojo.Account;
  *
  * @author HaiPhan
  */
-// @Component
+@Component
 public class PassValidator implements Validator{
 
     @Override

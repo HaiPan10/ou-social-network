@@ -16,13 +16,13 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-// import javax.validation.constraints.Email;
-// import javax.validation.constraints.NotBlank;
-// import javax.validation.constraints.Size;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+// import jakarta.validation.constraints.Email;
+// import jakarta.validation.constraints.NotBlank;
+// import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,14 +48,14 @@ public class Account implements Serializable {
     @Column(name = "id")
     private Integer id;
 
-    @NotBlank(message = "Email must not be blank")
-    @Email(message = "Please provide a valid email address")
-    @Size(min = 1, max = 45, message = "Email must be between 1 and 45 characters")
+    @NotBlank(message = "{account.email.notBlank}")
+    @Email(message = "{account.email.invalid}")
+    @Size(min = 1, max = 45, message = "{account.email.invalidSize}")
     @Column(name = "email")
     private String email;
 
-    @NotBlank(message = "Password must not be blank")
-    @Size(min = 1, max = 45, message = "Password must be between 1 and 45 characters")
+    @NotBlank(message = "{account.password.notBlank}")
+    @Size(min = 1, max = 45, message = "{account.password.invalidSize}")
     @Column(name = "password")
     private String password;
 
