@@ -43,12 +43,11 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public Account create(Account account) throws Exception {
-        try {
-            account.setCreatedDate(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
-            return accountRepository.create(account);
-        } catch (ConstraintViolationException e) {
-            throw new Exception("Email này đã được sử dụng");
+        if (accountRepository.findByEmail(account.getEmail()).isPresent()) {
+            throw new Exception("Email này đã được sử dụng!");
         }
+        account.setCreatedDate(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+        return accountRepository.create(account);
     }
 
     // Hàm gọi khi sinh viên gởi yêu cầu tạo tài khoản
@@ -60,6 +59,8 @@ public class AccountServiceImpl implements AccountService{
             create(account);
             userService.create(user, account);
             userStudentService.create(userStudent, user);
+            user.setUserStudent(userStudent);
+            account.setUser(user);
             return account;
         } catch (Exception e) {
             throw new Exception(e.getMessage());

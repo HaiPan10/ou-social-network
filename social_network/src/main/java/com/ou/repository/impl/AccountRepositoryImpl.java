@@ -2,7 +2,9 @@ package com.ou.repository.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -15,6 +17,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ou.pojo.Account;
+import com.ou.pojo.Role;
+import com.ou.pojo.UserStudent;
 import com.ou.repository.interfaces.AccountRepository;
 
 @Repository
@@ -26,17 +30,7 @@ public class AccountRepositoryImpl implements AccountRepository{
     @Override
     public Account retrieve(Integer id) {
         Session session = sessionFactoryBean.getObject().getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<Account> criteriaQuery = builder.createQuery(Account.class);
-        Root<Account> root = criteriaQuery.from(Account.class);
-        criteriaQuery.select(root);
-        List<Predicate> predicates = new ArrayList<>();
-
-        predicates.add(builder.equal(root.get("id"), id));
-        criteriaQuery.where(predicates.toArray(Predicate[]::new));
-
-        Query query = session.createQuery(criteriaQuery);
-        return (Account) query.getSingleResult();
+        return (Account) session.get(Account.class, id);
     }
 
     @Override
@@ -56,6 +50,26 @@ public class AccountRepositoryImpl implements AccountRepository{
         Session s = this.sessionFactoryBean.getObject().getCurrentSession();
         account.setId((Integer) s.save(account));
         return account;
+    }
+
+    @Override
+    public Optional<Account> findByEmail(String email) {
+        Session session = sessionFactoryBean.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Account> criteriaQuery = builder.createQuery(Account.class);
+        Root<Account> root = criteriaQuery.from(Account.class);
+        criteriaQuery.select(root);
+        List<Predicate> predicates = new ArrayList<>();
+
+        predicates.add(builder.equal(root.get("email"), email));
+        criteriaQuery.where(predicates.toArray(Predicate[]::new));
+
+        Query query = session.createQuery(criteriaQuery);
+        try {
+            return Optional.ofNullable((Account) query.getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
     }
 
     

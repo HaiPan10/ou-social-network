@@ -139,6 +139,11 @@
       <artifactId>spring-security-config</artifactId>
       <version>5.2.1.RELEASE</version>
     </dependency>
+    <dependency>
+      <groupId>org.apache.tiles</groupId>
+      <artifactId>tiles-extras</artifactId>
+      <version>3.0.8</version>
+    </dependency>
 
   </dependencies>
 
