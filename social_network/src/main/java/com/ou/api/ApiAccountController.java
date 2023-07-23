@@ -3,8 +3,8 @@ package com.ou.api;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -23,7 +23,7 @@ import com.ou.validator.MapValidator;
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("api/accounts")
-public class AccountController {
+public class ApiAccountController {
     @Autowired
     private AccountService accountService;
 

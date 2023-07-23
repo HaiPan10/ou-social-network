@@ -2,7 +2,9 @@ package com.ou.repository.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -26,17 +28,7 @@ public class AccountRepositoryImpl implements AccountRepository{
     @Override
     public Account retrieve(Integer id) {
         Session session = sessionFactoryBean.getObject().getCurrentSession();
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<Account> criteriaQuery = builder.createQuery(Account.class);
-        Root<Account> root = criteriaQuery.from(Account.class);
-        criteriaQuery.select(root);
-        List<Predicate> predicates = new ArrayList<>();
-
-        predicates.add(builder.equal(root.get("id"), id));
-        criteriaQuery.where(predicates.toArray(Predicate[]::new));
-
-        Query query = session.createQuery(criteriaQuery);
-        return (Account) query.getSingleResult();
+        return (Account) session.get(Account.class, id);
     }
 
     @Override
@@ -59,16 +51,24 @@ public class AccountRepositoryImpl implements AccountRepository{
     }
 
     @Override
-    public Account getAccountByEmail(String email) {
+    public Optional<Account> findByEmail(String email) {
         Session session = sessionFactoryBean.getObject().getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Account> criteriaQuery = builder.createQuery(Account.class);
         Root<Account> root = criteriaQuery.from(Account.class);
         criteriaQuery.select(root);
-        Predicate p = builder.equal(root.get("email"), email);
-        criteriaQuery.where(p);
+        List<Predicate> predicates = new ArrayList<>();
+
+        predicates.add(builder.equal(root.get("email"), email));
+        criteriaQuery.where(predicates.toArray(Predicate[]::new));
+
         Query query = session.createQuery(criteriaQuery);
-        return (Account) query.getSingleResult();
+        try {
+            return Optional.ofNullable((Account) query.getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
     }
+
     
 }

@@ -15,9 +15,6 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.JstlView;
-
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 
@@ -41,15 +38,15 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
         configurer.enable();
     }
 
-    @Bean
-    public InternalResourceViewResolver internalResourceViewResolver() {
-        InternalResourceViewResolver r = new InternalResourceViewResolver();
-        r.setViewClass(JstlView.class);
-        r.setPrefix("/WEB-INF/pages/");
-        r.setSuffix(".jsp");
+    // @Bean
+    // public InternalResourceViewResolver internalResourceViewResolver() {
+    //     InternalResourceViewResolver r = new InternalResourceViewResolver();
+    //     r.setViewClass(JstlView.class);
+    //     r.setPrefix("/WEB-INF/pages/");
+    //     r.setSuffix(".jsp");
 
-        return r;
-    }
+    //     return r;
+    // }
 
     @Bean
     public Cloudinary getCloudinary() {

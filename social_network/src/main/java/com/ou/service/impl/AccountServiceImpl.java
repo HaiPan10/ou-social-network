@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -56,13 +55,12 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public Account create(Account account) throws Exception {
-        try {
-            account.setCreatedDate(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
-            account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
-            return accountRepository.create(account);
-        } catch (ConstraintViolationException e) {
-            throw new Exception("Email này đã được sử dụng");
+        if (accountRepository.findByEmail(account.getEmail()).isPresent()) {
+            throw new Exception("Email này đã được sử dụng!");
         }
+        account.setCreatedDate(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+        account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
+        return accountRepository.create(account);
     }
 
     // Hàm gọi khi sinh viên gởi yêu cầu tạo tài khoản
@@ -74,6 +72,8 @@ public class AccountServiceImpl implements AccountService{
             create(account);
             userService.create(user, account);
             userStudentService.create(userStudent, user);
+            user.setUserStudent(userStudent);
+            account.setUser(user);
             return account;
         } catch (Exception e) {
             throw new Exception(e.getMessage());
@@ -82,7 +82,7 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Account account = accountRepository.getAccountByEmail(email);
+        Account account = accountRepository.findByEmail(email).get();
         if(account == null) {
             throw new UsernameNotFoundException("Email không tồn tại");
         }
