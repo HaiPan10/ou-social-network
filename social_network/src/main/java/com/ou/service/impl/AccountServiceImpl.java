@@ -3,10 +3,17 @@ package com.ou.service.impl;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,17 +26,23 @@ import com.ou.service.interfaces.RoleService;
 import com.ou.service.interfaces.UserService;
 import com.ou.service.interfaces.UserStudentService;
 
-@Service
+@Service("accountDetailService")
 @Transactional(rollbackFor = Exception.class)
 public class AccountServiceImpl implements AccountService{
     @Autowired
     private AccountRepository accountRepository;
+
     @Autowired
     private UserService userService;
+
     @Autowired
     private UserStudentService userStudentService;
+
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     public Account retrieve(Integer id) {
@@ -45,6 +58,7 @@ public class AccountServiceImpl implements AccountService{
     public Account create(Account account) throws Exception {
         try {
             account.setCreatedDate(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+            account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
             return accountRepository.create(account);
         } catch (ConstraintViolationException e) {
             throw new Exception("Email này đã được sử dụng");
@@ -64,6 +78,17 @@ public class AccountServiceImpl implements AccountService{
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Account account = accountRepository.getAccountByEmail(email);
+        if(account == null) {
+            throw new UsernameNotFoundException("Email không tồn tại");
+        }
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        authorities.add(new SimpleGrantedAuthority(account.getRoleId().getName()));
+        return new org.springframework.security.core.userdetails.User(email, email, authorities);
     }
     
 }

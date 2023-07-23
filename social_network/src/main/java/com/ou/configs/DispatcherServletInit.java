@@ -8,7 +8,8 @@ public class DispatcherServletInit extends
     @Override
     protected Class<?>[] getRootConfigClasses() {
         return new Class[] {
-            HibernateConfig.class
+            HibernateConfig.class,
+            SpringSecurityConfigs.class
         };
     }
 

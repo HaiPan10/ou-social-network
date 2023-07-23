@@ -8,4 +8,5 @@ public interface AccountRepository {
     Account retrieve(Integer id);
     List<Account> list();
     Account create(Account account);
+    Account getAccountByEmail(String email);
 }

@@ -58,5 +58,17 @@ public class AccountRepositoryImpl implements AccountRepository{
         return account;
     }
 
+    @Override
+    public Account getAccountByEmail(String email) {
+        Session session = sessionFactoryBean.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Account> criteriaQuery = builder.createQuery(Account.class);
+        Root<Account> root = criteriaQuery.from(Account.class);
+        criteriaQuery.select(root);
+        Predicate p = builder.equal(root.get("email"), email);
+        criteriaQuery.where(p);
+        Query query = session.createQuery(criteriaQuery);
+        return (Account) query.getSingleResult();
+    }
     
 }
