@@ -20,9 +20,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-// import jakarta.validation.constraints.Email;
-// import jakarta.validation.constraints.NotBlank;
-// import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -50,12 +47,12 @@ public class Account implements Serializable {
 
     @NotBlank(message = "{account.email.notBlank}")
     @Email(message = "{account.email.invalid}")
-    @Size(min = 1, max = 45, message = "{account.email.invalidSize}")
+    @Size(min = 1, message = "{account.email.invalidSize}")
     @Column(name = "email")
     private String email;
 
     @NotBlank(message = "{account.password.notBlank}")
-    @Size(min = 1, max = 45, message = "{account.password.invalidSize}")
+    @Size(min = 1, message = "{account.password.invalidSize}")
     @Column(name = "password")
     private String password;
 

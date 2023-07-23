@@ -59,7 +59,9 @@ public class AccountServiceImpl implements AccountService{
             throw new Exception("Email này đã được sử dụng!");
         }
         account.setCreatedDate(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
-        account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
+        String encoded = bCryptPasswordEncoder.encode(account.getPassword());
+        account.setPassword(encoded);
+        account.setConfirmPassword(encoded);
         return accountRepository.create(account);
     }
 

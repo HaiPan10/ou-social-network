@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
@@ -21,37 +22,37 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 })
 public class SpringSecurityConfigs {
 
-    @Autowired
-    private static UserDetailsService accountService;
-
     @Bean
-    public static BCryptPasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Order(1)
     @Configuration
     public static class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
+        @Autowired
+        private PasswordEncoder adminPasswordEncoder;
+
+        @Autowired
+        private UserDetailsService accountService;
+
         @Override
         protected void configure(AuthenticationManagerBuilder auth)
                 throws Exception {
             auth.userDetailsService(accountService)
-                    .passwordEncoder(passwordEncoder());
+                    .passwordEncoder(adminPasswordEncoder);
         }
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            http.formLogin(login ->
-                login.loginPage("/login")
+            http.formLogin(login -> login.loginPage("/login")
                     .usernameParameter("gmail")
                     .passwordParameter("password"));
-            http.formLogin(login ->
-                login.defaultSuccessUrl("/admin")
+            http.formLogin(login -> login.defaultSuccessUrl("/admin")
                     .failureUrl("/login?error"));
             http.exceptionHandling(handling -> handling.accessDeniedPage("/login?access_denied"));
-            http.authorizeRequests(requests ->
-                requests.antMatchers("/").permitAll()
-                        .antMatchers("/admin").access("hasRole('ADMIN')"));
+            http.authorizeRequests(requests -> requests.antMatchers("/").permitAll()
+                    .antMatchers("/admin").access("hasRole('ADMIN')"));
             http.csrf().disable();
         }
     }
@@ -59,16 +60,23 @@ public class SpringSecurityConfigs {
     @Order(2)
     @Configuration
     public static class UserSecurityConfig extends WebSecurityConfigurerAdapter {
+
+        @Autowired
+        private PasswordEncoder userPasswordEncoder;
+
+        @Autowired
+        private UserDetailsService accountService;
+
         @Override
         protected void configure(AuthenticationManagerBuilder auth)
                 throws Exception {
             auth.userDetailsService(accountService)
-                    .passwordEncoder(passwordEncoder());
+                    .passwordEncoder(userPasswordEncoder);
         }
 
-        // @Override
-        // protected void configure(HttpSecurity http){
-        // http.formLogin().loginPage("/admin/login", "")
-        // }
+        @Override
+        protected void configure(HttpSecurity http){
+
+        }
     }
 }
