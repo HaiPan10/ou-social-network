@@ -9,6 +9,7 @@ public class DispatcherServletInit extends
     protected Class<?>[] getRootConfigClasses() {
         return new Class[] {
             HibernateConfig.class,
+            SpringSecurityConfigs.class,
             TilesConfig.class
         };
     }

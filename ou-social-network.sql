@@ -11,15 +11,11 @@ CREATE TABLE `role` (
     
 )   ENGINE=INNODB;
 
-INSERT INTO role(name) VALUES("FORMER_STUDENT");
-INSERT INTO role(name) VALUES("TEACHER");
-INSERT INTO role(name) VALUES("ADMIN");
-
 DROP TABLE IF EXISTS `ou-social-network`.`account`;
 CREATE TABLE `account` (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     email VARCHAR(45) NOT NULL UNIQUE,
-    password VARCHAR(45) NOT NULL,
+    password VARCHAR(300) NOT NULL,
     created_date DATETIME,
     status ENUM('LOCKED', 'ACTIVE', 'PENDING') DEFAULT 'ACTIVE',
     role_id INT UNSIGNED NOT NULL,
@@ -31,10 +27,6 @@ CREATE TABLE `account` (
         ON DELETE CASCADE
     
 )   ENGINE=INNODB;
-
--- role_id 3 is the ADMIN role
-INSERT INTO account(email, password, created_date, role_id)
-VALUES ('admin123@gmail.com', '123456', now(), 3);
 
 DROP TABLE IF EXISTS `ou-social-network`.`user`;
 CREATE TABLE `user` (
@@ -51,10 +43,6 @@ CREATE TABLE `user` (
         ON DELETE CASCADE
     
 )   ENGINE=INNODB;
-
-INSERT INTO user(id, first_name, last_name, dob, avatar)
-VALUES (1, 'Hai', 'Phan Thanh', '2002-05-18',
-'https://res.cloudinary.com/dxjkpbzmo/image/upload/v1669639320/aukutc1ioxrflkionglc.png');
 
 DROP TABLE IF EXISTS `ou-social-network`.`user_student`;
 CREATE TABLE `user_student` (
@@ -178,3 +166,18 @@ CREATE TABLE `comment_reaction` (
         ON DELETE CASCADE
     
 )   ENGINE=INNODB;
+
+-- INSERT default rows after created
+INSERT INTO role(name) VALUES("FORMER_STUDENT");
+INSERT INTO role(name) VALUES("TEACHER");
+INSERT INTO role(name) VALUES("ADMIN");
+
+-- role_id 3 is the ADMIN role
+-- password is 123456
+INSERT INTO account(email, password, created_date, role_id)
+VALUES ('admin456@gmail.com',
+'$2a$10$3YohAzphxM8cU1uvEkikleeAf4xPlPZrQ0eqx5iPgc0bcUT48j/SC', now(), '3');
+
+INSERT INTO user(id, first_name, last_name, dob, avatar)
+VALUES (1, 'Hai', 'Phan Thanh', '2002-05-18',
+'https://res.cloudinary.com/dxjkpbzmo/image/upload/v1669639320/aukutc1ioxrflkionglc.png');
