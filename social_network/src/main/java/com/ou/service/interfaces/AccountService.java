@@ -1,6 +1,7 @@
 package com.ou.service.interfaces;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 
@@ -13,4 +14,7 @@ public interface AccountService  extends UserDetailsService {
     List<Account> list();
     Account create(Account account) throws Exception;
     Account createPendingAccount(Account account, User user, UserStudent userStudent) throws Exception;
+    List<Account> getPendingAccounts(Map<String, String> params);
+    Integer countPendingAccounts();
+    boolean verifyAccount(Account account, String status);
 }

@@ -36,10 +36,17 @@ public class UserStudent implements Serializable{
     @Column(name = "student_identical")
     private String studentIdentical;
 
-    @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
     @JsonIgnore
+    @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
     @OneToOne(optional = false, fetch = FetchType.LAZY)
     private User user;
+
+    @Override
+    public String toString() {
+        return "UserStudent [id=" + id + ", studentIdentical=" + studentIdentical + "]";
+    }
+
+    
 
     // public UserStudent(Integer id, String studentIdentical) {
     //     this.id = id;
