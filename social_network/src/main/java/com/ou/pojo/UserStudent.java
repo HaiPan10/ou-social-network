@@ -4,12 +4,15 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -34,7 +37,8 @@ public class UserStudent implements Serializable{
     private String studentIdentical;
 
     @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
-    @OneToOne(optional = false)
+    @JsonIgnore
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
     private User user;
 
     // public UserStudent(Integer id, String studentIdentical) {

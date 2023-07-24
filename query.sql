@@ -8,6 +8,7 @@ INSERT INTO role(name) VALUES("ADMIN");
 
 SELECT * FROM account;
 SELECT * FROM user;
+SELECT * FROM user_student;
 SELECT * FROM role;
 
 INSERT INTO account(email, password, role_id) VALUES('hai123@gmail.com', '123456', 1);

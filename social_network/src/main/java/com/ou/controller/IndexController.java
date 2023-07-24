@@ -12,8 +12,11 @@ public class IndexController {
 
     @RequestMapping("/")
     public String index(Model model){
-        String msg = "Success";
-        model.addAttribute("msg", msg);
         return "index";
+    }
+
+    @RequestMapping("/admin/dashboard")
+    public String dashBoard(Model model){
+        return "dashBoard";
     }
 }

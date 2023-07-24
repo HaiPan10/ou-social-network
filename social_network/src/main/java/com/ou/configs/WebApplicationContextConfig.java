@@ -27,7 +27,8 @@ import com.ou.handler.LoginSuccessHandler;
     "com.ou.repository",
     "com.ou.service",
     "com.ou.validator",
-    "com.ou.api"
+    "com.ou.api",
+    "com.ou.handler"
 })
 @PropertySource("classpath:configs.properties")
 @EnableTransactionManagement

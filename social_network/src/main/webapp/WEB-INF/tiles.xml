@@ -36,11 +36,11 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
         <put-attribute name="pageCss"
                        value=""/>
     </definition>
-    <definition name="login" extends="baseLayout">
-        <put-attribute name="title" value="Đăng nhập" />
+    <definition name="dashBoard" extends="baseLayout">
+        <put-attribute name="title" value="Bảng điều khiển" />
         <put-attribute name="content"
-                       value="/WEB-INF/pages/login.jsp" />
+                       value="/WEB-INF/pages/dashBoard.jsp" />
         <put-attribute name="pageCss"
-                       value=""/>
+                       value="" />
     </definition>
 </tiles-definitions>
