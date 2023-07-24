@@ -7,8 +7,10 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
     <definition name="baseLayout"
                 template="/WEB-INF/layout/base.jsp">
         <put-attribute name="title" value="" />
-        <put-attribute name="header"
-                       value="/WEB-INF/layout/header.jsp" />
+        <put-attribute name="aside-menu"
+                       value="/WEB-INF/layout/asideMenu.jsp" />
+        <put-attribute name="navigagion-bar"
+                       value="/WEB-INF/layout/navigationBar.jsp" />
         <put-attribute name="content" value="" />
         <put-attribute name="footer"
                        value="/WEB-INF/layout/footer.jsp" />
@@ -17,11 +19,22 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
         <put-attribute name="title" value="Trang chủ" />
         <put-attribute name="content"
                        value="/WEB-INF/pages/index.jsp" />
+        <put-attribute name="pageCss"
+                       value="" />
     </definition>
     <definition name="accounts" extends="baseLayout">
         <put-attribute name="title" value="Quản lý tài khoản" />
         <put-attribute name="content"
                        value="/WEB-INF/pages/accounts.jsp" />
+        <put-attribute name="pageCss"
+                       value="/WEB-INF/pages/accountsCss.jsp"/>
+    </definition>
+    <definition name="accountsVerification" extends="baseLayout">
+        <put-attribute name="title" value="Duyệt tài khoản" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/accountsVerification.jsp" />
+        <put-attribute name="pageCss"
+                       value=""/>
     </definition>
     <definition name="login" extends="baseLayout">
         <put-attribute name="title" value="Đăng nhập" />
