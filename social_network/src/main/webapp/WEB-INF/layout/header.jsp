@@ -13,7 +13,7 @@
                     <a class="nav-link" href="${action}">Trang chủ</a>
                 </li>
                 <li class="nav-item">
-                    <c:url value="/accounts" var="accountAction" />
+                    <c:url value="/admin/accounts" var="accountAction" />
                     <a class="nav-link" href="${accountAction}">Quản lý tài khoản</a>
                 </li>
             </ul>

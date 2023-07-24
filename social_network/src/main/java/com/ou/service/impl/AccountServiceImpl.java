@@ -90,7 +90,9 @@ public class AccountServiceImpl implements AccountService{
         }
         Set<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority(account.getRoleId().getName()));
-        return new org.springframework.security.core.userdetails.User(email, email, authorities);
+        return new org.springframework.security.core.userdetails.User(
+            account.getEmail(), account.getPassword(), authorities
+        );
     }
     
 }

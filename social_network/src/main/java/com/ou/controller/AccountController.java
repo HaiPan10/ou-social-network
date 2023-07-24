@@ -8,7 +8,7 @@ import com.ou.pojo.Account;
 
 @Controller
 public class AccountController {    
-    @GetMapping("/accounts")
+    @GetMapping("/admin/accounts")
     public String list(Model model) {
         model.addAttribute("pendingAccount", new Account(1, "abc@gmail.com", "123456"));
         return "accounts";

@@ -17,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.ou.handler.LoginSuccessHandler;
 
 @Configuration
 @EnableWebMvc
@@ -96,4 +97,9 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
         // implements the Formatter<T> interface
         // might not necessary
     }
+
+    // @Bean
+    // public LoginSuccessHandler loginSuccessHandler(){
+    //     return new LoginSuccessHandler();
+    // }
 }
