@@ -11,6 +11,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,9 +35,17 @@ public class UserStudent implements Serializable{
     @Column(name = "student_identical")
     private String studentIdentical;
 
+    @JsonIgnore
     @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private User user;
+
+    @Override
+    public String toString() {
+        return "UserStudent [id=" + id + ", studentIdentical=" + studentIdentical + "]";
+    }
+
+    
 
     // public UserStudent(Integer id, String studentIdentical) {
     //     this.id = id;

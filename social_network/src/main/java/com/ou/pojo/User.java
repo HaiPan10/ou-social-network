@@ -83,13 +83,20 @@ public class User implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Collection<CommentReaction> commentReactionCollection;
 
-    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
     private UserStudent userStudent;
+
+    @Override
+    public String toString() {
+        return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", dob=" + dob + ", avatar="
+                + avatar + ", coverAvatar=" + coverAvatar + ", userStudent=" + userStudent + "]";
+    }
 
     // public User(Integer id, String firstName, String lastName) {
     //     this.id = id;
     //     this.firstName = firstName;
     //     this.lastName = lastName;
     // }
+
+    
 }

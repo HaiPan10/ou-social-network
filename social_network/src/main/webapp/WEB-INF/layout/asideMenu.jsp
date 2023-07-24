@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo">
-        <img style="width: 100%; height: 100%;" src="<c:url value="/resources/img/logo/logo.png" />" />      
+        <img style="width: 100%; height: 100%;" src="<c:url value="/resources/img/logo/app-logo.png" />" />      
     </div>
 
     <div class="menu-inner-shadow"></div>

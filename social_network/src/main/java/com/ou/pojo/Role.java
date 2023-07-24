@@ -28,7 +28,6 @@ import lombok.ToString;
 @Entity
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @Table(name = "role")
 public class Role implements Serializable {
@@ -50,4 +49,10 @@ public class Role implements Serializable {
         this.id = id;
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "Role [id=" + id + ", name=" + name + "]";
+    }
+    
 }

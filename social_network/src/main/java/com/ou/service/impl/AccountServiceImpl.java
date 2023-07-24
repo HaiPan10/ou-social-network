@@ -5,6 +5,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,6 +94,21 @@ public class AccountServiceImpl implements AccountService{
         return new org.springframework.security.core.userdetails.User(
             account.getEmail(), account.getPassword(), authorities
         );
+    }
+
+    @Override
+    public List<Account> getPendingAccounts(Map<String, String> params) {
+        return accountRepository.getPendingAccounts(params);
+    }
+
+    @Override
+    public Integer countPendingAccounts() {
+        return accountRepository.countPendingAccounts();
+    }
+
+    @Override
+    public boolean verifyAccount(Account account, String status) {
+        return accountRepository.verifyAccount(account, status);
     }
     
 }
