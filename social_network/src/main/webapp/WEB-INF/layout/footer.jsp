@@ -1,6 +1,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-<div class="mt-4 p-5 bg-primary text-white rounded">
-    <h1>Phong - Hải &copy; 2023</h1>
-    <p>Khoa CNTT, Đại học Mở Tp.HCM</p>
-</div>
+<footer class="content-footer footer bg-footer-theme">
+    <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+      <div class="mb-2 mb-md-0">
+        © 2023
+        , made with ❤️ by Phong Lại & Thanh Hải
+      </div>
+    </div>
+</footer>

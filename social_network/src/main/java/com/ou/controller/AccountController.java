@@ -8,8 +8,14 @@ import com.ou.pojo.Account;
 
 @Controller
 public class AccountController {    
+    @GetMapping("/accounts/verification")
+    public String accountsVerification(Model model) {
+        model.addAttribute("pendingAccount", new Account(1, "abc@gmail.com", "123456"));
+        return "accountsVerification";
+    }
+
     @GetMapping("/accounts")
-    public String list(Model model) {
+    public String accounts(Model model) {
         model.addAttribute("pendingAccount", new Account(1, "abc@gmail.com", "123456"));
         return "accounts";
     }
