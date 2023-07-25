@@ -168,9 +168,9 @@ CREATE TABLE `comment_reaction` (
 )   ENGINE=INNODB;
 
 -- INSERT default rows after created
-INSERT INTO role(name) VALUES("FORMER_STUDENT");
-INSERT INTO role(name) VALUES("TEACHER");
-INSERT INTO role(name) VALUES("ADMIN");
+INSERT INTO role(name) VALUES("ROLE_FORMER_STUDENT");
+INSERT INTO role(name) VALUES("ROLE_TEACHER");
+INSERT INTO role(name) VALUES("ROLE_ADMIN");
 
 -- role_id 3 is the ADMIN role
 -- password is 123456
