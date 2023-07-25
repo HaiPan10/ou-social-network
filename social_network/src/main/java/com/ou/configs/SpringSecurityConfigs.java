@@ -49,7 +49,7 @@ public class SpringSecurityConfigs extends WebSecurityConfigurerAdapter {
                 .failureUrl("/"));
         http.authorizeRequests(requests ->
                 requests.antMatchers("/**/admin/accounts")
-                        .access("hasAnyRole('ADMIN')")
+                        .access("hasAnyRole('ROLE_ADMIN')")
                         .antMatchers("/")
                         .permitAll());
         http.csrf().disable();

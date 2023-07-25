@@ -4,7 +4,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <section class="container">
     <h1>Trang chủ</h1>
-    <sec:authorize access="hasRole('ADMIN')"> 
+    <sec:authorize access="hasRole('ROLE_ADMIN')"> 
         ADMIN USER
     </sec:authorize>
     <c:choose>
