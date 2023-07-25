@@ -48,10 +48,12 @@ public class SpringSecurityConfigs extends WebSecurityConfigurerAdapter {
                 .successHandler(loginSuccessHandler)
                 .failureUrl("/"));
         http.authorizeRequests(requests ->
-                requests.antMatchers("/**/admin/accounts")
+                requests.antMatchers("/**/admin/**")
                         .access("hasAnyRole('ROLE_ADMIN')")
-                        .antMatchers("/")
-                        .permitAll());
+                        .antMatchers("/api/accounts/login", "/")
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated());
         http.csrf().disable();
     }
 }

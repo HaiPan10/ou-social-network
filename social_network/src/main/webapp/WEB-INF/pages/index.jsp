@@ -5,6 +5,7 @@
 <section class="container">
     <h1>Trang chủ</h1>
     <sec:authorize access="hasRole('ROLE_ADMIN')"> 
+        <h1>Đăng nhập thành công với quyền admin</h1>
         ADMIN USER
     </sec:authorize>
     <c:choose>
@@ -33,7 +34,6 @@
         </c:when>
         <c:when test="${pageContext.request.userPrincipal.name != null}">
             <c:url value="/logout" var="logout" />
-            <h1>Đăng nhập thành công với quyền admin</h1>
             <a href="${logout}">Đăng xuất</a>
         </c:when>
     </c:choose>
