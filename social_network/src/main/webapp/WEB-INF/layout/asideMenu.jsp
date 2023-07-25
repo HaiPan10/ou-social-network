@@ -9,9 +9,9 @@
 
     <ul class="menu-inner py-1">
         <!-- Dashboard -->
-        <li class="menu-item" id="home-menu">
-            <c:url value="/" var="homeAction" />
-            <a href="${homeAction}" class="menu-link">
+        <li class="menu-item" id="dash-board">
+            <c:url value="/admin/dashboard" var="dashBoardAction" />
+            <a href="${dashBoardAction}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div>Bảng điều khiển</div>
             </a>
@@ -35,6 +35,7 @@
                 <div>Cấp tài khoản giảng viên</div>
             </a>
         </li>
+        
         <!-- <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
