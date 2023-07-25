@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -57,13 +59,9 @@ public class AccountController {
         return "accounts";
     }
 
-    @PatchMapping("/verification")
-    public ResponseEntity<Object> verifyAccount(@ModelAttribute(value = "account") Account account,
-    @RequestParam String status) {
-        try {
-            return ResponseEntity.ok(accountService.verifyAccount(account, status));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @GetMapping("/verification/{accountId}")
+    public String verify(@PathVariable Integer accountId, @RequestParam String status) {
+        accountService.verifyAccount(accountService.retrieve(accountId), status);
+        return "redirect:/admin/accounts/verification";
     }
 }

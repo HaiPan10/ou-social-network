@@ -20,24 +20,28 @@
             <tbody class="table-border-bottom-0">
                 <c:forEach items="${pendingAccounts}" var="p">
                     <tr>
-                        <!-- <form:form modelAttribute="account" method="patch" action="${action}" enctype="multipart/form-data"> -->
-                            <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>${p.user.userStudent.studentIdentical}</strong></td>
-                            <td>${p.email}</td>
-                            <td>${p.user.lastName}</td>
-                            <td>${p.user.firstName}</td>
-                            <td>
-                                <div class="dropdown" style="display: flex; flex-direction: row;">
-                                    <div class="alert-success" style="width: 50%; text-align: center;">
-                                        <a href="" class="alert-success"><i class="bx bx-user-check me-1"></i>
-                                            Đồng ý</a>
-                                    </div>
-                                    <div class="alert-danger" style="width: 50%; text-align: center;">
-                                        <a href="" class="alert-danger"><i class="bx bx-user-x"></i>
-                                            Từ chối</a>
-                                    </div> 
+                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>${p.user.userStudent.studentIdentical}</strong></td>
+                        <td>${p.email}</td>
+                        <td>${p.user.lastName}</td>
+                        <td>${p.user.firstName}</td>
+                        <td>
+                            <div class="dropdown" style="display: flex; flex-direction: row;">
+                                <div class="alert-success" style="width: 50%; text-align: center;">
+                                    <c:url value="/admin/accounts/verification/${p.id}" var="acceptAction">
+                                        <c:param name="status" value="ACTIVE" />
+                                    </c:url>
+                                    <a href="${acceptAction}" class="alert-success"><i class="bx bx-user-check me-1"></i>
+                                        Đồng ý</a>
                                 </div>
-                            </td>
-                        <!-- </form:form> -->
+                                <div class="alert-danger" style="width: 50%; text-align: center;">
+                                    <c:url value="/admin/accounts/verification/${p.id}" var="rejectAction">
+                                        <c:param name="status" value="REJECT" />
+                                    </c:url>
+                                    <a href="${rejectAction}" class="alert-danger"><i class="bx bx-user-x"></i>
+                                        Từ chối</a>
+                                </div> 
+                            </div>
+                        </td>
                     </tr>
                 </c:forEach>
             </tbody>  
