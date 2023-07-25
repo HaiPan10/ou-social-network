@@ -493,6 +493,6 @@
 </div>
 
 <script>
-    var d = document.getElementById("home-menu");
+    var d = document.getElementById("dash-board");
     d.className += " active";
 </script>

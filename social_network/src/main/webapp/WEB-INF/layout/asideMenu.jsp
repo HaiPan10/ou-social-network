@@ -255,8 +255,8 @@
                 <i class="menu-icon tf-icons bx bx-support"></i>
                 <div data-i18n="Support">Support</div>
             </a>
-        </li>
-        <li class="menu-item">
+        </li> -->
+        <!-- <li class="menu-item">
             <a href="https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/" target="_blank"
                 class="menu-link">
                 <i class="menu-icon tf-icons bx bx-file"></i>
