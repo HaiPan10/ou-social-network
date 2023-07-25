@@ -63,7 +63,7 @@ public class Account implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
 
-    @Size(max = 7)
+    @Size(max = 30)
     @Column(name = "status")
     private String status;
 

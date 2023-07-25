@@ -85,7 +85,7 @@ public class AccountRepositoryImpl implements AccountRepository{
         criteriaQuery.select(root);
         List<Predicate> predicates = new ArrayList<>();
 
-        predicates.add(builder.equal(root.get("status"), "PENDING"));
+        predicates.add(builder.equal(root.get("status"), "AUTHENTICATION_PENDING"));
         criteriaQuery.where(predicates.toArray(Predicate[]::new));
 
         Query query = session.createQuery(criteriaQuery);
@@ -111,7 +111,7 @@ public class AccountRepositoryImpl implements AccountRepository{
     @Override
     public Integer countPendingAccounts() {
         Session session = sessionFactoryBean.getObject().getCurrentSession();
-        Query query = session.createQuery("SELECT Count(*) FROM Account WHERE status = 'PENDING'");
+        Query query = session.createQuery("SELECT Count(*) FROM Account WHERE status = 'AUTHENTICATION_PENDING'");
 
         return Integer.parseInt(query.getSingleResult().toString());
     }

@@ -71,7 +71,7 @@ public class AccountServiceImpl implements AccountService{
     public Account createPendingAccount(Account account, User user, UserStudent userStudent) throws Exception {
         try {
             account.setRoleId(roleService.retrieve(1));
-            account.setStatus("PENDING");
+            account.setStatus("AUTHENTICATION_PENDING");
             create(account);
             userService.create(user, account);
             userStudentService.create(userStudent, user);
