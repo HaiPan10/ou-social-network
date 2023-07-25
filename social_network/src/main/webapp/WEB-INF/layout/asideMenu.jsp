@@ -3,8 +3,8 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <sec:authorize access="hasRole('ROLE_ADMIN')">
     <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-        <div class="app-brand demo">
-            <img style="width: 100%; height: 100%;" src="<c:url value="/resources/img/logo/app-logo.png" />" />      
+        <div class="app-brand demo" style="justify-content: center;">
+            <img style="width: 60%; height: 100%;" src="<c:url value="/resources/img/logo/full-size-logo.png" />" />      
         </div>
     
         <div class="menu-inner-shadow"></div>

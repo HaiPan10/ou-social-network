@@ -15,12 +15,15 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
         <put-attribute name="footer"
                        value="/WEB-INF/layout/footer.jsp" />
     </definition>
-    <definition name="index" extends="baseLayout">
-        <put-attribute name="title" value="Trang chủ" />
+    <definition name="blankLayout"
+            template="/WEB-INF/layout/blankBase.jsp">
+        <put-attribute name="title" value="" />
+        <put-attribute name="content" value="" />
+    </definition>
+    <definition name="index" extends="blankLayout">
+        <put-attribute name="title" value="Đăng nhập" />
         <put-attribute name="content"
                        value="/WEB-INF/pages/index.jsp" />
-        <put-attribute name="pageCss"
-                       value="" />
     </definition>
     <definition name="accounts" extends="baseLayout">
         <put-attribute name="title" value="Quản lý tài khoản" />
