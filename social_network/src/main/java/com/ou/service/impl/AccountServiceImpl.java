@@ -3,16 +3,16 @@ package com.ou.service.impl;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import javax.security.auth.login.AccountNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +28,7 @@ import com.ou.service.interfaces.UserStudentService;
 
 @Service("accountDetailService")
 @Transactional(rollbackFor = Exception.class)
-public class AccountServiceImpl implements AccountService{
+public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountRepository accountRepository;
 
@@ -43,6 +43,9 @@ public class AccountServiceImpl implements AccountService{
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @Override
     public Account retrieve(Integer id) {
@@ -84,19 +87,6 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Account account = accountRepository.findByEmail(email).get();
-        if(account == null) {
-            throw new UsernameNotFoundException("Email không tồn tại");
-        }
-        Set<GrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority(account.getRoleId().getName()));
-        return new org.springframework.security.core.userdetails.User(
-            account.getEmail(), account.getPassword(), authorities
-        );
-    }
-
-    @Override
     public List<Account> getPendingAccounts(Map<String, String> params) {
         return accountRepository.getPendingAccounts(params);
     }
@@ -110,5 +100,23 @@ public class AccountServiceImpl implements AccountService{
     public boolean verifyAccount(Account account, String status) {
         return accountRepository.verifyAccount(account, status);
     }
-    
+
+    @Override
+    public boolean login(Account account) throws AccountNotFoundException{
+        try{
+            Authentication authentication = authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                account.getEmail(), account.getPassword())
+            );
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            accountRepository.findByEmail(account.getEmail()).orElseThrow();
+            return true;
+        } catch(AuthenticationException exception){
+            return false;
+        } catch(Exception exception){
+            throw new AccountNotFoundException("Invalid email or password");
+        }
+    }
+
 }

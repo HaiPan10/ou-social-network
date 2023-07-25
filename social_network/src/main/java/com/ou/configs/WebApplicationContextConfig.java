@@ -1,5 +1,8 @@
 package com.ou.configs;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -9,6 +12,13 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -18,22 +28,27 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.ou.pojo.Account;
+import com.ou.repository.interfaces.AccountRepository;
 
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = {
-    "com.ou.controller",
-    "com.ou.repository",
-    "com.ou.service",
-    "com.ou.validator",
-    "com.ou.api",
-    "com.ou.handler"
+        "com.ou.controller",
+        "com.ou.repository",
+        "com.ou.service",
+        "com.ou.validator",
+        "com.ou.api",
+        "com.ou.handler"
 })
 @PropertySource("classpath:configs.properties")
 @EnableTransactionManagement
 public class WebApplicationContextConfig implements WebMvcConfigurer {
     @Autowired
     private Environment environment;
+
+    @Autowired
+    private AccountRepository accountRepository;
 
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
@@ -42,12 +57,12 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
 
     // @Bean
     // public InternalResourceViewResolver internalResourceViewResolver() {
-    //     InternalResourceViewResolver r = new InternalResourceViewResolver();
-    //     r.setViewClass(JstlView.class);
-    //     r.setPrefix("/WEB-INF/pages/");
-    //     r.setSuffix(".jsp");
+    // InternalResourceViewResolver r = new InternalResourceViewResolver();
+    // r.setViewClass(JstlView.class);
+    // r.setPrefix("/WEB-INF/pages/");
+    // r.setSuffix(".jsp");
 
-    //     return r;
+    // return r;
     // }
 
     @Bean
@@ -75,7 +90,7 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
     }
 
     @Override
-    public Validator getValidator(){
+    public Validator getValidator() {
         return validator();
     }
 
@@ -83,17 +98,16 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
     }
-    
 
     // @Bean
     // public WebAppValidator getWebAppValidator(){
-    //     Set<Validator> springValidators = new HashSet<>();
-    //     springValidators.add(new PassValidator());
+    // Set<Validator> springValidators = new HashSet<>();
+    // springValidators.add(new PassValidator());
 
-    //     WebAppValidator validator = new WebAppValidator();
-    //     validator.setSpringValidators(springValidators);
+    // WebAppValidator validator = new WebAppValidator();
+    // validator.setSpringValidators(springValidators);
 
-    //     return validator;
+    // return validator;
     // }
 
     @Override
@@ -105,8 +119,25 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
         // might not necessary
     }
 
-    // @Bean
-    // public LoginSuccessHandler loginSuccessHandler(){
-    //     return new LoginSuccessHandler();
-    // }
+    @Bean
+    public UserDetailsService getUserDetailsService() {
+        return new UserDetailsService() {
+            @Override
+            public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+                Account account = accountRepository.findByEmail(email).get();
+                if (account == null) {
+                    throw new UsernameNotFoundException("Email không tồn tại");
+                }
+                Set<GrantedAuthority> authorities = new HashSet<>();
+                authorities.add(new SimpleGrantedAuthority(account.getRoleId().getName()));
+                return new org.springframework.security.core.userdetails.User(
+                        account.getEmail(), account.getPassword(), authorities);
+            }
+        };
+    }
+
+    @Bean
+    public AuthenticationManager getAuthenticationManager(AuthenticationConfiguration auth) throws Exception{
+        return auth.getAuthenticationManager();
+    }
 }

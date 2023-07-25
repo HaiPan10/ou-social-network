@@ -17,7 +17,7 @@ import com.ou.handler.LoginSuccessHandler;
 @Configuration
 @EnableWebSecurity
 @EnableTransactionManagement
-@ComponentScan(basePackages = {
+@ComponentScan({
 
 })
 public class SpringSecurityConfigs extends WebSecurityConfigurerAdapter {
