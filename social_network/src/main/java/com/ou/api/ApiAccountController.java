@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,9 +44,10 @@ public class ApiAccountController {
     }
 
     @PostMapping(path = "/register")
-    public ResponseEntity<Object> createPendingAccount(@Valid @RequestBody Map<String, Object> params,
+    public ResponseEntity<Object> createPendingAccount(@RequestBody Map<String, Object> params,
             BindingResult bindingResult) throws Exception {
         try {
+            mapValidator.validate(params, bindingResult);
             if (bindingResult.hasErrors()) {
                 // Print log
                 System.out.println("============================================");
