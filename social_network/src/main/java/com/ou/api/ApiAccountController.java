@@ -7,7 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,6 +65,16 @@ public class ApiAccountController {
             UserStudent userStudent = mapper.convertValue(params.get("userStudent"), UserStudent.class);
 
             return ResponseEntity.ok(accountService.createPendingAccount(account, user, userStudent));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    
+    @GetMapping(path = "/verify/{accountId}/{verificationCode}")
+    public ResponseEntity<Object> verifyAccount(@PathVariable Integer accountId, @PathVariable String verificationCode) throws Exception {
+        try {            
+            return ResponseEntity.ok(accountService.verifyEmail(accountId, verificationCode));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

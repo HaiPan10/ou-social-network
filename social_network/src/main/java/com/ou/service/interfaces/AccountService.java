@@ -17,4 +17,5 @@ public interface AccountService  extends UserDetailsService {
     List<Account> getPendingAccounts(Map<String, String> params);
     Integer countPendingAccounts();
     boolean verifyAccount(Account account, String status);
+    boolean verifyEmail(Integer accountId, String verificationCode) throws Exception;
 }

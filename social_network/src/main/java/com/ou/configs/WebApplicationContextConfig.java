@@ -1,5 +1,7 @@
 package com.ou.configs;
 
+import java.util.Properties;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -9,6 +11,8 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -72,6 +76,47 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
         messageSource.setBasename("classpath:messages");
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;
+    }
+
+    @Bean
+    public JavaMailSender getJavaMailSender() {
+        JavaMailSenderImpl javaMailSenderImpl = new JavaMailSenderImpl();
+        javaMailSenderImpl.setHost("cp03hn.emailserver.net.vn");
+        javaMailSenderImpl.setUsername("admin@ousocialnetwork.id.vn");
+        javaMailSenderImpl.setPassword("Vo2Z%)nF_+,{");
+        javaMailSenderImpl.setPort(465);
+
+        Properties mailProperties = new Properties();
+        // mailProperties.put("mail.transport.protocol", "smtp");
+        // // mailProperties.put("mail.smtp.auth", true);
+        // mailProperties.put("mail.smtp.starttls.enable", true);
+        // mailProperties.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        // mailProperties.put("mail.smtp.ssl.enabledProtocols", "TLSv1.2");
+        // // mailProperties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+        // mailProperties.put("mail.debug", "true");
+        
+
+        mailProperties.put("mail.smtp.host", "cp03hn.emailserver.net.vn");
+        mailProperties.put("mail.smtp.socketFactory.port", "465");
+        // mailProperties.put("mail.imap.host", "cp03hn.emailserver.net.vn");
+        // mailProperties.put("mail.imap.socketFactory.port", "993");
+
+        mailProperties.put("mail.smtp.auth", "true");
+        mailProperties.put("mail.smtp.ssl.enable", "true"); // Enable SSL/TLS for SMTP
+        mailProperties.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        mailProperties.put("mail.smtp.ssl.enabledProtocols", "TLSv1.2");
+        mailProperties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory"); // Required for SSL/TLS
+        mailProperties.put("mail.smtp.socketFactory.fallback", "false");
+
+        // Set the IMAP properties for SSL/TLS
+        mailProperties.put("mail.imap.ssl.enable", "true"); // Enable SSL/TLS for IMAP
+        mailProperties.put("mail.imap.ssl.protocols", "TLSv1.2");
+        mailProperties.put("mail.imap.ssl.enabledProtocols", "TLSv1.2");
+        mailProperties.put("mail.imap.socketFactory.class", "javax.net.ssl.SSLSocketFactory"); // Required for SSL/TLS
+        mailProperties.put("mail.imap.socketFactory.fallback", "false");
+        mailProperties.put("mail.debug", "true");
+        javaMailSenderImpl.setJavaMailProperties(mailProperties);
+        return javaMailSenderImpl;
     }
 
     @Override

@@ -63,6 +63,10 @@ public class Account implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
 
+    @Size(max = 64)
+    @Column(name = "verification_code")
+    private String verificationCode;
+
     @Size(max = 30)
     @Column(name = "status")
     private String status;

@@ -22,9 +22,12 @@ import com.ou.pojo.User;
 import com.ou.pojo.UserStudent;
 import com.ou.repository.interfaces.AccountRepository;
 import com.ou.service.interfaces.AccountService;
+import com.ou.service.interfaces.MailService;
 import com.ou.service.interfaces.RoleService;
 import com.ou.service.interfaces.UserService;
 import com.ou.service.interfaces.UserStudentService;
+
+import net.bytebuddy.utility.RandomString;
 
 @Service("accountDetailService")
 @Transactional(rollbackFor = Exception.class)
@@ -40,6 +43,9 @@ public class AccountServiceImpl implements AccountService{
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private MailService mailService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -71,12 +77,21 @@ public class AccountServiceImpl implements AccountService{
     public Account createPendingAccount(Account account, User user, UserStudent userStudent) throws Exception {
         try {
             account.setRoleId(roleService.retrieve(1));
-            account.setStatus("AUTHENTICATION_PENDING");
+            account.setStatus("EMAIL_VERIFICATION_PENDING");
+            account.setVerificationCode(RandomString.make(64));
             create(account);
             userService.create(user, account);
             userStudentService.create(userStudent, user);
             user.setUserStudent(userStudent);
             account.setUser(user);
+            String mailBody = String.format("Xin chào %s,<br>"
+            + "Cảm ơn bạn đã đăng kí tài khoản mạng xã hội cựu sinh viên trường đại học Mở TP.HCM<br>"
+            + "Vui lòng nhấn vào đường link bên dưới để xác thực<br>"
+            + "<h3><a href=\"%s\">XÁC THỰC NGAY</a></h3>"
+            + "Chúng tôi xin cảm ơn,<br>"
+            + "OU Social Network", user.getFirstName(), 
+            String.format("http://localhost:8080/social_network/api/accounts/verify/%d/%s", account.getId(), account.getVerificationCode()));
+            mailService.sendEmail(account.getEmail(), "Xác thực email", mailBody);
             return account;
         } catch (Exception e) {
             throw new Exception(e.getMessage());
@@ -110,5 +125,14 @@ public class AccountServiceImpl implements AccountService{
     public boolean verifyAccount(Account account, String status) {
         return accountRepository.verifyAccount(account, status);
     }
-    
+
+    @Override
+    public boolean verifyEmail(Integer accountId, String verificationCode) throws Exception {
+        Account account = retrieve(accountId);
+        if (account.getVerificationCode().equals(verificationCode)) {
+            return verifyAccount(account, "AUTHENTICATION_PENDING");
+        } else {
+            throw new Exception("Verification code doesn't match!");
+        }
+    }
 }
