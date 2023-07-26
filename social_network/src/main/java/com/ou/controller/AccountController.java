@@ -24,10 +24,9 @@ public class AccountController {
     @Autowired
     private Environment env;
     
-    @GetMapping("/verification")
+    @GetMapping("/verification/")
     public String accountsVerification(Model model, @RequestParam Map<String, String> params) {
         List<Account> pendingAccounts = accountService.getPendingAccounts(params);
-        System.out.println(pendingAccounts.toString());
         model.addAttribute("pendingAccounts", pendingAccounts);
         Integer pageSize = Integer.parseInt(env.getProperty("PENDING_ACCOUNT_PAGE_SIZE"));
         model.addAttribute("counter", Math.ceil(accountService.countPendingAccounts() * 1.0/pageSize));
@@ -55,6 +54,6 @@ public class AccountController {
     @GetMapping("/verification/{accountId}")
     public String verify(@PathVariable Integer accountId, @RequestParam String status) {
         accountService.verifyAccount(accountService.retrieve(accountId), status);
-        return "redirect:/admin/accounts/verification";
+        return "redirect:/admin/accounts/verification/";
     }
 }

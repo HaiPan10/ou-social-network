@@ -2,6 +2,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Login } from "./pages/login/Login";
 import { Register } from "./pages/register/Register";
 import { Home } from "./pages/home/Home";
+import { EmailVerification } from "./pages/emailVerification/EmailVerification";
 
 const App = () => {
   const Layout = () => {
@@ -19,6 +20,10 @@ const App = () => {
     {
       path:"/register",
       element:<Register/>,
+    },
+    {
+      path:"/email_verification",
+      element:<EmailVerification/>,
     },
     {
       path:"/home",

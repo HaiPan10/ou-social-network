@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom"
 import "./register.scss"
-import axios from 'axios';
 import { AuthenBackground } from "../../components/authenBackground/AuthenBackground";
 import { useState } from "react";
 import Api, { endpoints } from "../../configs/Api";

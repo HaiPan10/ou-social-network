@@ -24,7 +24,7 @@
                 <span class="menu-header-text">Tài khoản</span>
             </li>
             <li class="menu-item" id="account-verification-menu">
-                <c:url value="/admin/accounts/verification" var="accountVerificationAction" />
+                <c:url value="/admin/accounts/verification/" var="accountVerificationAction" />
                 <a href="${accountVerificationAction}" class="menu-link">
                     <i class="menu-icon tf-icons bx bx-check-shield"></i>
                     <div>Duyệt tài khoản</div>

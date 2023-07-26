@@ -13,7 +13,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -59,7 +58,8 @@ public class ApiAccountController {
                         .get(0)
                         .getDefaultMessage();
 
-                return ResponseEntity.badRequest().body(invalidMessage);
+
+                return ResponseEntity.badRequest().body("BINDING RESULT ERR" + invalidMessage);
             }
 
             ObjectMapper mapper = new ObjectMapper();
@@ -82,7 +82,7 @@ public class ApiAccountController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    
+
     @PostMapping(path="/login")
     public ResponseEntity<String> login(@RequestBody Account account,
         BindingResult bindingResult) throws AccountNotFoundException{
