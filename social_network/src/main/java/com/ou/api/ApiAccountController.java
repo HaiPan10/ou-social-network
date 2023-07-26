@@ -73,7 +73,6 @@ public class ApiAccountController {
         }
     }
 
-<<<<<<< HEAD
     
     @GetMapping(path = "/verify/{accountId}/{verificationCode}")
     public ResponseEntity<Object> verifyAccount(@PathVariable Integer accountId, @PathVariable String verificationCode) throws Exception {
@@ -81,7 +80,9 @@ public class ApiAccountController {
             return ResponseEntity.ok(accountService.verifyEmail(accountId, verificationCode));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
-=======
+        }
+    }
+    
     @PostMapping(path="/login")
     public ResponseEntity<String> login(@RequestBody Account account,
         BindingResult bindingResult) throws AccountNotFoundException{
@@ -97,7 +98,6 @@ public class ApiAccountController {
             return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body("Login fail, invalid email or password"); 
->>>>>>> a04bdd38124c5d737fe6eccdacc214b6afa7c951
         }
     }
 }
