@@ -45,14 +45,6 @@
 </sec:authorize>
 <c:choose>
     <c:when test="${pageContext.request.userPrincipal.name == null}">
-        <div class="alert alert-danger">
-            <c:if test="${param.error != null}">
-                <spring:message code="user.login.error1" />
-            </c:if>
-            <c:if test="${param.accessDenied != null}">
-                <spring:message code="user.login.error2" />
-            </c:if>
-        </div>
         <div class="container-xxl">
             <div class="authentication-wrapper authentication-basic container-p-y">
                 <div class="authentication-inner">

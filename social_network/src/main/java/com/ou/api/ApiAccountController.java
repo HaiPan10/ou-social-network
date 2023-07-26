@@ -2,7 +2,11 @@ package com.ou.api;
 
 import java.util.Map;
 
+import javax.security.auth.login.AccountNotFoundException;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -33,16 +37,15 @@ public class ApiAccountController {
     @Autowired
     private MapValidator mapValidator;
 
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
+    @InitBinder("params")
+    public void initBinderMap(WebDataBinder binder) {
         binder.setValidator(mapValidator);
     }
 
     @PostMapping(path = "/register")
-    public ResponseEntity<Object> createPendingAccount(@RequestBody Map<String, Object> params,
+    public ResponseEntity<Object> createPendingAccount(@Valid @RequestBody Map<String, Object> params,
             BindingResult bindingResult) throws Exception {
         try {
-            mapValidator.validate(params, bindingResult);
             if (bindingResult.hasErrors()) {
                 // Print log
                 System.out.println("============================================");
@@ -70,6 +73,7 @@ public class ApiAccountController {
         }
     }
 
+<<<<<<< HEAD
     
     @GetMapping(path = "/verify/{accountId}/{verificationCode}")
     public ResponseEntity<Object> verifyAccount(@PathVariable Integer accountId, @PathVariable String verificationCode) throws Exception {
@@ -77,6 +81,23 @@ public class ApiAccountController {
             return ResponseEntity.ok(accountService.verifyEmail(accountId, verificationCode));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+=======
+    @PostMapping(path="/login")
+    public ResponseEntity<String> login(@RequestBody Account account,
+        BindingResult bindingResult) throws AccountNotFoundException{
+        try {
+            boolean isAuthenticated = accountService.login(account);
+            if(isAuthenticated){
+                return ResponseEntity.ok().body("Login Successful");
+            }
+            else {
+                throw new Exception();
+            }
+        } catch (Exception e) {
+            return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body("Login fail, invalid email or password"); 
+>>>>>>> a04bdd38124c5d737fe6eccdacc214b6afa7c951
         }
     }
 }
