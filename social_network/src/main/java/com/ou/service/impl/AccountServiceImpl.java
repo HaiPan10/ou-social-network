@@ -19,7 +19,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ou.configs.JwtService;
 import com.ou.pojo.Account;
+import com.ou.pojo.AuthResponse;
 import com.ou.pojo.User;
 import com.ou.pojo.UserStudent;
 import com.ou.repository.interfaces.AccountRepository;
@@ -54,6 +56,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtService jwtService;
 
     @Override
     public Account retrieve(Integer id) {
@@ -125,7 +130,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean login(Account account) throws Exception {
+    public AuthResponse login(Account account) throws Exception {
         try{
             Optional<Account> accountOptional = accountRepository.findByEmail(account.getEmail());
             if (!accountOptional.isPresent()) {
@@ -143,7 +148,8 @@ public class AccountServiceImpl implements AccountService {
             );
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            return true;
+            String response = jwtService.generateAccessToken(account);
+            return new AuthResponse(accountOptional.get(), response);
         } catch(AuthenticationException exception){
             throw new Exception("Sai mật khẩu!");
         }

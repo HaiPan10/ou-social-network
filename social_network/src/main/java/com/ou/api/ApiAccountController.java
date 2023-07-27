@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ou.configs.JwtService;
 import com.ou.pojo.Account;
+import com.ou.pojo.AuthResponse;
 import com.ou.pojo.User;
 import com.ou.pojo.UserStudent;
 import com.ou.service.interfaces.AccountService;
@@ -94,7 +96,7 @@ public class ApiAccountController {
     }
 
     @PostMapping(path="/login")
-    public ResponseEntity<String> login(@Valid @RequestBody Account requestBody,
+    public ResponseEntity<?> login(@Valid @RequestBody Account requestBody,
         BindingResult bindingResult) throws AccountNotFoundException {
         try {
             if (bindingResult.hasErrors()) {
@@ -113,9 +115,9 @@ public class ApiAccountController {
 
                 return ResponseEntity.badRequest().body(invalidMessage);
             }
-            boolean isAuthenticated = accountService.login(requestBody);
-            if(isAuthenticated){
-                return ResponseEntity.ok().body("Login Successful");
+            AuthResponse response = accountService.login(requestBody);
+            if(response != null){
+                return ResponseEntity.ok().body(response);
             }
             else {
                 throw new Exception();
