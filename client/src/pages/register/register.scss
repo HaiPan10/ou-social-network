@@ -124,6 +124,11 @@ $primaryColor: #07689f;
               background-color: $primaryColor;
               color: white;
             }
+
+            .btn-submit:disabled {
+              background-color: #ccc;
+              cursor:not-allowed;
+            }
           }
         }
       }

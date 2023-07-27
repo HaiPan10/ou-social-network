@@ -18,5 +18,5 @@ public interface AccountService{
     Integer countPendingAccounts();
     boolean verifyAccount(Account account, String status);
     boolean verifyEmail(Integer accountId, String verificationCode) throws Exception;
-    public boolean login(Account account) throws AccountNotFoundException;
+    public boolean login(Account account) throws AccountNotFoundException, Exception;
 }

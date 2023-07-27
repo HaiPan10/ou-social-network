@@ -3,14 +3,16 @@ import { Login } from "./pages/login/Login";
 import { Register } from "./pages/register/Register";
 import { Home } from "./pages/home/Home";
 import { EmailVerification } from "./pages/emailVerification/EmailVerification";
+import { useState } from "react";
 
 const App = () => {
-  const Layout = () => {
-    return (
-      <div>
-      </div>
-    )
-  }
+  const [account, setAccount] = useState({
+    "id": "",
+    "email": "",
+    "password": "",
+    "verificationCode": ""
+  })
+  
 
   const router = createBrowserRouter([
     {
@@ -22,7 +24,7 @@ const App = () => {
       element:<Register/>,
     },
     {
-      path:"/email_verification",
+      path:"/register/email_verification",
       element:<EmailVerification/>,
     },
     {

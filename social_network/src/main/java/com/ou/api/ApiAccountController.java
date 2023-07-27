@@ -26,6 +26,7 @@ import com.ou.pojo.User;
 import com.ou.pojo.UserStudent;
 import com.ou.service.interfaces.AccountService;
 import com.ou.validator.MapValidator;
+import com.ou.validator.WebAppValidator;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -36,10 +37,18 @@ public class ApiAccountController {
 
     @Autowired
     private MapValidator mapValidator;
+    
+    @Autowired
+    private WebAppValidator webAppValidator;
 
     @InitBinder("params")
     public void initBinderMap(WebDataBinder binder) {
         binder.setValidator(mapValidator);
+    }
+
+    @InitBinder("requestBody")
+    public void initBinderWeb(WebDataBinder binder) {
+        binder.setValidator(webAppValidator);
     }
 
     @PostMapping(path = "/register")
@@ -61,7 +70,7 @@ public class ApiAccountController {
                         .getDefaultMessage();
 
 
-                return ResponseEntity.badRequest().body("BINDING RESULT ERR" + invalidMessage);
+                return ResponseEntity.badRequest().body(invalidMessage);
             }
 
             ObjectMapper mapper = new ObjectMapper();
@@ -86,10 +95,26 @@ public class ApiAccountController {
     }
 
     @PostMapping(path="/login")
-    public ResponseEntity<String> login(@RequestBody Account account,
-        BindingResult bindingResult) throws AccountNotFoundException{
+    public ResponseEntity<String> login(@Valid @RequestBody Account requestBody,
+        BindingResult bindingResult) throws AccountNotFoundException {
         try {
-            boolean isAuthenticated = accountService.login(account);
+            if (bindingResult.hasErrors()) {
+                // Print log
+                System.out.println("============================================");
+                bindingResult.getAllErrors().forEach(error -> {
+                    System.out.println("[ERROR CODE]: " + error.getCode());
+                    System.out.println("[MESSAGE]: " + error.getDefaultMessage());
+                });
+
+                String invalidMessage = bindingResult
+                        .getAllErrors()
+                        .get(0)
+                        .getDefaultMessage();
+
+
+                return ResponseEntity.badRequest().body(invalidMessage);
+            }
+            boolean isAuthenticated = accountService.login(requestBody);
             if(isAuthenticated){
                 return ResponseEntity.ok().body("Login Successful");
             }
@@ -99,7 +124,7 @@ public class ApiAccountController {
         } catch (Exception e) {
             return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
-                .body("Login fail, invalid email or password"); 
+                .body(e.getMessage()); 
         }
     }
 }

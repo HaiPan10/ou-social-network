@@ -1,25 +1,26 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import "./register.scss"
 import { AuthenBackground } from "../../components/authenBackground/AuthenBackground";
 import { useState } from "react";
 import Api, { endpoints } from "../../configs/Api";
 import ErrorAlert from "../../components/ErrorAlert";
+import { EmailVerification } from "../emailVerification/EmailVerification";
 
 export const Register = () => {
-  // const [email, setEmail] = useState('')
-  // const [password, setPassword] = useState('')
-  // const [rePassword, setRePassword] = useState('')
   const [err, setErr] = useState()
-
-  const [account, setAccount] = useState({
-    "email": "",
-    "password": "",
-    "confirmPassword": ""
-  })
-
+  const [disableButton, setDisableButton] = useState()
+  
   const [user, setUser] = useState({
     "firstName": "",
     "lastName": "",
+  })
+
+  const [account, setAccount] = useState({
+    "id": "",
+    "email": "",
+    "password": "",
+    "confirmPassword": "",
+    "verificationCode": "",
   })
 
   const [userStudent, setUserStudent] = useState({
@@ -28,6 +29,7 @@ export const Register = () => {
 
   const register = (evt) => {
     evt.preventDefault()
+    setDisableButton(true);
 
     const process = async () => {
         try {
@@ -38,10 +40,11 @@ export const Register = () => {
             })
             
             if (res.status === 200) {
-              console.log(res.data)
+              setAccount(res.data)
             }
         } catch (ex) {
           setErr(ex.response.data)
+          setDisableButton(false);
         }
     }
 
@@ -89,42 +92,46 @@ export const Register = () => {
   return (
     <div>
       <AuthenBackground/>
-      <div className="register">
-        <div className="card">
-        <div className="right">
-          <div className="right-top">
-            {/* <h1>Mạng xã hội cựu sinh viên trường đại học Mở TP.HCM</h1> */}
-            {/* <p>
-              Chức năng này giành riêng cho cựu sinh viên trường đại học Mở TP.HCM.
-            </p> */}
-          </div>
-          <div className="right-bottom">
-            <span>Bạn đã có tài khoản?</span>
-            <Link to="/login">
-              <button>Đăng nhập ngay</button>
-            </Link>
-          </div>
-        </div>
-        <div className="left">
-          <h1>Đăng ký</h1>
-          <form onSubmit={register}>
-            {renderForm()}
-
-            {err?<ErrorAlert err={err} />:""}
-            
-            <div className="btn-field">
-              {step > 1 && <button className="btn-back" onClick={prevStep}>Quay lại</button>}
-              {step < 2 ? (
-                <button className="btn-next" onClick={nextStep}>Tiếp tục</button>
-              ) : (
-                <button className="btn-submit" type="submit">Đăng ký</button>
-              )}
+      {account.id === "" ? (
+        <div className="register">
+          <div className="card">
+            <div className="right">
+              <div className="right-top">
+                {/* <h1>Mạng xã hội cựu sinh viên trường đại học Mở TP.HCM</h1> */}
+                {/* <p>
+                  Chức năng này giành riêng cho cựu sinh viên trường đại học Mở TP.HCM.
+                </p> */}
+              </div>
+              <div className="right-bottom">
+                <span>Bạn đã có tài khoản?</span>
+                <Link to="/login">
+                  <button>Đăng nhập ngay</button>
+                </Link>
+              </div>
             </div>
-          </form>
-          <p>Chức năng đăng ký chỉ giành cho cựu sinh viên trường Đại học Mở TP.HCM! Vui lòng cung cấp thông tin chính xác.</p>
+            <div className="left">
+            <h1>Đăng ký</h1>
+            <form onSubmit={register}>
+              {renderForm()}
+
+              {err?<ErrorAlert err={err} />:""}
+              
+              <div className="btn-field">
+                {step > 1 && <button className="btn-back" onClick={prevStep}>Quay lại</button>}
+                {step < 2 ? (
+                  <button className="btn-next" onClick={nextStep}>Tiếp tục</button>
+                ) : (
+                  <button disabled={disableButton} className="btn-submit" type="submit">Đăng ký</button>
+                )}
+              </div>
+            </form>
+            <p>Chức năng đăng ký chỉ giành cho cựu sinh viên trường Đại học Mở TP.HCM! Vui lòng cung cấp thông tin chính xác.</p>
+          </div>
         </div>
       </div>
-    </div>
+      ) : (
+        <EmailVerification account={account}/>
+      )}
     </div>
   )
 }

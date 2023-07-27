@@ -5,6 +5,8 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
 import javax.security.auth.login.AccountNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,14 +89,7 @@ public class AccountServiceImpl implements AccountService {
             userStudentService.create(userStudent, user);
             user.setUserStudent(userStudent);
             account.setUser(user);
-            String mailBody = String.format("Xin chào %s,<br>"
-            + "Cảm ơn bạn đã đăng kí tài khoản mạng xã hội cựu sinh viên trường đại học Mở TP.HCM<br>"
-            + "Vui lòng nhấn vào đường link bên dưới để xác thực<br>"
-            + "<h3><a href=\"%s\">XÁC THỰC NGAY</a></h3>"
-            + "Chúng tôi xin cảm ơn,<br>"
-            + "OU Social Network", user.getFirstName(), 
-            String.format("http://localhost:8080/social_network/api/accounts/verify/%d/%s", account.getId(), account.getVerificationCode()));
-            mailService.sendEmail(account.getEmail(), "Xác thực email", mailBody);
+            mailService.sendVerificationEmail(account);
             return account;
         } catch (Exception e) {
             throw new Exception(e.getMessage());
@@ -119,6 +114,9 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public boolean verifyEmail(Integer accountId, String verificationCode) throws Exception {
         Account account = retrieve(accountId);
+        if (!account.getStatus().equals("EMAIL_VERIFICATION_PENDING")) {
+            throw new Exception("This account can't not be verified");
+        }
         if (account.getVerificationCode().equals(verificationCode)) {
             return verifyAccount(account, "AUTHENTICATION_PENDING");
         } else {
@@ -127,20 +125,27 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean login(Account account) throws AccountNotFoundException{
+    public boolean login(Account account) throws Exception {
         try{
+            Optional<Account> accountOptional = accountRepository.findByEmail(account.getEmail());
+            if (!accountOptional.isPresent()) {
+                throw new Exception("Email không tồn tại!");
+            } else {
+                Account retrieveAccount = accountOptional.get();
+                if (!retrieveAccount.getStatus().equals("ACTIVE")) {
+                    // EXCEPTION FORMAT ACCOUNT.{STATUS} FOR CLIENT
+                    throw new Exception(String.format("ACCOUNT.%s", retrieveAccount.getStatus()));
+                }
+            }
             Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
                 account.getEmail(), account.getPassword())
             );
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            accountRepository.findByEmail(account.getEmail()).orElseThrow();
             return true;
         } catch(AuthenticationException exception){
-            return false;
-        } catch(Exception exception){
-            throw new AccountNotFoundException("Invalid email or password");
+            throw new Exception("Sai mật khẩu!");
         }
     }
 
