@@ -1,20 +1,55 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Navigate, Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Login } from "./pages/login/Login";
 import { Register } from "./pages/register/Register";
+import { Profile } from "./pages/profile/Profile";
+import { NavBar } from "./components/navBar/NavBar";
+import { LeftBar } from "./components/leftBar/LeftBar";
+import { RightBar } from "./components/rightBar/RightBar";
 import { Home } from "./pages/home/Home";
-import { EmailVerification } from "./pages/emailVerification/EmailVerification";
-import { useState } from "react";
 
 const App = () => {
-  const [account, setAccount] = useState({
-    "id": "",
-    "email": "",
-    "password": "",
-    "verificationCode": ""
-  })
-  
+  const currentUser = false;
+
+  const Layout = () => {
+    return (
+      <div>
+        <NavBar />
+        <div style={{ display: "flex" }}>
+          <LeftBar />
+          <Outlet />
+          <RightBar />
+        </div>
+      </div>
+    );
+  };
+
+  const ProtectedRoute = ({ children }) => {
+    if (!currentUser) {
+      return <Navigate to="/login" />;
+    }
+    return children;
+  };
+
 
   const router = createBrowserRouter([
+    {
+      path:"/",
+      element: (
+        <ProtectedRoute>
+          <Layout/>
+        </ProtectedRoute>
+      ),
+      children: [
+        { 
+          path: "/",
+          element: <Home />,
+        },
+        {
+          path: "/profile/:id",
+          element: <Profile />,
+        },
+      ],
+    },
     {
       path:"/login",
       element:<Login/>,
@@ -22,14 +57,6 @@ const App = () => {
     {
       path:"/register",
       element:<Register/>,
-    },
-    {
-      path:"/register/email_verification",
-      element:<EmailVerification/>,
-    },
-    {
-      path:"/home",
-      element:<Home/>,
     },
   ])
 

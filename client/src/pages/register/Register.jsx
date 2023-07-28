@@ -20,7 +20,6 @@ export const Register = () => {
     "email": "",
     "password": "",
     "confirmPassword": "",
-    "verificationCode": "",
   })
 
   const [userStudent, setUserStudent] = useState({
@@ -40,7 +39,7 @@ export const Register = () => {
             })
             
             if (res.status === 200) {
-              setAccount(res.data)
+              setAccount(account => ({...account, ["id"]:res.data}))
             }
         } catch (ex) {
           setErr(ex.response.data)
@@ -104,7 +103,7 @@ export const Register = () => {
               </div>
               <div className="right-bottom">
                 <span>Bạn đã có tài khoản?</span>
-                <Link to="/login">
+                <Link to="/">
                   <button>Đăng nhập ngay</button>
                 </Link>
               </div>
@@ -130,7 +129,7 @@ export const Register = () => {
         </div>
       </div>
       ) : (
-        <EmailVerification account={account}/>
+        <EmailVerification accountId={account.id}/>
       )}
     </div>
   )

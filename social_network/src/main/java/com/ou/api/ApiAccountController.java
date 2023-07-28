@@ -1,11 +1,13 @@
 package com.ou.api;
 
+import java.net.URI;
 import java.util.Map;
 
 import javax.security.auth.login.AccountNotFoundException;
-import javax.validation.Valid;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -85,16 +87,34 @@ public class ApiAccountController {
 
     
     @GetMapping(path = "/verify/{accountId}/{verificationCode}")
-    public ResponseEntity<Object> verifyAccount(@PathVariable Integer accountId, @PathVariable String verificationCode) throws Exception {
+    public ResponseEntity<Object> verifyAccount(@PathVariable Integer accountId, 
+    @PathVariable String verificationCode, HttpServletResponse response) throws Exception {
         try {            
-            return ResponseEntity.ok(accountService.verifyEmail(accountId, verificationCode));
+            if (accountService.verifyEmail(accountId, verificationCode)) {
+                HttpHeaders headers = new HttpHeaders();
+                headers.setLocation(URI.create("http://localhost:3000/"));
+                return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+            } else {
+                return null;
+            }
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
+    // @GetMapping(path = "/verify/{accountId}/{verificationCode}")
+    // public void verifyAccount(@PathVariable Integer accountId, 
+    // @PathVariable String verificationCode, HttpServletResponse response) throws Exception {
+    //     try {            
+    //         if (accountService.verifyEmail(accountId, verificationCode)) {
+    //             response.sendRedirect("http://localhost:3000/");
+    //         }
+    //     } catch (Exception e) {
+    //     }
+    // }
+
     @PostMapping(path="/login")
-    public ResponseEntity<String> login(@Valid @RequestBody Account requestBody,
+    public ResponseEntity<Object> login(@RequestBody Map<String, Object> params,
         BindingResult bindingResult) throws AccountNotFoundException {
         try {
             if (bindingResult.hasErrors()) {
@@ -113,17 +133,14 @@ public class ApiAccountController {
 
                 return ResponseEntity.badRequest().body(invalidMessage);
             }
-            boolean isAuthenticated = accountService.login(requestBody);
-            if(isAuthenticated){
-                return ResponseEntity.ok().body("Login Successful");
-            }
-            else {
-                throw new Exception();
-            }
+            ObjectMapper mapper = new ObjectMapper();
+            Account account = mapper.convertValue(params.get("account"), Account.class);
+            return ResponseEntity.ok().body(accountService.login(account));
         } catch (Exception e) {
-            return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
-                .body(e.getMessage()); 
+            // return ResponseEntity
+            //     .status(HttpStatus.UNAUTHORIZED)
+            //     .body(e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }

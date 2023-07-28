@@ -2,7 +2,8 @@ import axios from "axios";
 
 export const endpoints = {
     "register": "/accounts/register",
-    "verify": "/email/verify"
+    "verify": "/email/verify",
+    "login": "/accounts/login",
 }
 
 export default axios.create({

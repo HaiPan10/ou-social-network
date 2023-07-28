@@ -13,10 +13,10 @@ public interface AccountService{
     Account retrieve(Integer id);
     List<Account> list();
     Account create(Account account) throws Exception;
-    Account createPendingAccount(Account account, User user, UserStudent userStudent) throws Exception;
+    Integer createPendingAccount(Account account, User user, UserStudent userStudent) throws Exception;
     List<Account> getPendingAccounts(Map<String, String> params);
     Integer countPendingAccounts();
     boolean verifyAccount(Account account, String status);
     boolean verifyEmail(Integer accountId, String verificationCode) throws Exception;
-    public boolean login(Account account) throws AccountNotFoundException, Exception;
+    Account login(Account account) throws AccountNotFoundException, Exception;
 }

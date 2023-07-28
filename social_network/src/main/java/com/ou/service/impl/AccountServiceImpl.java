@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import javax.security.auth.login.AccountNotFoundException;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -79,7 +80,7 @@ public class AccountServiceImpl implements AccountService {
 
     // Hàm gọi khi sinh viên gởi yêu cầu tạo tài khoản
     @Override
-    public Account createPendingAccount(Account account, User user, UserStudent userStudent) throws Exception {
+    public Integer createPendingAccount(Account account, User user, UserStudent userStudent) throws Exception {
         try {
             account.setRoleId(roleService.retrieve(1));
             account.setStatus("EMAIL_VERIFICATION_PENDING");
@@ -89,8 +90,8 @@ public class AccountServiceImpl implements AccountService {
             userStudentService.create(userStudent, user);
             user.setUserStudent(userStudent);
             account.setUser(user);
-            mailService.sendVerificationEmail(account);
-            return account;
+            mailService.sendVerificationEmail(account.getId());
+            return account.getId();
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
@@ -125,17 +126,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean login(Account account) throws Exception {
+    public Account login(Account account) throws Exception {
         try{
             Optional<Account> accountOptional = accountRepository.findByEmail(account.getEmail());
             if (!accountOptional.isPresent()) {
                 throw new Exception("Email không tồn tại!");
-            } else {
-                Account retrieveAccount = accountOptional.get();
-                if (!retrieveAccount.getStatus().equals("ACTIVE")) {
-                    // EXCEPTION FORMAT ACCOUNT.{STATUS} FOR CLIENT
-                    throw new Exception(String.format("ACCOUNT.%s", retrieveAccount.getStatus()));
-                }
             }
             Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
@@ -143,7 +138,17 @@ public class AccountServiceImpl implements AccountService {
             );
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            return true;
+
+            Account retrieveAccount = accountOptional.get();
+            if (!retrieveAccount.getStatus().equals("ACTIVE")) {
+                // EXCEPTION JSON FOR CLIENT
+                String jsonString = new JSONObject()
+                .put("id", retrieveAccount.getId())
+                .put("status", retrieveAccount.getStatus())
+                .toString();
+                throw new Exception(jsonString);
+            }
+            return retrieveAccount;
         } catch(AuthenticationException exception){
             throw new Exception("Sai mật khẩu!");
         }

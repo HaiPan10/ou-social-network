@@ -17,12 +17,16 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
 import com.ou.pojo.Account;
+import com.ou.service.interfaces.AccountService;
 import com.ou.service.interfaces.MailService;
 
 @Service
 public class MailServiceImpl implements MailService {
     @Autowired
     MailSender mailSender;
+
+    @Autowired
+    AccountService accountService;
 
     @Override
     public void sendEmail(String userEmail, String subject, String content) {
@@ -54,10 +58,12 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public void sendVerificationEmail(Account account) throws Exception {
-        System.out.println(account.toString());
-        if (account.getId() == null || account.getVerificationCode() == null) {
-            throw new Exception("Invalid account!");
+    public void sendVerificationEmail(Integer accountId) throws Exception {
+        Account account = accountService.retrieve(accountId);
+        if (account == null) {
+            throw new Exception("Không tìm thấy tài khoản!");
+        } else if (!account.getStatus().equals("EMAIL_VERIFICATION_PENDING")) {
+            throw new Exception("Trạng thái không hợp lệ!");
         } else {
             String mailBody = String.format("Xin chào %s,<br>"
             + "Cảm ơn bạn đã đăng kí tài khoản mạng xã hội cựu sinh viên trường đại học Mở TP.HCM<br>"

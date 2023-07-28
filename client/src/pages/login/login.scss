@@ -110,6 +110,11 @@ $primaryColor: #07689f;
           color: white;
           font-weight: bold;
           cursor: pointer;
+
+          :disabled {
+            background-color: #ccc;
+            cursor:not-allowed;
+          }
         }
       }
     }
