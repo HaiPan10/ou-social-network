@@ -7,8 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.security.auth.login.AccountNotFoundException;
-
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ou.configs.JwtService;
 import com.ou.pojo.Account;
+import com.ou.pojo.AuthRequest;
 import com.ou.pojo.AuthResponse;
 import com.ou.pojo.User;
 import com.ou.pojo.UserStudent;
@@ -130,28 +130,36 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AuthResponse login(Account account) throws Exception {
+    public AuthResponse login(AuthRequest account) throws Exception {
         try{
             Optional<Account> accountOptional = accountRepository.findByEmail(account.getEmail());
             if (!accountOptional.isPresent()) {
                 throw new Exception("Email không tồn tại!");
-            } else {
-                Account retrieveAccount = accountOptional.get();
-                if (!retrieveAccount.getStatus().equals("ACTIVE")) {
-                    // EXCEPTION FORMAT ACCOUNT.{STATUS} FOR CLIENT
-                    throw new Exception(String.format("ACCOUNT.%s", retrieveAccount.getStatus()));
-                }
-            }
+            } 
+            
             Authentication authentication = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
                 account.getEmail(), account.getPassword())
             );
 
+            Account authenticationAccount = accountOptional.get();
+
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            String response = jwtService.generateAccessToken(account);
-            return new AuthResponse(accountOptional.get(), response);
+            String token = jwtService.generateAccessToken(authenticationAccount);
+
+            if (!authenticationAccount.getStatus().equals("ACTIVE")) {
+                // EXCEPTION JSON FOR CLIENT
+                String jsonString = new JSONObject()
+                                        .put("id", authenticationAccount.getId())
+                                        .put("status", authenticationAccount.getStatus())
+                                        .put("accessToken", token)
+                                        .toString();
+                throw new Exception(jsonString);
+            }
+
+            return new AuthResponse(authenticationAccount, token);
         } catch(AuthenticationException exception){
-            throw new Exception("Sai mật khẩu!");
+            throw new Exception("Email hoặc mật khẩu không đúng.");
         }
     }
 

@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ou.configs.JwtService;
 import com.ou.pojo.Account;
+import com.ou.pojo.AuthRequest;
 import com.ou.pojo.AuthResponse;
 import com.ou.pojo.User;
 import com.ou.pojo.UserStudent;
@@ -56,6 +56,7 @@ public class ApiAccountController {
     public ResponseEntity<Object> createPendingAccount(@RequestBody Map<String, Object> params,
             BindingResult bindingResult) throws Exception {
         try {
+            System.out.println("[DEBUG] - Register");
             mapValidator.validate(params, bindingResult);
             if (bindingResult.hasErrors()) {
                 // Print log
@@ -96,7 +97,7 @@ public class ApiAccountController {
     }
 
     @PostMapping(path="/login")
-    public ResponseEntity<?> login(@Valid @RequestBody Account requestBody,
+    public ResponseEntity<?> login(@Valid @RequestBody AuthRequest requestBody,
         BindingResult bindingResult) throws AccountNotFoundException {
         try {
             if (bindingResult.hasErrors()) {
@@ -120,7 +121,7 @@ public class ApiAccountController {
                 return ResponseEntity.ok().body(response);
             }
             else {
-                throw new Exception();
+                throw new Exception("Get Null Pointer");
             }
         } catch (Exception e) {
             return ResponseEntity

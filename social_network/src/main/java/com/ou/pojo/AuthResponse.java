@@ -1,5 +1,7 @@
 package com.ou.pojo;
 
+import java.io.Serializable;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +11,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthResponse {
+public class AuthResponse implements Serializable{
     private Account account;
     private String accessToken;
 }

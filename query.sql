@@ -14,6 +14,7 @@ SELECT * FROM role;
 UPDATE role SET name = 'ROLE_ADMIN' where id = 3;
 UPDATE role SET name = 'ROLE_TEACHER' where id = 2;
 UPDATE role SET name = 'ROLE_FORMER_STUDENT' where id = 1;
+UPDATE account 
 
 INSERT INTO account(email, password, role_id) VALUES('hai123@gmail.com', '123456', 1);
 INSERT INTO user(id, first_name, last_name) VALUES (30, 'Hai', 'Phan Thanh');
