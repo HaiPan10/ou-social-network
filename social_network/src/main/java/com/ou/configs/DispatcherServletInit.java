@@ -10,7 +10,9 @@ public class DispatcherServletInit extends
         return new Class[] {
             HibernateConfig.class,
             SpringSecurityConfigs.class,
-            TilesConfig.class
+            JwtService.class,
+            TilesConfig.class,
+            JwtTokenFilter.class
         };
     }
 
@@ -25,7 +27,7 @@ public class DispatcherServletInit extends
     protected String[] getServletMappings() {
         return new String[] 
         {
-            "/", "/api/accounts/register", "/api/accounts/login"
+            "/", "/api/accounts/register", "/api/accounts/login", "/login"
         };
     }
     

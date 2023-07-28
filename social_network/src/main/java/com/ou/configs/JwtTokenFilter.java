@@ -17,8 +17,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.ou.pojo.Account;
-
 @Component
 public class JwtTokenFilter extends OncePerRequestFilter{
 
@@ -36,6 +34,7 @@ public class JwtTokenFilter extends OncePerRequestFilter{
         // }
 
         System.out.println("[DEBUG] - Start filter Token");
+        System.out.println("[DEBUG] - " + request.getRequestURI());
         
         if(!hasAuthorizationBearer(request)){
             filterChain.doFilter(request, response);
