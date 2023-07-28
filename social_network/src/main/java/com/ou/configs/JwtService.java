@@ -19,7 +19,7 @@ import io.jsonwebtoken.UnsupportedJwtException;
 @Service
 public class JwtService {
     private final String SECRECT = "ajfipupieuqwpieuasipdhfajlbfljh3y012637018274hfajlsd";
-    private final long HOUR = 24;
+    private final long HOUR = 365;
     private final long MINUTE = 60;
     private final long SECOND = 60;
     private final long MILISECOND = 1000;

@@ -54,13 +54,14 @@ public class SpringSecurityConfigs extends WebSecurityConfigurerAdapter {
         });
         http.formLogin(login ->
                 login.loginPage("/")
+                .usernameParameter("email")
+                .passwordParameter("password")
                 .successHandler(loginSuccessHandler)
                 .failureUrl("/login?error"));
         http.authorizeRequests(requests ->
                 requests.antMatchers("/**/admin/**")
                         .access("hasAnyRole('ROLE_ADMIN')")
                         .antMatchers("/",
-                                    "/login",
                                     "/api/accounts/login",
                                     "/api/accounts/register",
                                     "/api/email/verify",
