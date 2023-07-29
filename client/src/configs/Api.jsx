@@ -5,7 +5,7 @@ export const endpoints = {
     "register": "/accounts/register",
     "verify": "/email/verify",
     "login": "/accounts/login",
-    "status": "/status"
+    "status": "/accounts/status"
 }
 
 // export const authAPI = () => axios.create({
@@ -22,7 +22,8 @@ export const authAPI = () => {
     return axios.create({
       baseURL: "http://127.0.0.1:8080/social_network/api",
       headers: {
-        "Authorization": `Bearer ${accessToken}`
+        "Authorization": `Bearer ${accessToken}`,
+        "Access-Control-Allow-Origin": "*"
       }
     });
   };
