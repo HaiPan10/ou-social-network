@@ -1,5 +1,7 @@
 package com.ou.configs;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -8,8 +10,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.ou.handler.LoginSuccessHandler;
@@ -27,6 +31,9 @@ public class SpringSecurityConfigs extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private LoginSuccessHandler loginSuccessHandler;
 
+    @Autowired
+    private JwtTokenFilter jwtTokenFilter;
+
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -41,12 +48,15 @@ public class SpringSecurityConfigs extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable();
+        http.sessionManagement(management ->
+            management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.formLogin(login ->
                 login.loginPage("/")
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .successHandler(loginSuccessHandler)
-                .failureUrl("/"));
+                .failureUrl("/login?error"));
         http.authorizeRequests(requests ->
                 requests.antMatchers("/**/admin/**")
                         .access("hasAnyRole('ROLE_ADMIN')")
@@ -59,6 +69,10 @@ public class SpringSecurityConfigs extends WebSecurityConfigurerAdapter {
                         .permitAll()
                         .anyRequest()
                         .authenticated());
-        http.csrf().disable();
+        http.exceptionHandling(handling ->
+            handling.authenticationEntryPoint((requests, reponse, ex) -> {
+                reponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, ex.getMessage());
+        }));
+        http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }

@@ -14,4 +14,5 @@ public interface AccountRepository {
     List<Account> getPendingAccounts(Map<String, String> params);
     Integer countPendingAccounts();
     boolean verifyAccount(Account account, String status);
+    String getStatus(Integer accountId);
 }

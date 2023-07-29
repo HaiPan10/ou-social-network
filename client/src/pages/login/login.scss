@@ -111,7 +111,7 @@ $primaryColor: #07689f;
           font-weight: bold;
           cursor: pointer;
 
-          :disabled {
+          &:disabled {
             background-color: #ccc;
             cursor:not-allowed;
           }

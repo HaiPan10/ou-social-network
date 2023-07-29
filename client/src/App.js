@@ -2,42 +2,22 @@ import { Navigate, Outlet, RouterProvider, createBrowserRouter } from "react-rou
 import { Login } from "./pages/login/Login";
 import { Register } from "./pages/register/Register";
 import { Profile } from "./pages/profile/Profile";
-import { NavBar } from "./components/navBar/NavBar";
-import { LeftBar } from "./components/leftBar/LeftBar";
-import { RightBar } from "./components/rightBar/RightBar";
 import { Home } from "./pages/home/Home";
+import { AuthContext } from "./context/AuthContext";
+import { useContext, useEffect, useReducer } from "react";
+import userReducer from "./reducers/userReducer";
+import { load } from 'react-cookies';
+import { Layout } from "./components/Layout";
+
 
 const App = () => {
-  const currentUser = false;
-
-  const Layout = () => {
-    return (
-      <div>
-        <NavBar />
-        <div style={{ display: "flex" }}>
-          <LeftBar />
-          <Outlet />
-          <RightBar />
-        </div>
-      </div>
-    );
-  };
-
-  const ProtectedRoute = ({ children }) => {
-    if (!currentUser) {
-      return <Navigate to="/login" />;
-    }
-    return children;
-  };
-
+  const [user, dispatch] = useReducer(userReducer, load('current-user') || null)
 
   const router = createBrowserRouter([
     {
       path:"/",
       element: (
-        <ProtectedRoute>
-          <Layout/>
-        </ProtectedRoute>
+        <Layout/>
       ),
       children: [
         { 
@@ -60,9 +40,11 @@ const App = () => {
     },
   ])
 
-  return (
+  return (    
     <div>
-      <RouterProvider router={router}/>
+      <AuthContext.Provider value={[user, dispatch]}>
+        <RouterProvider router={router}/>
+      </AuthContext.Provider>
     </div>
   );
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.security.auth.login.AccountNotFoundException;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ou.pojo.Account;
+import com.ou.pojo.AuthRequest;
+import com.ou.pojo.AuthResponse;
 import com.ou.pojo.User;
 import com.ou.pojo.UserStudent;
 import com.ou.service.interfaces.AccountService;
@@ -56,6 +59,7 @@ public class ApiAccountController {
     public ResponseEntity<Object> createPendingAccount(@RequestBody Map<String, Object> params,
             BindingResult bindingResult) throws Exception {
         try {
+            System.out.println("[DEBUG] - Register");
             mapValidator.validate(params, bindingResult);
             if (bindingResult.hasErrors()) {
                 // Print log
@@ -102,44 +106,37 @@ public class ApiAccountController {
         }
     }
 
-    // @GetMapping(path = "/verify/{accountId}/{verificationCode}")
-    // public void verifyAccount(@PathVariable Integer accountId, 
-    // @PathVariable String verificationCode, HttpServletResponse response) throws Exception {
-    //     try {            
-    //         if (accountService.verifyEmail(accountId, verificationCode)) {
-    //             response.sendRedirect("http://localhost:3000/");
-    //         }
-    //     } catch (Exception e) {
-    //     }
-    // }
-
     @PostMapping(path="/login")
-    public ResponseEntity<Object> login(@RequestBody Map<String, Object> params,
+    public ResponseEntity<?> login(@Valid @RequestBody AuthRequest requestBody,
         BindingResult bindingResult) throws AccountNotFoundException {
         try {
             if (bindingResult.hasErrors()) {
-                // Print log
-                System.out.println("============================================");
-                bindingResult.getAllErrors().forEach(error -> {
-                    System.out.println("[ERROR CODE]: " + error.getCode());
-                    System.out.println("[MESSAGE]: " + error.getDefaultMessage());
-                });
-
                 String invalidMessage = bindingResult
                         .getAllErrors()
                         .get(0)
                         .getDefaultMessage();
-
-
                 return ResponseEntity.badRequest().body(invalidMessage);
             }
-            ObjectMapper mapper = new ObjectMapper();
-            Account account = mapper.convertValue(params.get("account"), Account.class);
-            return ResponseEntity.ok().body(accountService.login(account));
+            AuthResponse response = accountService.login(requestBody);
+            if(response != null){
+                return ResponseEntity.ok().body(response);
+            }
+            else {
+                throw new Exception("Get Null Pointer");
+            }
         } catch (Exception e) {
             // return ResponseEntity
             //     .status(HttpStatus.UNAUTHORIZED)
             //     .body(e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping(path="/status/{accountId}")
+    public ResponseEntity<Object> getStatus(@PathVariable Integer accountId) {
+        try {
+            return ResponseEntity.ok().body(accountService.getStatus(accountId));
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

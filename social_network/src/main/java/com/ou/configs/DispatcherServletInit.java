@@ -25,7 +25,7 @@ public class DispatcherServletInit extends
     protected String[] getServletMappings() {
         return new String[] 
         {
-            "/"
+            "/", "/api/accounts/register", "/api/accounts/login"
         };
     }
     

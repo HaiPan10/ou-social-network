@@ -128,4 +128,12 @@ public class AccountRepositoryImpl implements AccountRepository{
             return false;
         }
     }
+
+    @Override
+    public String getStatus(Integer accountId) {
+        Session session = sessionFactoryBean.getObject().getCurrentSession();
+        Query query = session.createQuery("SELECT a.status FROM Account a WHERE id = :accountId");
+        query.setParameter("accountId", accountId);
+        return (String) query.getSingleResult();
+    }
 }
