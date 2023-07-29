@@ -34,10 +34,10 @@ public class JwtTokenFilter extends OncePerRequestFilter{
         // }
 
         System.out.println("[DEBUG] - Start filter Token");
-        System.out.println("[DEBUG] - " + request.getRequestURI());
+        System.out.println("[DEBUG] - uri=" + request.getRequestURI());
 
         // DEBUG header
-        System.out.println("[DEBUG] - Authorization: " + request.getHeader("Authorization"));
+        System.out.println("[DEBUG] - Header Authorization: " + request.getHeader("Authorization"));
 
         String header = getAuthorization(request);
 
@@ -46,7 +46,7 @@ public class JwtTokenFilter extends OncePerRequestFilter{
             return;
         }
 
-        System.out.println("Has Authorization Bearer");
+        System.out.println("[DEBUG] - Has Authorization Bearer");
 
         String token = getAccessToken(header);
 
@@ -54,6 +54,8 @@ public class JwtTokenFilter extends OncePerRequestFilter{
             filterChain.doFilter(request, response);
             return;
         }
+
+        System.out.println("[DEBUG] - Given token is valid");
 
         setAuthenticationContext(token, request);
         filterChain.doFilter(request, response);
@@ -93,6 +95,7 @@ public class JwtTokenFilter extends OncePerRequestFilter{
         // Account account = new Account();
         System.out.println("[User ID] - " + claims[0]);
         System.out.println("[Email] - " + claims[1]);
+        System.out.println("[INFO] - Load the user detail");
         // account.setId(Integer.parseInt(claims[0]));
         // account.setEmail(claims[1]);
         return userDetailsService.loadUserByUsername(claims[1]);
