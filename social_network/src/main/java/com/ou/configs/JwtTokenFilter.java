@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
@@ -34,36 +34,47 @@ public class JwtTokenFilter extends OncePerRequestFilter{
         // }
 
         System.out.println("[DEBUG] - Start filter Token");
-        
-        if(!hasAuthorizationBearer(request)){
+        System.out.println("[DEBUG] - uri=" + request.getRequestURI());
+
+        // DEBUG header
+        System.out.println("[DEBUG] - Header Authorization: " + request.getHeader("Authorization"));
+
+        String header = getAuthorization(request);
+
+        if(header == null || !header.startsWith("Bearer")){
             filterChain.doFilter(request, response);
             return;
         }
 
-        System.out.println("Has Authorization Bearer");
+        System.out.println("[DEBUG] - Has Authorization Bearer");
 
-        String token = getAccessToken(request);
+        String token = getAccessToken(header);
 
         if(!jwtService.isValidAccessToken(token)){
             filterChain.doFilter(request, response);
             return;
         }
 
+        System.out.println("[DEBUG] - Given token is valid");
+
         setAuthenticationContext(token, request);
         filterChain.doFilter(request, response);
     }
 
-    private boolean hasAuthorizationBearer(HttpServletRequest request){
+    private String getAuthorization(HttpServletRequest request){
         String header = request.getHeader("Authorization");
-        if(ObjectUtils.isEmpty(header) || !header.startsWith("Bearer")){
-            return false;
+        if(header == null) {
+            Cookie[] cookies = request.getCookies();
+            for(Cookie cookie : cookies){
+                if(cookie.getName().equals("Authorization")){
+                    header = "Bearer " + cookie.getValue();
+                }
+            }
         }
-
-        return true;
+        return header;
     }
 
-    private String getAccessToken(HttpServletRequest request){
-        String header = request.getHeader("Authorization");
+    private String getAccessToken(String header){
         String token = header.split(" ")[1].trim();
         return token;
     }
@@ -71,7 +82,7 @@ public class JwtTokenFilter extends OncePerRequestFilter{
     private void setAuthenticationContext(String token, HttpServletRequest request){
         UserDetails userDetails = getUserDetails(token);
         UsernamePasswordAuthenticationToken authentication = new 
-            UsernamePasswordAuthenticationToken(userDetails, null, null);
+            UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         authentication.setDetails(
             new WebAuthenticationDetailsSource().buildDetails(request)
         );
@@ -84,6 +95,7 @@ public class JwtTokenFilter extends OncePerRequestFilter{
         // Account account = new Account();
         System.out.println("[User ID] - " + claims[0]);
         System.out.println("[Email] - " + claims[1]);
+        System.out.println("[INFO] - Load the user detail");
         // account.setId(Integer.parseInt(claims[0]));
         // account.setEmail(claims[1]);
         return userDetailsService.loadUserByUsername(claims[1]);

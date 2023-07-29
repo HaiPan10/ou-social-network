@@ -49,8 +49,9 @@ public class SpringSecurityConfigs extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
-        http.sessionManagement(management ->
-            management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http.sessionManagement(management -> {
+            management.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        });
         http.formLogin(login ->
                 login.loginPage("/")
                 .usernameParameter("email")
@@ -71,6 +72,7 @@ public class SpringSecurityConfigs extends WebSecurityConfigurerAdapter {
                         .authenticated());
         http.exceptionHandling(handling ->
             handling.authenticationEntryPoint((requests, reponse, ex) -> {
+                System.out.printf("[EXCEPTION] - %s\n", ex.getMessage());
                 reponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, ex.getMessage());
         }));
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
