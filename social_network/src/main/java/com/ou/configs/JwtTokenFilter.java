@@ -36,6 +36,9 @@ public class JwtTokenFilter extends OncePerRequestFilter{
         System.out.println("[DEBUG] - Start filter Token");
         System.out.println("[DEBUG] - " + request.getRequestURI());
 
+        // DEBUG header
+        System.out.println("[DEBUG] - Authorization: " + request.getHeader("Authorization"));
+
         String header = getAuthorization(request);
 
         if(header == null || !header.startsWith("Bearer")){
