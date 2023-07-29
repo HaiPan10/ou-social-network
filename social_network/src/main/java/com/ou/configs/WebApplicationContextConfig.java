@@ -25,6 +25,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -184,4 +185,17 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
     public AuthenticationManager getAuthenticationManager(AuthenticationConfiguration auth) throws Exception{
         return auth.getAuthenticationManager();
     }
+
+    @Override
+	public void addCorsMappings(CorsRegistry registry) {
+
+		registry.addMapping("/api/**")
+			.allowedOrigins("http://localhost:3000")
+			.allowedMethods("PUT", "DELETE", "GET", "POST")
+			.allowedHeaders("Authorization")
+			.exposedHeaders("Authorization")
+			.allowCredentials(true).maxAge(3600);
+
+		// Add more mappings...
+	}
 }
