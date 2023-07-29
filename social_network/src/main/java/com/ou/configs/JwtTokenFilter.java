@@ -65,10 +65,12 @@ public class JwtTokenFilter extends OncePerRequestFilter{
         String header = request.getHeader("Authorization");
         if(header == null) {
             Cookie[] cookies = request.getCookies();
-            for(Cookie cookie : cookies){
+            if(cookies != null){
+                for(Cookie cookie : cookies){
                 if(cookie.getName().equals("Authorization")){
                     header = "Bearer " + cookie.getValue();
                 }
+            }
             }
         }
         return header;
