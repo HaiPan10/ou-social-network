@@ -5,7 +5,7 @@ export const endpoints = {
     "register": "/accounts/register",
     "verify": "/email/verify",
     "login": "/accounts/login",
-    "status": "/status"
+    "status": "/accounts/status"
 }
 
 // export const authAPI = () => axios.create({
