@@ -33,6 +33,9 @@ export const EmailVerification = (props) => {
                         <span><a href='' onClick={resend}>Gửi lại email</a></span>
                         </p>
                     </div>
+                    <div className='logout'>
+                        <button>Đăng xuất</button>
+                    </div>
                 </div>
             </div>
         </div>

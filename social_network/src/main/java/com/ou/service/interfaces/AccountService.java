@@ -20,6 +20,6 @@ public interface AccountService{
     Integer countPendingAccounts();
     boolean verifyAccount(Account account, String status);
     boolean verifyEmail(Integer accountId, String verificationCode) throws Exception;
-    public AuthResponse login(AuthRequest account) throws AccountNotFoundException, Exception;
+    AuthResponse login(AuthRequest account) throws AccountNotFoundException, Exception;
     String getStatus(Integer accountId);
 }
