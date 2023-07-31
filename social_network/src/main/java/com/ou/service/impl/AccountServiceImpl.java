@@ -147,15 +147,15 @@ public class AccountServiceImpl implements AccountService {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String token = jwtService.generateAccessToken(authenticationAccount);
 
-            if (!authenticationAccount.getStatus().equals("ACTIVE")) {
-                // EXCEPTION JSON FOR CLIENT
-                String jsonString = new JSONObject()
-                                        .put("id", authenticationAccount.getId())
-                                        .put("status", authenticationAccount.getStatus())
-                                        .put("accessToken", token)
-                                        .toString();
-                throw new Exception(jsonString);
-            }
+            // if (!authenticationAccount.getStatus().equals("ACTIVE")) {
+            //     // EXCEPTION JSON FOR CLIENT
+            //     String jsonString = new JSONObject()
+            //                             .put("id", authenticationAccount.getId())
+            //                             .put("status", authenticationAccount.getStatus())
+            //                             .put("accessToken", token)
+            //                             .toString();
+            //     throw new Exception(jsonString);
+            // }
 
             return new AuthResponse(authenticationAccount, token);
         } catch(AuthenticationException exception){

@@ -22,7 +22,8 @@ export const authAPI = () => {
     return axios.create({
       baseURL: "http://127.0.0.1:8080/social_network/api",
       headers: {
-        "Authorization": `Bearer ${accessToken}`
+        "Authorization": `Bearer ${accessToken}`,
+        "Access-Control-Allow-Origin": "*"
       }
     });
   };

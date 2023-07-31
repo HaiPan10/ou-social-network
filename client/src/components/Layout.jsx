@@ -9,6 +9,7 @@ import { EmailVerification } from '../pages/emailVerification/EmailVerification'
 import { AccountLocked } from '../pages/accountLocked/AccountLocked';
 import { AccountPending } from '../pages/accountPending/AccountPending';
 import { AccountRejected } from '../pages/accountRejected/AccountRejected';
+import { AuthenBackground } from './authenBackground/AuthenBackground';
 
 export const Layout = () => {
     const [user, dispatch] = useContext(AuthContext)
@@ -49,13 +50,34 @@ export const Layout = () => {
             </div>
         )
     } else if (status === "EMAIL_VERIFICATION_PENDING") {
-        pageContent = <EmailVerification accountId={user.id}/>
+        pageContent = (
+            <div>
+                <AuthenBackground/>
+                <EmailVerification accountId={user.id}/>
+            </div>
+        )
+
     } else if (status === "LOCKED") {
-        pageContent = <AccountLocked/>
+        pageContent = (
+            <div>
+                <AuthenBackground/>
+                <AccountLocked/>
+            </div>
+        )
     } else if (status === "AUTHENTICATION_PENDING") {
-        pageContent = <AccountPending/>
+        pageContent = (
+            <div>
+                <AuthenBackground/>
+                <AccountPending/>
+            </div>
+        )
     } else if (status === "REJECT") {
-        pageContent = <AccountRejected/>
+        pageContent = (
+            <div>
+                <AuthenBackground/>
+                <AccountRejected/>
+            </div>
+        )
     } else if (status === "ERROR") {
         pageContent = <NavBar/>
     } else if (status === "LOGIN") {
