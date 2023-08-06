@@ -8,9 +8,11 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import './navBar.scss'
+import { DarkModeContext } from '../../context/DarkModeContext';
 
 export const NavBar = () => {
   const [user, dispatch] = useContext(AuthContext)
+  const { toggle } = useContext(DarkModeContext)
 
   const logout = (evt) => {
     evt.preventDefault()
@@ -23,11 +25,11 @@ export const NavBar = () => {
     <div className='navBar'>
       <div className='left'>
         <div className='logo'>
-          <img src={require('../../images/full-size-logo.png')} alt="" />
+          <img />
           {/* <span>OU Social Network</span> */}
         </div>
         <HomeOutlinedIcon/>
-        <DarkModeOutlinedIcon/>
+        <DarkModeOutlinedIcon onClick = {toggle}/>
         <GridViewOutlinedIcon/>
         <div className='search'>
           <SearchOutlinedIcon/>

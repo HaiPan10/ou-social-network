@@ -10,10 +10,13 @@ import { AccountLocked } from '../pages/accountLocked/AccountLocked';
 import { AccountPending } from '../pages/accountPending/AccountPending';
 import { AccountRejected } from '../pages/accountRejected/AccountRejected';
 import { AuthenBackground } from './authenBackground/AuthenBackground';
+import '../style.scss'
+import { DarkModeContext } from '../context/DarkModeContext';
 
 export const Layout = () => {
     const [user, dispatch] = useContext(AuthContext)
     const [status, setStatus] = useState()
+    const {darkMode} = useContext(DarkModeContext)
 
     useEffect(() => {
         if (user !== null) {
@@ -40,11 +43,11 @@ export const Layout = () => {
     let pageContent;
     if (status === "ACTIVE") {
         pageContent = (
-            <div>
+            <div className={`theme-${darkMode ? "dark" : "light"}`}>
                 <NavBar />
                 <div style={{ display: "flex" }}>
                     <LeftBar />
-                    <Outlet />
+                    <div style={{flex: 6}}><Outlet /></div>
                     <RightBar />
                 </div>
             </div>
