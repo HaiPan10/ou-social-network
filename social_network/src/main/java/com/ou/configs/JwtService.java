@@ -55,6 +55,11 @@ public class JwtService {
         return false;
     }
 
+    /**
+     * 
+     * @param token
+     * @return a string with format [id,email]
+     */
     public String getSubject(String token){
         return parseClaims(token).getSubject();
     }

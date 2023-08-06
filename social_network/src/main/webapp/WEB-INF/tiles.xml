@@ -46,4 +46,11 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
         <put-attribute name="pageCss"
                        value="" />
     </definition>
+    <definition name="accountProvider" extends="baseLayout">
+        <put-attribute name="title" value="Cấp tài khoản giảng viên" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/accountProvider.jsp" />
+        <put-attribute name="pageCss"
+                       value="" />
+    </definition>
 </tiles-definitions>

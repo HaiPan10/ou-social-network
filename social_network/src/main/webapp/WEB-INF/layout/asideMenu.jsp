@@ -31,10 +31,17 @@
                 </a>
             </li>
             <li class="menu-item" id="account-providers-menu">
-                <c:url value="/admin/accounts" var="accountVerificationAction" />
-                <a href="${accountVerificationAction}" class="menu-link">
+                <c:url value="/admin/accounts/provider" var="accountProviderAction" />
+                <a href="${accountProviderAction}" class="menu-link">
                     <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
                     <div>Cấp tài khoản giảng viên</div>
+                </a>
+            </li>
+            <li class="menu-item" id="accounts-admin">
+                <c:url value="/admin/accounts" var="accountsAction" />
+                <a href="${accountsAction}" class="menu-link">
+                    <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
+                    <div>Quản lý tài khoản</div>
                 </a>
             </li>
             

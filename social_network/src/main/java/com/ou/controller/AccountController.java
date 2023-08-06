@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ou.pojo.Account;
+import com.ou.pojo.User;
 import com.ou.service.interfaces.AccountService;
 
 @Controller
@@ -46,7 +47,6 @@ public class AccountController {
 
     @GetMapping
     public String accounts(Model model) {
-        model.addAttribute("pendingAccount", new Account(1, "abc@gmail.com", "123456"));
         return "accounts";
     }
 
@@ -54,5 +54,11 @@ public class AccountController {
     public String verify(@PathVariable Integer accountId, @RequestParam String status) {
         accountService.verifyAccount(accountService.retrieve(accountId), status);
         return "redirect:/admin/accounts/verification/";
+    }
+
+    @GetMapping("/provider")
+    public String provideAccounts(Model model){
+        model.addAttribute("teacherAccount", new Account());
+        return "accountProvider";
     }
 }
