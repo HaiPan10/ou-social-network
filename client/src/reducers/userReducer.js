@@ -7,6 +7,7 @@ const userReducer = (state, action) => {
         case "LOGOUT":
             cookie.remove('access-token')
             cookie.remove('current-user')
+            cookie.remove('theme')
             return null
         default:
             return state

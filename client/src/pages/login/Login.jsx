@@ -4,13 +4,13 @@ import { AuthenBackground } from "../../components/authenBackground/AuthenBackgr
 import { useContext, useState } from "react";
 import Api, { endpoints } from "../../configs/Api";
 import ErrorAlert from "../../components/ErrorAlert";
-import { save } from 'react-cookies';
+import { save, load } from 'react-cookies';
 import { AuthContext } from "../../context/AuthContext";
 
 export const Login = () => {
   const [err, setErr] = useState()
   const [disableButton, setDisableButton] = useState()
-  const [user, dispatch] = useContext(AuthContext)
+  const [user, userDispatch] = useContext(AuthContext)
 
   const [account, setAccount] = useState({
     "id": "",
@@ -32,7 +32,7 @@ export const Login = () => {
             save('access-token', res.data.accessToken)
             save('current-user', res.data.account.user)
 
-            dispatch({
+            userDispatch({
               "type": "LOGIN", 
               "payload": res.data.account.user
             })

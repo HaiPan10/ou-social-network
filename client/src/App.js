@@ -6,18 +6,20 @@ import { Home } from "./pages/home/Home";
 import { AuthContext } from "./context/AuthContext";
 import { useContext, useEffect, useReducer } from "react";
 import userReducer from "./reducers/userReducer";
-import { load } from 'react-cookies';
+import { load, save } from 'react-cookies';
 import { Layout } from "./components/Layout";
+import { DarkModeContext, DarkModeContextProvider } from "./context/DarkModeContext";
 
 
 const App = () => {
   const [user, dispatch] = useReducer(userReducer, load('current-user') || null)
-
   const router = createBrowserRouter([
     {
       path:"/",
       element: (
-        <Layout/>
+        <DarkModeContextProvider>
+          <Layout/>
+        </DarkModeContextProvider>
       ),
       children: [
         { 
@@ -43,7 +45,7 @@ const App = () => {
   return (    
     <div>
       <AuthContext.Provider value={[user, dispatch]}>
-        <RouterProvider router={router}/>
+        <RouterProvider router={router}/>        
       </AuthContext.Provider>
     </div>
   );
