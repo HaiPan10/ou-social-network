@@ -22,5 +22,19 @@ public class UserRepositoryImpl implements UserRepository {
         s.save(user);
         return user;
     }
+
+    @Override
+    public void updateAvatar(User user, String url) {
+        Session s = sessionFactoryBean.getObject().getCurrentSession();
+        User persistUser = s.get(User.class, user.getId());
+        persistUser.setAvatar(url);
+        s.saveOrUpdate(persistUser);
+    }
+
+    @Override
+    public User getUserById(Integer id) {
+        Session s = sessionFactoryBean.getObject().getCurrentSession();
+        return (User) s.get(User.class, id);
+    }
     
 }

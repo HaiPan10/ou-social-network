@@ -29,6 +29,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -112,7 +113,6 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
         // mailProperties.put("mail.smtp.ssl.enabledProtocols", "TLSv1.2");
         // // mailProperties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
         // mailProperties.put("mail.debug", "true");
-        
 
         mailProperties.put("mail.smtp.host", "cp03hn.emailserver.net.vn");
         mailProperties.put("mail.smtp.socketFactory.port", "465");
@@ -185,7 +185,7 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public AuthenticationManager getAuthenticationManager(AuthenticationConfiguration auth) throws Exception{
+    public AuthenticationManager getAuthenticationManager(AuthenticationConfiguration auth) throws Exception {
         return auth.getAuthenticationManager();
     }
 
@@ -200,4 +200,12 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
+    @Bean
+    public CommonsMultipartResolver multipartResolver() {
+        CommonsMultipartResolver resolver = new CommonsMultipartResolver();
+        resolver.setDefaultEncoding("UTF-8");
+        return resolver;
+    }
+
 }
