@@ -38,30 +38,49 @@
       margin: 30px 0px;
       display: flex;
       justify-content: space-between;
-      gap: 20px;
+      gap: 5px;
+      width: fit-content;
 
-      .info {
-        flex:5;
-        display: flex;
-        flex-direction: column;
-        gap: 3px;
-        align-items: flex-start;
-
-        span {
-          font-weight: 500;
+      .comment-content {
+        .info {
+          padding: 10px;
+          background-color: themed("commentColor");
+          flex:5;
+          display: flex;
+          flex-direction: column;
+          gap: 3px;
+          align-items: flex-start;
+          border-radius: max(0px, min(20px, calc((100vw - 4px - 100%) * 9999)));
+  
+          span {
+            font-weight: 500;
+          }
+  
+          p{
+            color:themed("textColor");
+            margin: 0;
+          }
         }
 
-        p{
-          color:themed("textColorSoft")
+        .comment-action {
+          display: flex;
+          flex-direction: row;
+          gap: 10px;
+
+          span{
+            color: themed("textColor");
+            font-size: 14px;
+          }
+
+          .date {
+            color: themed("mainColor");
+            align-self: flex-end;
+            font-size: 12px;
+            font-weight: 500;
+          }
         }
       }
 
-      .date{
-        flex:1;
-        align-self: center;
-        color: gray;
-        font-size: 12px;
-      }
     }
   }
 }

@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Api, { endpoints } from "../../configs/Api";
 import './emailVerification.scss'
+import { AuthContext } from '../../context/AuthContext';
 
 export const EmailVerification = (props) => {
     const resend = (evt) => {
@@ -19,6 +20,14 @@ export const EmailVerification = (props) => {
         process()
     }
 
+    const [user, dispatch] = useContext(AuthContext)
+    const logout = (evt) => {
+        evt.preventDefault()
+        dispatch({
+          "type": "LOGOUT",
+        })
+      }
+
     return (
         <div>
             <div className="emailVerification">
@@ -34,7 +43,7 @@ export const EmailVerification = (props) => {
                         </p>
                     </div>
                     <div className='logout'>
-                        <button>Đăng xuất</button>
+                        <button onClick={logout}>Đăng xuất</button>
                     </div>
                 </div>
             </div>

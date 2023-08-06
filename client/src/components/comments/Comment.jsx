@@ -15,11 +15,17 @@ export const Comment = (props) => {
             {props.comments.map((comment) => (
                 <div className="comment">
                     <img src={comment.avatar} alt="" />
-                    <div className="info">
-                        <span>{comment.name}</span>
-                        <p>{comment.desc}</p>
+                    <div className='comment-content'>
+                        <div className="info">
+                            <span>{comment.name}</span>
+                            <p>{comment.desc}</p>
+                        </div>
+                        <div className='comment-action'>
+                            <span>Thích</span>
+                            <span>Phản hồi</span>
+                            <span className="date">1 phút trước</span>
+                        </div>
                     </div>
-                    <span className="date">1 phút trước</span>
                 </div>
             ))}
         </div>

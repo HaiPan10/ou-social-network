@@ -50,7 +50,7 @@ export const Login = () => {
   }
 
   return (
-    <div>
+    <div className="theme-light">
       <AuthenBackground/>
       <div className="login">
         <div className="card">

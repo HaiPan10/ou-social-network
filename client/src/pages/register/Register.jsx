@@ -89,7 +89,7 @@ export const Register = () => {
   };
 
   return (
-    <div>
+    <div className="theme-light">
       <AuthenBackground/>
       {account.id === "" ? (
         <div className="register">

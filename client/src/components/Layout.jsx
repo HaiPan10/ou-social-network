@@ -18,6 +18,12 @@ export const Layout = () => {
     const [status, setStatus] = useState()
     const {darkMode} = useContext(DarkModeContext)
 
+    const hideScrollbarStyle = {
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
+    };
+
     useEffect(() => {
         if (user !== null) {
             const getStatus = async () => {
@@ -43,7 +49,7 @@ export const Layout = () => {
     let pageContent;
     if (status === "ACTIVE") {
         pageContent = (
-            <div className={`theme-${darkMode ? "dark" : "light"}`}>
+            <div className={`theme-${darkMode ? "dark" : "light"}`} style={hideScrollbarStyle}>
                 <NavBar />
                 <div style={{ display: "flex" }}>
                     <LeftBar />
