@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -84,7 +83,7 @@ public class AccountServiceImpl implements AccountService {
 
     // Hàm gọi khi sinh viên gởi yêu cầu tạo tài khoản
     @Override
-    public Integer createPendingAccount(Account account, User user, UserStudent userStudent) throws Exception {
+    public AuthResponse createPendingAccount(Account account, User user, UserStudent userStudent) throws Exception {
         try {
             account.setRoleId(roleService.retrieve(1));
             account.setStatus("EMAIL_VERIFICATION_PENDING");
@@ -95,7 +94,8 @@ public class AccountServiceImpl implements AccountService {
             user.setUserStudent(userStudent);
             account.setUser(user);
             mailService.sendVerificationEmail(account.getId());
-            return account.getId();
+            String token = jwtService.generateAccessToken(account);
+            return new AuthResponse(user, token);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
@@ -157,7 +157,7 @@ public class AccountServiceImpl implements AccountService {
             //     throw new Exception(jsonString);
             // }
 
-            return new AuthResponse(authenticationAccount, token);
+            return new AuthResponse(authenticationAccount.getUser(), token);
         } catch(AuthenticationException exception){
             throw new Exception("Email hoặc mật khẩu không đúng.");
         }

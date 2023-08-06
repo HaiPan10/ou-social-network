@@ -15,7 +15,7 @@ public interface AccountService{
     Account retrieve(Integer id);
     List<Account> list();
     Account create(Account account) throws Exception;
-    Integer createPendingAccount(Account account, User user, UserStudent userStudent) throws Exception;
+    AuthResponse createPendingAccount(Account account, User user, UserStudent userStudent) throws Exception;
     List<Account> getPendingAccounts(Map<String, String> params);
     Integer countPendingAccounts();
     boolean verifyAccount(Account account, String status);
