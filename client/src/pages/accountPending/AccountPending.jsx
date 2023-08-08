@@ -1,7 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import './accountPending.scss'
+import { AuthContext } from '../../context/AuthContext'
 
 export const AccountPending = () => {
+    const [user, dispatch] = useContext(AuthContext)
+    const logout = (evt) => {
+        evt.preventDefault()
+        dispatch({
+          "type": "LOGOUT",
+        })
+      }
+
     return (
         <div>
             <div className="accountPending">
@@ -15,6 +24,9 @@ export const AccountPending = () => {
                         <p> Chúng tôi sẽ duyệt tài khoản sớm nhất có thể.
                             Chúng tôi sẽ gửi email phản hồi ngay khi hoàn thành quá trình kiểm duyệt tài khoản.
                         </p>
+                    </div>
+                    <div className='logout'>
+                        <button onClick={logout}>Đăng xuất</button>
                     </div>
                 </div>
             </div>

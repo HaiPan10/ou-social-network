@@ -66,8 +66,8 @@ public class User implements Serializable {
     @Column(name = "cover_avatar")
     private String coverAvatar;
 
-    @Transient
-    private MultipartFile uploadAvatar;
+    // @Transient
+    // private MultipartFile uploadAvatar;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")

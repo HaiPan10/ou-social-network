@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.protobuf.Option;
 import com.ou.configs.JwtService;
 import com.ou.pojo.Account;
 import com.ou.pojo.AuthRequest;
@@ -60,8 +61,13 @@ public class AccountServiceImpl implements AccountService {
     private JwtService jwtService;
 
     @Override
-    public Account retrieve(Integer id) {
-        return accountRepository.retrieve(id);
+    public Account retrieve(Integer id) throws Exception {
+        Optional<Account> accountOptional = accountRepository.retrieve(id);
+        if (accountOptional.isPresent()) {
+            return accountOptional.get();
+        } else {
+            throw new Exception("Account not found");
+        }
     }
 
     @Override
@@ -95,7 +101,7 @@ public class AccountServiceImpl implements AccountService {
             account.setUser(user);
             mailService.sendVerificationEmail(account.getId());
             String token = jwtService.generateAccessToken(account);
-            return new AuthResponse(user, token);
+            return new AuthResponse(account.getRoleId(), user, token);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
@@ -157,7 +163,7 @@ public class AccountServiceImpl implements AccountService {
             //     throw new Exception(jsonString);
             // }
 
-            return new AuthResponse(authenticationAccount.getUser(), token);
+            return new AuthResponse(authenticationAccount.getRoleId() ,authenticationAccount.getUser(), token);
         } catch(AuthenticationException exception){
             throw new Exception("Email hoặc mật khẩu không đúng.");
         }

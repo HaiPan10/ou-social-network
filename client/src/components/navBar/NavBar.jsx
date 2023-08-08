@@ -46,12 +46,12 @@ export const NavBar = () => {
         <NotificationsOutlinedIcon/>
         <div className="dropdown">
           <div className='user'>
-            <img src={require('../../images/default_avatar.png')} alt="" />
+            <img src={user.avatar} alt="" />
             <span>{user.firstName}</span>
           </div>
-          <div class="dropdown-content">
+          <div className="dropdown-content">
             <div onClick={logout}>Đăng xuất <LogoutOutlinedIcon/></div>
-            <Link to="/profile/1" style={{ textDecoration: 'none' }}>
+            <Link to={`/profile/${user.id}`} style={{ textDecoration: 'none' }}>
               <div>Xem trang cá nhân <AccountBoxOutlinedIcon/></div>
             </Link>
             {!darkMode ? <div onClick = {toggle}>Chế độ tối <DarkModeOutlinedIcon/></div> : 

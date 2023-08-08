@@ -1,9 +1,91 @@
 @import "../../style.scss";
 
+.modal-content {
+  @include themify($themes) {
+    background-color: themed("bgSoft");
+    color: themed("textColor");
+
+    .avatar {
+      .avatar-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img {
+          width: 150px;
+          height: 150px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+      }
+    }
+
+    .cover {
+      .cover-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img {
+          width: 100%;
+          height: 300px;
+          object-fit: cover;
+        }
+      }
+    }
+
+    .row-title {
+      display: flex;
+      justify-content: space-between;
+
+      .btn-edit {
+        color: themed("mainColor");
+        cursor: pointer;
+
+        &:hover {
+          color: themed("mainHoverColor");
+        }
+      }
+    }
+
+    .user-info {
+      .info-row {
+        display: flex;
+        gap: 10px;
+
+        .info-title {
+          font-weight: 500;
+          font-size: 16px;
+        }
+      }
+    }
+
+    .close-btn {
+      background-color: themed("commentColor");
+      color: themed("textColor");
+      border-color: themed("commentColor");
+
+      &:hover {
+        background-color: themed("hoverColor");
+      }
+    }
+  }
+}
+
 .profile {
   @include themify($themes) {
     min-height: calc(100vh - 50px);
     background-color: themed("bg");
+
+    .loading {
+      color: themed("textColor");
+      text-align: center;
+      line-height: calc(100vh - 50px);
+    }
+    
+    .page_404 {
+      color: themed("textColor");
+      text-align: center;
+      line-height: calc(100vh - 50px);
+    }
 
     .posts{
         padding: 20px 70px;
@@ -108,7 +190,7 @@
 
           .user-name {
             // padding-top: 40px;
-            font-size: 30px;
+            font-size: 25px;
             font-weight: 500;
           }
 
@@ -158,7 +240,7 @@
         }
 
         .right {
-          flex: 1;
+          flex: 3;
           display: flex;
           align-items: center;
           justify-content: flex-end;
@@ -171,6 +253,19 @@
             padding: 10px;
             border-radius: 5px;
             cursor: pointer;
+
+            &:hover {
+              background-color: #727fff;
+            }
+          }
+
+          .softColor {
+            background-color: themed("commentColor");
+            color: themed("textColor");
+
+            &:hover {
+              background-color: themed("hoverColor");
+            }
           }
         }
       }

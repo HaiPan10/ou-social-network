@@ -12,7 +12,7 @@ import com.ou.pojo.User;
 import com.ou.pojo.UserStudent;
 
 public interface AccountService{
-    Account retrieve(Integer id);
+    Account retrieve(Integer id) throws Exception;
     List<Account> list();
     Account create(Account account) throws Exception;
     AuthResponse createPendingAccount(Account account, User user, UserStudent userStudent) throws Exception;

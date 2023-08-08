@@ -32,9 +32,13 @@ public class AccountRepositoryImpl implements AccountRepository{
     private Environment env;
 
     @Override
-    public Account retrieve(Integer id) {
+    public Optional<Account> retrieve(Integer id) {
         Session session = sessionFactoryBean.getObject().getCurrentSession();
-        return (Account) session.get(Account.class, id);
+        try {
+            return Optional.ofNullable((Account) (Account) session.get(Account.class, id));
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
     }
 
     @Override

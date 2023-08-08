@@ -28,13 +28,13 @@ export const Login = () => {
               "email": account.email,
               "password": account.password,
             })
-
             save('access-token', res.data.accessToken)
-            save('current-user', res.data.account.user)
+            save('current-user', res.data.user)
+            save('role', res.data.role)
 
             userDispatch({
               "type": "LOGIN", 
-              "payload": res.data.account.user
+              "payload": res.data.user
             })
         } catch (ex) {
           setErr(ex.response.data)

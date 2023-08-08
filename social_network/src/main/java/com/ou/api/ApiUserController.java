@@ -7,9 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.ou.pojo.User;
 import com.ou.service.interfaces.UserService;
 
@@ -20,22 +25,43 @@ public class ApiUserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "update_avatar",
+    @RequestMapping(value = "/update_avatar/{userId}",
         method = RequestMethod.POST
     )
-    public ResponseEntity<String> updateAvatar(User user){
+    public ResponseEntity<Object> updateAvatar(MultipartFile uploadAvatar, @PathVariable Integer userId){
         try {
-            System.out.println("[DEBUG] - " + user);
-            userService.uploadAvatar(user);
-            return ResponseEntity.ok().body("Upload Successful");
+            return ResponseEntity.ok().body(userService.uploadAvatar(uploadAvatar, userId));
         } catch (IOException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @GetMapping("{userId}")
-    public ResponseEntity<User> get(@PathVariable Integer userId){
-        User user = userService.getUserById(userId);
-        return ResponseEntity.ok().body(user);
+    @RequestMapping(value = "/update_cover/{userId}",
+        method = RequestMethod.POST
+    )
+    public ResponseEntity<Object> updateCover(MultipartFile uploadCover, @PathVariable Integer userId){
+        try {
+            return ResponseEntity.ok().body(userService.uploadCover(uploadCover, userId));
+        } catch (IOException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping(value = "update_information/{userId}")
+    public ResponseEntity<Object> updateInformation(@RequestBody User user, @PathVariable Integer userId){
+        try {
+            return ResponseEntity.ok().body(userService.updateUser(user, userId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/profile/{userId}")
+    public ResponseEntity<Object> loadProfile(@PathVariable Integer userId) {
+        try {
+            return ResponseEntity.ok().body(userService.loadProfile(userId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

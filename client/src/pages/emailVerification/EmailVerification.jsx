@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import Api, { endpoints } from "../../configs/Api";
+import Api, { authAPI, endpoints } from "../../configs/Api";
 import './emailVerification.scss'
 import { AuthContext } from '../../context/AuthContext';
 
@@ -8,7 +8,7 @@ export const EmailVerification = (props) => {
         evt.preventDefault()
         const process = async () => {
             try {
-                let res = await Api.get(endpoints['verify'] + `/${props.accountId}`)
+                let res = await authAPI().get(endpoints['verify'] + `/${props.accountId}`)
                 if (res.status === 200) {
                     console.log("resent email!")
                 }
@@ -38,9 +38,8 @@ export const EmailVerification = (props) => {
                     </div>
                     <div className='content'>
                         <p>Tài khoản của bạn cần được xác thực email!</p>
-                        <p>Chúng tôi đã gửi mail xác thực về email của bạn, vui lòng nhấn vào đường link trong mail. 
-                        <span><a href='' onClick={resend}>Gửi lại email</a></span>
-                        </p>
+                        <p>Chúng tôi đã gửi mail xác thực về email của bạn, vui lòng nhấn vào đường link trong mail.</p>
+                        <button onClick={resend}>Gửi lại email</button>
                     </div>
                     <div className='logout'>
                         <button onClick={logout}>Đăng xuất</button>

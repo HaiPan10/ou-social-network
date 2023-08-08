@@ -51,7 +51,7 @@ public class AccountController {
     }
 
     @GetMapping("/verification/{accountId}")
-    public String verify(@PathVariable Integer accountId, @RequestParam String status) {
+    public String verify(@PathVariable Integer accountId, @RequestParam String status) throws Exception {
         accountService.verifyAccount(accountService.retrieve(accountId), status);
         return "redirect:/admin/accounts/verification/";
     }

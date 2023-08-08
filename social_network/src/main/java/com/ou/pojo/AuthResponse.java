@@ -12,6 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthResponse implements Serializable{
+    private Role role;
     private User user;
     private String accessToken;
 }

@@ -65,7 +65,7 @@ public class SpringSecurityConfigs extends WebSecurityConfigurerAdapter {
                         .antMatchers("/",
                                     "/api/accounts/login",
                                     "/api/accounts/register",
-                                    "/api/email/verify/**",
+                                    // "/api/email/verify/**",
                                     "/api/accounts/verify/**/**",
                                     "/resources/**")
                         .permitAll()
