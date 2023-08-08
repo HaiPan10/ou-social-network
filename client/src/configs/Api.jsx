@@ -5,7 +5,11 @@ export const endpoints = {
     "register": "/accounts/register",
     "verify": "/email/verify",
     "login": "/accounts/login",
-    "status": "/accounts/status"
+    "status": "/accounts/status",
+    "profile": "/user/profile",
+    "update_avatar": "/user/update_avatar",
+    "update_cover": "/user/update_cover",
+    "update_information": "/user/update_information"
 }
 
 export const authAPI = () => axios.create({

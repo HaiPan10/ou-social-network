@@ -21,11 +21,12 @@ import com.ou.handler.LoginSuccessHandler;
 @Configuration
 @EnableWebSecurity
 @EnableTransactionManagement
-@ComponentScan(basePackages = {
-    "com.ou.controller",
-    "com.ou.service",
-    "com.ou.repository"
-})
+@ComponentScan(
+    // basePackages = {
+    // "com.ou.controller",
+    // "com.ou.service",
+    // "com.ou.repository"}
+    )
 public class SpringSecurityConfigs extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService accountService;
@@ -67,7 +68,7 @@ public class SpringSecurityConfigs extends WebSecurityConfigurerAdapter {
                         .antMatchers("/",
                                     "/api/accounts/login",
                                     "/api/accounts/register",
-                                    "/api/email/verify/**",
+                                    // "/api/email/verify/**",
                                     "/api/accounts/verify/**/**",
                                     "/resources/**")
                         .permitAll()

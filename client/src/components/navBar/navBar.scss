@@ -19,10 +19,18 @@
             align-items: center;
             gap: 30px;
 
+            @include mobile{
+                gap: 10px;
+            }
+
             .logo {
                 width: 5%;
                 display: flex;
                 align-items: center;
+
+                @include mobile{
+                    width: 30%;
+                }
 
                 img {
                     width: 100%;
@@ -45,6 +53,10 @@
                     width: 500px;
                     background-color: transparent;
                     color: themed("textColor");
+
+                    @include mobile{
+                        display: none;
+                    }
                 }
             }
         }
@@ -54,20 +66,52 @@
             align-items: center;
             gap: 20px;
 
-            .user {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                font-weight: 500;
 
-                img {
-                    width: 30px;
-                    height: 30px;
-                    border-radius: 50%;
-                    object-fit: cover;
+            .dropdown {
+                cursor: pointer;
+                position: relative;
+                display: inline-block;
+
+                &:hover {
+                    .dropdown-content {display: block;}
                 }
+                
+                .user {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    font-weight: 500;
+                    padding: 10px;
+    
+                    img {
+                        width: 30px;
+                        height: 30px;
+                        border-radius: 50%;
+                        object-fit: cover;
+                    }
+    
+                    span {}
+                }
+    
+                .dropdown-content {
+                    display: none;
+                    align-items: flex-end;
+                    width: 200px;
+                    position: absolute;
+                    right: 0;
+                    background-color: themed("bg");
+                    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                    z-index: 1;
+                }
+    
+                .dropdown-content div {
+                    color: themed("textColor");
+                    padding: 12px 16px;
+                    text-decoration: none;
+                    display: block;
 
-                span {}
+                    &:hover {background-color: themed("bgSoft");}
+                }
             }
         }
     }

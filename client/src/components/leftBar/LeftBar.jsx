@@ -10,7 +10,7 @@ export const LeftBar = () => {
       <div className='container'>
         <div className='menu'>
           <div className="user">
-            <img src={require('../../images/default_avatar.png')} alt="" />
+            <img src={user.avatar} alt="" />
             <span>{user.firstName}</span>
           </div>
           <div className="item">

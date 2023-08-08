@@ -7,7 +7,7 @@ import { AuthContext } from "./context/AuthContext";
 import { useContext, useEffect, useReducer } from "react";
 import userReducer from "./reducers/userReducer";
 import { load, save } from 'react-cookies';
-import { Layout } from "./components/Layout";
+import { Layout } from "./components/layout/Layout";
 import { DarkModeContext, DarkModeContextProvider } from "./context/DarkModeContext";
 
 

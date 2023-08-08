@@ -1,23 +1,23 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { AuthContext } from '../context/AuthContext';
+import { AuthContext } from '../../context/AuthContext';
 import { Navigate, Outlet } from 'react-router-dom';
-import { NavBar } from './navBar/NavBar';
-import { LeftBar } from './leftBar/LeftBar';
-import { RightBar } from './rightBar/RightBar';
-import { authAPI, endpoints } from '../configs/Api';
-import { EmailVerification } from '../pages/emailVerification/EmailVerification';
-import { AccountLocked } from '../pages/accountLocked/AccountLocked';
-import { AccountPending } from '../pages/accountPending/AccountPending';
-import { AccountRejected } from '../pages/accountRejected/AccountRejected';
-import { AuthenBackground } from './authenBackground/AuthenBackground';
-import '../style.scss'
-import { DarkModeContext } from '../context/DarkModeContext';
+import { NavBar } from '../navBar/NavBar';
+import { LeftBar } from '../leftBar/LeftBar';
+import { RightBar } from '../rightBar/RightBar';
+import { authAPI, endpoints } from '../../configs/Api';
+import { EmailVerification } from '../../pages/emailVerification/EmailVerification';
+import { AccountLocked } from '../../pages/accountLocked/AccountLocked';
+import { AccountPending } from '../../pages/accountPending/AccountPending';
+import { AccountRejected } from '../../pages/accountRejected/AccountRejected';
+import { AuthenBackground } from '../authenBackground/AuthenBackground';
+import '../../style.scss'
+import './layout.scss'
+import { DarkModeContext } from '../../context/DarkModeContext';
 
 export const Layout = () => {
     const [user, dispatch] = useContext(AuthContext)
     const [status, setStatus] = useState()
     const {darkMode} = useContext(DarkModeContext)
-
     useEffect(() => {
         if (user !== null) {
             const getStatus = async () => {
@@ -31,7 +31,6 @@ export const Layout = () => {
     
             getStatus()
         } else {
-            console.log("LOGIN")
             setStatus("LOGIN")
         }
     }, [])
@@ -88,7 +87,7 @@ export const Layout = () => {
     }
 
     return (
-        <div>
+        <div className='layout'>
             {pageContent}
         </div>
     )

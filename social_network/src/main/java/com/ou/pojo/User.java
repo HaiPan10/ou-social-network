@@ -19,8 +19,10 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
@@ -56,6 +58,7 @@ public class User implements Serializable {
 
     @Column(name = "dob")
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(shape = JsonFormat.Shape.STRING ,pattern = "dd-MM-YYYY" , timezone="UTC")
     private Date dob;
 
     @Size(max = 300)
@@ -66,8 +69,8 @@ public class User implements Serializable {
     @Column(name = "cover_avatar")
     private String coverAvatar;
 
-    @Transient
-    private MultipartFile uploadAvatar;
+    // @Transient
+    // private MultipartFile uploadAvatar;
 
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")

@@ -1,10 +1,12 @@
-import { Link, useNavigate } from "react-router-dom"
+import { Link, Navigate, useNavigate } from "react-router-dom"
 import "./register.scss"
 import { AuthenBackground } from "../../components/authenBackground/AuthenBackground";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Api, { endpoints } from "../../configs/Api";
 import ErrorAlert from "../../components/ErrorAlert";
 import { EmailVerification } from "../emailVerification/EmailVerification";
+import { AuthContext } from "../../context/AuthContext";
+import { save } from "react-cookies";
 
 export const Register = () => {
   const [err, setErr] = useState()
@@ -16,7 +18,6 @@ export const Register = () => {
   })
 
   const [account, setAccount] = useState({
-    "id": "",
     "email": "",
     "password": "",
     "confirmPassword": "",
@@ -25,6 +26,15 @@ export const Register = () => {
   const [userStudent, setUserStudent] = useState({
     "studentIdentical": "",
   })
+
+  
+  const [step, setStep] = useState(1);
+
+  const [authUser, userDispatch] = useContext(AuthContext)
+  
+  if (authUser !== null) {
+    return <Navigate to="/" />
+  }
 
   const register = (evt) => {
     evt.preventDefault()
@@ -38,9 +48,13 @@ export const Register = () => {
                 "userStudent": userStudent
             })
             
-            if (res.status === 200) {
-              setAccount(account => ({...account, ["id"]:res.data}))
-            }
+            save('access-token', res.data.accessToken)
+            save('current-user', res.data.user)
+            save('role', res.data.role)
+            userDispatch({
+              "type": "LOGIN", 
+              "payload": res.data.user
+            })
         } catch (ex) {
           setErr(ex.response.data)
           setDisableButton(false);
@@ -54,8 +68,6 @@ export const Register = () => {
       process()
     }
   }
-
-  const [step, setStep] = useState(1);
 
   const nextStep = () => {
     setStep(step + 1);
@@ -89,9 +101,8 @@ export const Register = () => {
   };
 
   return (
-    <div>
+    <div className="theme-light">
       <AuthenBackground/>
-      {account.id === "" ? (
         <div className="register">
           <div className="card">
             <div className="right">
@@ -128,9 +139,6 @@ export const Register = () => {
           </div>
         </div>
       </div>
-      ) : (
-        <EmailVerification accountId={account.id}/>
-      )}
     </div>
   )
 }

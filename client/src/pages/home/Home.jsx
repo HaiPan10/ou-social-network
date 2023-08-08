@@ -3,8 +3,14 @@ import { LeftBar } from "../../components/leftBar/LeftBar"
 import { RightBar } from "../../components/rightBar/RightBar"
 import "./home.scss"
 import { Post } from "../../components/post/Post"
+import { useEffect } from "react"
 
 export const Home = () => {
+  
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+  }, [])
+
   const posts = [
     {
         id: 1,
@@ -77,7 +83,7 @@ export const Home = () => {
             "https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-1/353379960_1306447316942411_1921747266404131645_n.jpg?stp=dst-jpg_s320x320&_nc_cat=111&cb=99be929b-59f725be&ccb=1-7&_nc_sid=7206a8&_nc_ohc=6JFejOH1QgwAX_DN3Ul&_nc_ht=scontent.fsgn2-6.fna&oh=00_AfBudbnuh-1PCgBd_TW9L6OQrRlbOFFqCslswjX9WbI1HQ&oe=64D3085A",
         }
       ]
-  }
+    }
   ];
   return (
     <div className="home">

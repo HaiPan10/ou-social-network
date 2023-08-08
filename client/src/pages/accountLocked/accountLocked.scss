@@ -37,5 +37,27 @@ $primaryColor: #07689f;
         font-size: 20px;
         width: 100%;
       }
+
+      .logout{
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+
+        button {
+          margin-right: 25px;
+          margin-bottom: 10px;
+          padding: 10px;
+          border: none;
+          background-color: $primaryColor;
+          color: white;
+          font-weight: bold;
+          border-radius: 5px;
+          cursor: pointer;
+
+          &:hover {
+            background-color: #ccc;
+          }
+        }
+      }
     }
 }
