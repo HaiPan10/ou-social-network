@@ -1,6 +1,7 @@
 package com.ou.pojo;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.CascadeType;
@@ -58,7 +59,7 @@ public class User implements Serializable {
 
     @Column(name = "dob")
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(shape = JsonFormat.Shape.STRING ,pattern = "dd-MM-YYYY" , timezone="UTC")
+    @JsonFormat(pattern = "dd-MM-YYYY HH:mm:ss")
     private Date dob;
 
     @Size(max = 300)
