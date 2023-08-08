@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ou.pojo.Account;
-import com.ou.pojo.User;
 import com.ou.service.interfaces.AccountService;
 
 @Controller
@@ -58,7 +57,7 @@ public class AccountController {
 
     @GetMapping("/provider")
     public String provideAccounts(Model model){
-        model.addAttribute("teacherAccount", new Account());
+        
         return "accountProvider";
     }
 }

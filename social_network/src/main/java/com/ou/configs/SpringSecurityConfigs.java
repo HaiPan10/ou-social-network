@@ -21,8 +21,10 @@ import com.ou.handler.LoginSuccessHandler;
 @Configuration
 @EnableWebSecurity
 @EnableTransactionManagement
-@ComponentScan({
-
+@ComponentScan(basePackages = {
+    "com.ou.controller",
+    "com.ou.service",
+    "com.ou.repository"
 })
 public class SpringSecurityConfigs extends WebSecurityConfigurerAdapter {
     @Autowired

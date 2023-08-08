@@ -28,6 +28,8 @@
 
         <script src="<c:url value='/resources/vendor/js/helpers.js'></c:url>"></script>
         <script src="<c:url value='/resources/js/config.js'></c:url>"></script>
+        <!-- Jquery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     </head>
     <body>
