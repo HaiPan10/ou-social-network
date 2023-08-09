@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ou.pojo.Post;
 import com.ou.repository.interfaces.PostRepository;
 import com.ou.service.interfaces.ImageInPostService;
-import com.ou.service.interfaces.PostReactionService;
+// import com.ou.service.interfaces.PostReactionService;
 import com.ou.service.interfaces.PostService;
 
 @Service
@@ -24,8 +24,8 @@ public class PostServiceImpl implements PostService {
     private PostRepository postRepository;
     @Autowired
     private ImageInPostService imageInPostService;
-    @Autowired
-    private PostReactionService postReactionService;
+    // @Autowired
+    // private PostReactionService postReactionService;
 
     @Override
     public Post uploadPost(String postContent, Integer userId, List<MultipartFile> images) throws Exception {
