@@ -83,7 +83,7 @@ public class ApiAccountController {
             User user = mapper.convertValue(params.get("user"), User.class);
             UserStudent userStudent = mapper.convertValue(params.get("userStudent"), UserStudent.class);
 
-            return ResponseEntity.ok(accountService.createPendingAccount(account, user, userStudent));
+            return ResponseEntity.ok(accountService.create(account, user, userStudent));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

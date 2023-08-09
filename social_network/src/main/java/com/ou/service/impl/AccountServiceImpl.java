@@ -17,7 +17,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.protobuf.Option;
 import com.ou.configs.JwtService;
 import com.ou.pojo.Account;
 import com.ou.pojo.AuthRequest;
@@ -89,7 +88,7 @@ public class AccountServiceImpl implements AccountService {
 
     // Hàm gọi khi sinh viên gởi yêu cầu tạo tài khoản
     @Override
-    public AuthResponse createPendingAccount(Account account, User user, UserStudent userStudent) throws Exception {
+    public AuthResponse create(Account account, User user, UserStudent userStudent) throws Exception {
         try {
             account.setRoleId(roleService.retrieve(1));
             account.setStatus("EMAIL_VERIFICATION_PENDING");
@@ -172,6 +171,19 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public String getStatus(Integer accountId) {
         return accountRepository.getStatus(accountId);
+    }
+
+    @Override
+    public Account create(Account account, User user) throws Exception {
+        try {
+            account.setRoleId(roleService.retrieve(2));
+            create(account);
+            userService.create(user, account);
+            account.setUser(user);
+            return account;
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
     }
 
 }

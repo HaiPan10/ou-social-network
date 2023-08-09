@@ -15,11 +15,12 @@ public interface AccountService{
     Account retrieve(Integer id) throws Exception;
     List<Account> list();
     Account create(Account account) throws Exception;
-    AuthResponse createPendingAccount(Account account, User user, UserStudent userStudent) throws Exception;
+    AuthResponse create(Account account, User user, UserStudent userStudent) throws Exception;
     List<Account> getPendingAccounts(Map<String, String> params);
     Integer countPendingAccounts();
     boolean verifyAccount(Account account, String status);
     boolean verifyEmail(Integer accountId, String verificationCode) throws Exception;
     AuthResponse login(AuthRequest account) throws AccountNotFoundException, Exception;
     String getStatus(Integer accountId);
+    Account create(Account account, User user) throws Exception;
 }
