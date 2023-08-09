@@ -34,11 +34,11 @@ public class AccountController {
     @Autowired
     private Environment env;
 
-    // @InitBinder
-    // public void initBinder(WebDataBinder binder) {
-    //     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-    //     binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
-    // }
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+    }
 
     @GetMapping("/verification/")
     public String accountsVerification(Model model, @RequestParam Map<String, String> params) {
@@ -83,8 +83,10 @@ public class AccountController {
     @PostMapping("/provider")
     public String add(@Valid @ModelAttribute("account") Account account, BindingResult accountBindingResult) throws Exception {
         try {
+            User user = account.getUser();
+            account.setUser(null);
             System.out.printf("[INFO] - Account Provider: %s\n", account);
-            System.out.printf("[INFO] - User Provider: %s\n", account.getUser());
+            System.out.printf("[INFO] - User Provider: %s\n", user);
             if (accountBindingResult.hasErrors()) {
                 String invalidMessage = accountBindingResult
                         .getAllErrors()
@@ -94,7 +96,7 @@ public class AccountController {
                 return "redirect:/admin/accounts/provider/";
             }
 
-            Account createdAccount = accountService.create(account, account.getUser());
+            Account createdAccount = accountService.create(account, user);
             System.out.printf("[INFO] - Provider email: %s\n", createdAccount);
             return "redirect:/admin/accounts/provider/";
         } catch (Exception e) {

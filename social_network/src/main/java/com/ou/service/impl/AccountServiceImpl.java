@@ -178,6 +178,7 @@ public class AccountServiceImpl implements AccountService {
         try {
             account.setRoleId(roleService.retrieve(2));
             create(account);
+            System.out.println("[DEBUG] - Saved account id: " + account.getId());
             userService.create(user, account);
             account.setUser(user);
             return account;

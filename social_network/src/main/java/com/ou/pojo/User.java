@@ -54,7 +54,7 @@ public class User implements Serializable {
 
     @Column(name = "dob")
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(pattern = "yyyy/MM/dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dob;
 
     @Size(max = 300)

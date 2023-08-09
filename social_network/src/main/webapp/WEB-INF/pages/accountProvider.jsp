@@ -32,7 +32,7 @@
     </div>
     <button type="submit">Cấp tài khoản</button>
 </form> -->
-<form:form modelAttribute="account" method="post">
+<form:form id="provideAccount" modelAttribute="account" method="post">
     <h2>Tài khoản</h2>
     <div class="form-floating mb-3 mt-3">
         <input class="form-control" type="text" path="email" name="email" placeholder="Tài khoản email" />
@@ -53,7 +53,7 @@
         <label for="lastName">Họ tên lót giảng viên</label>
     </div>
     <div class="form-floating mb-3 mt-3">
-        <input class="form-control" type="datetime" path="user.dob" name="user.dob" />
+        <input id ="dob" class="form-control" type="date" path="user.dob" name="user.dob" />
         <label for="dob">Ngày tháng năm sinh</label>
     </div>
     <input type="submit" value="Cấp tài khoản" />
@@ -62,7 +62,6 @@
 <script>
     var provider = document.getElementById("account-providers-menu");
     provider.className += " active";
-    const form = document.getElementById("provideAccount");
     // form.addEventListener("submit", function (e) {
     //     e.preventDefault();
     //     console.log("[DEBUG] - prevent the form submit");
