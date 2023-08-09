@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,9 +17,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
@@ -40,33 +43,40 @@ public class Post implements Serializable {
     @Column(name = "id")
     private Integer id;
 
-    @NotNull(message = "{post.content.notNull}")
     @Size(max = 255, message = "{post.content.invalidSize}")
     @Column(name = "content")
     private String content;
 
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private Date createdAt;
 
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private Date updatedAt;
 
     @Column(name = "is_active_comment")
     private Boolean isActiveComment;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, mappedBy = "postId")
     private List<ImageInPost> imageInPostList;
 
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne
     private User userId;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId")
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "postId")
     private List<PostReaction> postReactionList;
     
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "postId")
-    private List<Comment> commentList;    
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "postId")
+    private List<Comment> commentList;
+
+    // @Transient
+    // private Integer reactionTotal;
+    // @Transient
+    // private Integer commentTotal;
 }

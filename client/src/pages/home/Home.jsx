@@ -4,6 +4,7 @@ import { RightBar } from "../../components/rightBar/RightBar"
 import "./home.scss"
 import { Post } from "../../components/post/Post"
 import { useEffect } from "react"
+import { PostLayout } from "../../components/postLayout/PostLayout"
 
 export const Home = () => {
   
@@ -40,20 +41,20 @@ export const Home = () => {
     },
     {
         id: 2,
-        name: "Phong Lại",
-        avatar: "https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-1/361257784_1748612805595222_847078644766594281_n.jpg?stp=dst-jpg_p320x320&_nc_cat=108&cb=99be929b-59f725be&ccb=1-7&_nc_sid=7206a8&_nc_ohc=Hp1YhJkSU4YAX9ERBPJ&_nc_ht=scontent.fsgn2-7.fna&oh=00_AfAGLqd7zzgorPAEfHq77HAkZnLzDHeKXShz2bWuUIkxhA&oe=64D42675",
+        name: "Hải Phan",
+        avatar: "https://scontent.fsgn5-11.fna.fbcdn.net/v/t39.30808-1/346479486_1919223765143706_3610828056285952976_n.jpg?stp=c0.67.200.200a_dst-jpg_p200x200&_nc_cat=110&cb=99be929b-59f725be&ccb=1-7&_nc_sid=7206a8&_nc_ohc=-v-kUVQwX4cAX-eguld&_nc_ht=scontent.fsgn5-11.fna&oh=00_AfA6UuoWqkedW1WwvaliXHwNNVjL-1Koq04LEFWcyVTyLQ&oe=64D90094",
         userId: 2,
         img:
-        "https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-6/348609765_1731357207320782_1190611563029584674_n.jpg?stp=dst-jpg_p843x403&_nc_cat=111&cb=99be929b-59f725be&ccb=1-7&_nc_sid=8bfeb9&_nc_ohc=9Q_Em4DuLZcAX8hEvBO&_nc_ht=scontent.fsgn2-6.fna&oh=00_AfCTDhP5SSLxe_IEaOR8MODZ26CeQ6sd2pQzB2unnVjuXQ&oe=64D31D9A",
-        desc: "Cơm chó này @Phan Thanh Hải",
+        "https://scontent.fsgn13-2.fna.fbcdn.net/v/t39.30808-6/357380645_702233255043360_1023825951615310938_n.jpg?stp=dst-jpg_p180x540&_nc_cat=106&cb=99be929b-59f725be&ccb=1-7&_nc_sid=7f8c78&_nc_ohc=1aw6EEiMBjEAX_idf2f&_nc_ht=scontent.fsgn13-2.fna&oh=00_AfAchAaPWdlA1enVcmkfQbIx4EsAatJL9Z5Hv5Z3iBYk5w&oe=64D8E138",
+        desc: "Dăm ba cái huy chương",
         comments: [
           {
             id: 1,
             desc: "Huhu chỉ biết ước",
-            name: "Phan Thanh Hải",
+            name: "Phong Lại",
             userId: 1,
             avatar:
-              "https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-1/346479486_1919223765143706_3610828056285952976_n.jpg?stp=c0.107.320.320a_dst-jpg_p320x320&_nc_cat=110&cb=99be929b-59f725be&ccb=1-7&_nc_sid=7206a8&_nc_ohc=wpq5BIkJr2oAX8wrJJs&_nc_ht=scontent.fsgn2-6.fna&oh=00_AfBDIKd8ITu9wEP_LwYDAbDrQUpdkxdMxlNai8mu6mSuwg&oe=64D311D4",
+              "https://scontent.fsgn2-7.fna.fbcdn.net/v/t39.30808-1/361257784_1748612805595222_847078644766594281_n.jpg?stp=dst-jpg_p320x320&_nc_cat=108&cb=99be929b-59f725be&ccb=1-7&_nc_sid=7206a8&_nc_ohc=Hp1YhJkSU4YAX9ERBPJ&_nc_ht=scontent.fsgn2-7.fna&oh=00_AfAGLqd7zzgorPAEfHq77HAkZnLzDHeKXShz2bWuUIkxhA&oe=64D42675",
           },
           {
             id: 2,
@@ -88,6 +89,7 @@ export const Home = () => {
   return (
     <div className="home">
       <div className="posts">
+        <PostLayout/>
         {posts.map(post=>(
           <Post post={post} key={post.id}/>
         ))}

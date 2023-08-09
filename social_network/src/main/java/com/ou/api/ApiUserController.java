@@ -49,6 +49,7 @@ public class ApiUserController {
     @PostMapping(value = "update_information/{userId}")
     public ResponseEntity<Object> updateInformation(@RequestBody User user, @PathVariable Integer userId){
         try {
+            System.out.println(user.getDob());
             return ResponseEntity.ok().body(userService.updateUser(user, userId));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
