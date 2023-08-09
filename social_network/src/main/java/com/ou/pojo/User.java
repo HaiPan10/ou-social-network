@@ -1,7 +1,6 @@
 package com.ou.pojo;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.CascadeType;
@@ -15,13 +14,9 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -59,7 +54,7 @@ public class User implements Serializable {
 
     @Column(name = "dob")
     @Temporal(TemporalType.TIMESTAMP)
-    @JsonFormat(pattern = "dd-MM-YYYY HH:mm:ss")
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private Date dob;
 
     @Size(max = 300)
