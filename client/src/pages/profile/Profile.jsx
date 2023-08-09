@@ -13,6 +13,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { DarkModeContext } from "../../context/DarkModeContext";
 import { Form } from "react-bootstrap";
+import { PostLayout } from "../../components/postLayout/PostLayout";
 
 const UpdateAvatar = (props) => {
   const {darkMode} = useContext(DarkModeContext)
@@ -125,26 +126,30 @@ const UpdateCover = (props) => {
     evt.preventDefault()
     setDisableButton(true)
     const process = async () => {
-      try {
-        let form = new FormData()
-        if (cover.current.files.length > 0)
-            form.append("uploadCover", cover.current.files[0])
-        let res = await authAPI().post(endpoints['update_cover'] + `/${props.profileUser.id}`, form, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        })
-        if (res.status === 200) {
-          setDisableButton(false)
-          close()
-          save("current-user", res.data)
-          userDispatch({
-            "type": "LOGIN", 
-            "payload": res.data
+      if (selectedCover !== null) {
+        try {
+          let form = new FormData()
+          if (cover.current.files.length > 0)
+              form.append("uploadCover", cover.current.files[0])
+          let res = await authAPI().post(endpoints['update_cover'] + `/${props.profileUser.id}`, form, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
           })
+          if (res.status === 200) {
+            setDisableButton(false)
+            close()
+            save("current-user", res.data)
+            userDispatch({
+              "type": "LOGIN", 
+              "payload": res.data
+            })
+          }
+        } catch (ex) {
+          
         }
-      } catch (ex) {
-        
+      } else {
+        setDisableButton(false)
       }
     }
     process()
@@ -224,7 +229,12 @@ const UpdateInformation = (props) => {
         
       }
     }
-    process()
+
+    if (updateUser.dob !== "" && updateUser.dob !== props.profileUser.dob) {
+      process()
+    } else {
+      setDisableButton(false)
+    }
   }
 
   return (
@@ -248,7 +258,17 @@ const UpdateInformation = (props) => {
               </div>
               <div className="info-row">
                 <div className="info-title">Ngày tháng năm sinh:</div>
-                <div><input type="date" value={props.profileUser.dob} onChange={(e) => setUpdateUser(updateUser => ({...updateUser, ["dob"]:e.target.value}))} /></div>
+                <div><input type="date" onChange={(e) => 
+                  {
+                    const selectedDate = e.target.value;
+                    const formattedDate = new Date(selectedDate).toLocaleDateString('en-GB', {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric'
+                    }).split('/').join('-');
+                    setUpdateUser(updateUser => ({ ...updateUser, dob: formattedDate }));
+                  }
+                } /></div>
               </div>
             </div>
           </Modal.Body>
@@ -456,6 +476,7 @@ export const Profile = () => {
         </div>      
       </div>
       <div className="posts">
+        <PostLayout/>
         {/* {posts.map(post=>(
           <Post post={post} key={post.id}/>
         ))} */}

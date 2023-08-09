@@ -10,8 +10,8 @@ export const RightBar = () => {
           <span>Lời mời kết bạn</span>
           <div className='user'>
             <div className="userInfo">
-              <img src={require('../../images/default_avatar.png')} alt="" />
-              <span>User 1</span>
+              <img src="https://scontent.fsgn5-11.fna.fbcdn.net/v/t39.30808-1/346479486_1919223765143706_3610828056285952976_n.jpg?stp=c0.67.200.200a_dst-jpg_p200x200&_nc_cat=110&cb=99be929b-59f725be&ccb=1-7&_nc_sid=7206a8&_nc_ohc=-v-kUVQwX4cAX-eguld&_nc_ht=scontent.fsgn5-11.fna&oh=00_AfA6UuoWqkedW1WwvaliXHwNNVjL-1Koq04LEFWcyVTyLQ&oe=64D90094" alt="" />
+              <span>Hai Phan</span>
             </div>
             <div className="button">
               <button>Thêm bạn bè</button>
@@ -20,8 +20,8 @@ export const RightBar = () => {
           </div>
           <div className='user'>
             <div className="userInfo">
-              <img src={require('../../images/default_avatar.png')} alt="" />
-              <span>User 2</span>
+              <img src="https://scontent.fsgn2-9.fna.fbcdn.net/v/t39.30808-6/277002539_1375356086260046_5160724194459668762_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=174925&_nc_ohc=d7EjbFj3HFYAX9S3SS9&_nc_ht=scontent.fsgn2-9.fna&oh=00_AfCrm2BS8U8tVO64URnFSG98ydiHt6rBAW5TJ-y2qvut1A&oe=64D266E2" alt="" />
+              <span>Mai Nguyễn</span>
             </div>
             <div className="button">
               <button>Thêm bạn bè</button>
