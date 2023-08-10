@@ -76,14 +76,14 @@ public class AccountController {
     }
 
     @GetMapping("/provider")
-    public String provideAccounts(ModelMap model) {
+    public String provideAccounts(Model model) {
         Account account = new Account();
-        account.setUser(new User());
+        // account.setUser(new User());
         model.addAttribute("account", account);
         return "provider";
     }
 
-    @PostMapping(path = "/provider", produces = "text/plain; charset=UTF-8")
+    @PostMapping(path = "/provider")
     public String add(@ModelAttribute("account") Account account, BindingResult bindingResult) throws Exception {
         try {
             User user = account.getUser();
