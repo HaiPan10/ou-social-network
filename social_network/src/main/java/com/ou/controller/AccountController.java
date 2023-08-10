@@ -20,21 +20,26 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.pojo.Account;
 import com.ou.pojo.User;
 import com.ou.service.interfaces.AccountService;
+import com.ou.service.interfaces.UserService;
 import com.ou.validator.GrantAccountValidator;
 
 @Controller
 @RequestMapping("/admin/accounts")
 public class AccountController {
     @Autowired
-    AccountService accountService;
+    private AccountService accountService;
     @Autowired
     private Environment env;
     @Autowired
     private GrantAccountValidator adminValidator;
+    @Autowired
+    private UserService userService;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -76,29 +81,33 @@ public class AccountController {
     }
 
     @GetMapping("/provider")
-    public String provideAccounts(Model model) {
+    public String provideAccounts(Model model, @RequestParam(name="status",required = false) String status) {
         Account account = new Account();
-        // account.setUser(new User());
+        account.setUser(new User());
         model.addAttribute("account", account);
+        if(status != null){
+            model.addAttribute("status", status);
+        }
         return "provider";
     }
 
     @PostMapping(path = "/provider")
-    public String add(@ModelAttribute("account") Account account, BindingResult bindingResult) throws Exception {
+    public String add(@ModelAttribute("account") Account account,
+        @RequestPart(value = "fileInput", required = false) MultipartFile avatar,
+        BindingResult bindingResult) throws Exception {
         try {
             User user = account.getUser();
             account.setUser(null);
             adminValidator.validate(account, bindingResult);
             adminValidator.validate(user, bindingResult);
-            System.out.printf("[INFO] - Account Provider: %s\n", account);
-            System.out.printf("[INFO] - User Provider: %s\n", user);
             if (bindingResult.hasErrors()) {
                 return "provider";
             }
 
             Account createdAccount = accountService.create(account, user);
             System.out.printf("[INFO] - Provider email: %s\n", createdAccount);
-            return "redirect:/admin/accounts/provider";
+            userService.uploadAvatar(avatar, createdAccount.getId());
+            return "redirect:/admin/accounts/provider/?status=success";
         } catch (Exception e) {
             bindingResult.addError(new ObjectError("exceptionError", e.getMessage()));
             return "provider";

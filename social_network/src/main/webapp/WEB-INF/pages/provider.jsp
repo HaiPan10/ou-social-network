@@ -32,7 +32,13 @@
     </div>
     <button type="submit">Cấp tài khoản</button>
 </form> -->
-<form:form id="provideAccount" modelAttribute="account" method="post">
+<c:if test="${status != null}">
+    <div class="alert alert-success">
+        ${status}
+    </div>
+</c:if>
+<c:url value="/admin/accounts/provider" var="provider" />
+<form:form action="${provider}" id="provideAccount" modelAttribute="account" method="post" enctype="multipart/form-data">
     <h2>Tài khoản</h2>
     <div class="form-group">
         <div class="mb-3">
@@ -51,16 +57,19 @@
     <h2>Thông tin giảng viên</h2>
     <div class="form-floating mb-3 mt-3">
         <form:input class="form-control" id="firstName" type="text" path="user.firstName" 
-            name="user.firstName" placeholder="Tên" />
+            name="firstName" placeholder="Tên" />
         <label for="firstName">Tên giảng viên</label>
     </div>
     <div class="form-floating mb-3 mt-3">
-        <form:input class="form-control" type="text" path="user.lastName" name="user.lastName" placeholder="Họ tên lót" />
+        <form:input class="form-control" type="text" path="user.lastName" name="lastName" placeholder="Họ tên lót" />
         <label for="lastName">Họ tên lót giảng viên</label>
     </div>
     <div class="form-floating mb-3 mt-3">
-        <form:input id ="dob" class="form-control" type="date" path="user.dob" name="user.dob" />
+        <form:input id ="dob" class="form-control" type="date" path="user.dob" name="dob" />
         <label for="dob">Ngày tháng năm sinh</label>
+    </div>
+    <div class="form-floating mb-3 mt-3">
+        <input type="file" name="fileInput">
     </div>
     <form:button type="submit">Cấp tài khoản</form:button>
 </form:form>
