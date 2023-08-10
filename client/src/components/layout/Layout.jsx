@@ -13,6 +13,7 @@ import { AuthenBackground } from '../authenBackground/AuthenBackground';
 import '../../style.scss'
 import './layout.scss'
 import { DarkModeContext } from '../../context/DarkModeContext';
+import 'react-image-lightbox/style.css';
 
 export const Layout = () => {
     const [user, dispatch] = useContext(AuthContext)

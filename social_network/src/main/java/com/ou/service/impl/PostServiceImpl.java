@@ -13,8 +13,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.pojo.Post;
 import com.ou.repository.interfaces.PostRepository;
+import com.ou.service.interfaces.CommentService;
 import com.ou.service.interfaces.ImageInPostService;
-// import com.ou.service.interfaces.PostReactionService;
+import com.ou.service.interfaces.PostReactionService;
 import com.ou.service.interfaces.PostService;
 
 @Service
@@ -24,17 +25,22 @@ public class PostServiceImpl implements PostService {
     private PostRepository postRepository;
     @Autowired
     private ImageInPostService imageInPostService;
-    // @Autowired
-    // private PostReactionService postReactionService;
+    @Autowired
+    private PostReactionService postReactionService;
+    @Autowired
+    private CommentService commentService;
 
     @Override
-    public Post uploadPost(String postContent, Integer userId, List<MultipartFile> images) throws Exception {
+    public Post uploadPost(String postContent, Integer userId, List<MultipartFile> images, boolean isActiveContent) throws Exception {
         Post newPost = new Post();
         newPost.setContent(postContent);
         newPost.setCreatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
         newPost.setUpdatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+        newPost.setIsActiveComment(isActiveContent);
         postRepository.uploadPost(newPost, userId);
         newPost.setImageInPostList(imageInPostService.uploadImageInPost(images, newPost));
+        newPost.setReactionTotal(postReactionService.countReaction(newPost.getId()));
+        newPost.setCommentTotal(commentService.countComment(newPost.getId()));
         return newPost;
     }
 
@@ -42,11 +48,14 @@ public class PostServiceImpl implements PostService {
     public List<Post> loadPost(Integer userId) throws Exception {
         Optional<List<Post>> listPostOptional = postRepository.loadPost(userId);
         if (listPostOptional.isPresent()) {
-            // List<Post> posts = listPosOptional.get();
-            // posts.forEach(p -> p.setReactionTotal(postReactionService.countReaction(p.getId())));
-            return listPostOptional.get();
+            List<Post> posts = listPostOptional.get();
+            posts.forEach(p -> {
+                p.setReactionTotal(postReactionService.countReaction(p.getId()));
+                p.setCommentTotal(commentService.countComment(p.getId()));
+            });
+            return posts;
         } else {
-            throw new Exception("Không còn bài đăng nào!");
+            throw new Exception("Lỗi user không hợp lệ!");
         }
     }
 }

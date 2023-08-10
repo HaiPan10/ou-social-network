@@ -33,20 +33,24 @@
                 flex-direction: column;
                 gap: 20px;
 
-                .user {
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-
-                    img {
-                        width: 30px;
-                        height: 30px;
-                        border-radius: 50%;
-                        object-fit: cover;
-                    }
-
-                    span {
-                        font-size: 14px;
+                .turnoff-link-style {
+                    text-decoration: none;
+                    color: themed("textColor");
+                    .user {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+    
+                        img {
+                            width: 30px;
+                            height: 30px;
+                            border-radius: 50%;
+                            object-fit: cover;
+                        }
+    
+                        span {
+                            font-size: 14px;
+                        }
                     }
                 }
 
@@ -54,6 +58,11 @@
                     display: flex;
                     align-items: center;
                     gap: 10px;
+
+                    .icon {
+                        width: 30px;
+                        height: 30px;
+                    }
 
                     #friend {
                         content: themed("friendIcon");

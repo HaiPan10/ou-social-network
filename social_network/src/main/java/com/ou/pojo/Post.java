@@ -75,8 +75,8 @@ public class Post implements Serializable {
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "postId")
     private List<Comment> commentList;
 
-    // @Transient
-    // private Integer reactionTotal;
-    // @Transient
-    // private Integer commentTotal;
+    @Transient
+    private Integer reactionTotal;
+    @Transient
+    private Integer commentTotal;
 }

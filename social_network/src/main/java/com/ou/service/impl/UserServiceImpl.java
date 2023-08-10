@@ -13,6 +13,7 @@ import com.ou.pojo.Account;
 import com.ou.pojo.User;
 import com.ou.repository.interfaces.UserRepository;
 import com.ou.service.interfaces.AccountService;
+import com.ou.service.interfaces.PostService;
 import com.ou.service.interfaces.UploadFileService;
 import com.ou.service.interfaces.UserService;
 
@@ -26,6 +27,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private AccountService accountService;
+    
+    @Autowired
+    private PostService postService;
 
     @Override
     public User create(User user, Account account) {
@@ -71,8 +75,8 @@ public class UserServiceImpl implements UserService {
         }
         Map<String, Object> jsonObject = new HashMap<>();
         jsonObject.put("user", retrieveAccount.getUser());
-        // .put("status", retrieveAccount.getStatus())
         jsonObject.put("role", retrieveAccount.getRoleId());
+        jsonObject.put("posts", postService.loadPost(userId));
         return jsonObject;
     }
 
