@@ -40,6 +40,7 @@ public class JwtTokenFilter extends OncePerRequestFilter{
         System.out.println("[DEBUG] - Header Authorization: " + request.getHeader("Authorization"));
 
         String header = getAuthorization(request);
+        request.setCharacterEncoding("UTF-8");
 
         if(header == null || !header.startsWith("Bearer")){
             filterChain.doFilter(request, response);
