@@ -55,7 +55,9 @@ const UploadPost = (props) => {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <div>Bài viết</div>
+            <div className="user"></div>
+            <div className="content"></div>
+            <div className="image"></div>
           </Modal.Body>
           <Modal.Footer>
             <Button onClick={props.onHide}>Đóng</Button>
