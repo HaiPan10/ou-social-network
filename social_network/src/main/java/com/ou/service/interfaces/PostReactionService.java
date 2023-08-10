@@ -1,5 +1,5 @@
-// package com.ou.service.interfaces;
+package com.ou.service.interfaces;
 
-// public interface PostReactionService {
-//     Integer countReaction(Integer postId);
-// }
+public interface PostReactionService {
+    Integer countReaction(Integer postId);
+}

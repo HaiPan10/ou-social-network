@@ -8,8 +8,8 @@
         border-radius: 20px;
         background-color: themed("bgSoft");
         color: themed("textColor");
-        .container {
-            padding: 20px;
+        .postContainer {
+            padding: 20px;      
 
             .user {
                 display: flex;
@@ -43,10 +43,10 @@
             }
 
             .content {
-                margin: 20px 0px;
+                margin: 10px 0px;
                 
                 p {
-                    margin: 0;
+                    margin-bottom: 10px;
                 }
 
                 img {
@@ -54,6 +54,27 @@
                     max-height: 500px;
                     object-fit: cover;
                     margin-top: 10px;
+                }
+
+                .grid-container {
+                    padding: 0;
+
+                    
+                    .container {
+                        .row {
+                            .height-one {
+                                padding-top: 50%;
+                            }
+    
+                            .background {
+                                border-radius: 0;
+                            }
+
+                            .cover {
+                                border-radius: 0;
+                            }
+                        }
+                    }
                 }
             }
 

@@ -55,7 +55,9 @@ const UploadPost = (props) => {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <div>Bài viết</div>
+            <div className="user"></div>
+            <div className="content"></div>
+            <div className="image"></div>
           </Modal.Body>
           <Modal.Footer>
             <Button onClick={props.onHide}>Đóng</Button>
@@ -70,7 +72,7 @@ export const PostLayout = () => {
   const [uploadPostShow, setUploadPostShow] = useState(false)
   return (
     <div className='post-layout'>
-        <div className="container">
+        <div className="postLayoutContainer">
             <div className="avatar"><img src={user.avatar} alt="" /></div>
             <div className="show-modal" onClick={() => setUploadPostShow(true)}>Chia sẻ trạng thái của bạn</div>
         </div>

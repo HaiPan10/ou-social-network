@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import "./post.scss"
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
@@ -7,43 +7,59 @@ import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Link } from "react-router-dom";
 import { Comment } from '../comments/Comment';
+import Moment from 'react-moment';
+import ImageInPost from '../imageInPost/ImageInPost'
+import { AuthContext } from '../../context/AuthContext';
 
 export const Post = ({post}) => {
     const [commentOpen, setCommentOpen] = useState(false)
     const liked = false;
+    const images = post.imageInPostList.map(image => image.imageUrl);
+    const [user, userDispatch] = useContext(AuthContext)
+
+    const formatDate = (inputDate) => {
+        const parts = inputDate.split('-');
+        const day = parts[0];
+        const month = parts[1];
+        const year = parts[2];
+        
+        return `${year}-${month}-${day}`;
+      };
 
     return (
         <div className='post'>
-            <div className="container">
+            <div className="postContainer">
                 <div className="user">
                     <div className="userInfo">
-                        <img src={post.avatar} />
+                        {post.userId.id === user.id ? <img src={user.avatar}/> : <img src={post.userId.avatar} />}
                         <div className="details">
-                            <Link to={`/profile/${post.userId}`} style={{textDecoration:"none", color:"inherit"}}>
-                                <span className='name'>{post.name}</span>
+                            <Link to={`/profile/${post.userId.id}`} style={{textDecoration:"none", color:"inherit"}}>
+                                <span className='name'>{post.userId.lastName} {post.userId.firstName}</span>
                             </Link>
-                            <span className='date'>1 phút trước</span>
+                            <span className='date'><Moment locale="vi" fromNow>{formatDate(post.createdAt)}</Moment></span>
                         </div>
                     </div>
                     <MoreHorizIcon/>
                 </div>
                 <div className="content">
-                    <p>{post.desc}</p>
-                    <img src={post.img} />
+                    <p>{post.content}</p>
+                    <ImageInPost hideOverlay={true} images={images} />
+                    {/* <img src={post.img} /> */}
                 </div>
                 <div className="info">
                     <div className="item">
                         {liked? <FavoriteOutlinedIcon/> : <FavoriteBorderOutlinedIcon/>}
-                        69 Likes
+                        {post.reactionTotal} tương tác
                     </div>
-                    <div className="item" onClick={()=>setCommentOpen(!commentOpen)}>
+                    {post.isActiveComment ? <div className="item" onClick={()=>setCommentOpen(!commentOpen)}>
                         <TextsmsOutlinedIcon />
-                        12 Comments
-                    </div>
-                    <div className="item">
+                        {post.commentTotal} bình luận
+                    </div> :
+                    <div> Bình luận bị khóa! </div> }
+                    {/* <div className="item">
                         <ShareOutlinedIcon />
                         Share
-                    </div>
+                    </div> */}
                 </div>
                 {commentOpen && <Comment comments={post.comments}/>}
             </div>

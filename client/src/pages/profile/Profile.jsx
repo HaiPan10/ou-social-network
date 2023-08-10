@@ -48,7 +48,6 @@ const UpdateAvatar = (props) => {
           })
           if (res.status === 200) {
             setDisableButton(false)
-            close()
             save("current-user", res.data)
             userDispatch({
               "type": "LOGIN", 
@@ -63,6 +62,7 @@ const UpdateAvatar = (props) => {
       }
     }
     process()
+    close()
   }
 
   return (
@@ -138,7 +138,6 @@ const UpdateCover = (props) => {
           })
           if (res.status === 200) {
             setDisableButton(false)
-            close()
             save("current-user", res.data)
             userDispatch({
               "type": "LOGIN", 
@@ -153,6 +152,7 @@ const UpdateCover = (props) => {
       }
     }
     process()
+    close()
   }
 
   return (
@@ -219,7 +219,6 @@ const UpdateInformation = (props) => {
         if (res.status === 200) {
           setDisableButton(false)
           save("current-user", res.data)
-          close()
           userDispatch({
             "type": "LOGIN", 
             "payload": res.data
@@ -232,6 +231,7 @@ const UpdateInformation = (props) => {
 
     if (updateUser.dob !== "" && updateUser.dob !== props.profileUser.dob) {
       process()
+      close()
     } else {
       setDisableButton(false)
     }
@@ -283,6 +283,7 @@ const UpdateInformation = (props) => {
 
 const EditProfile = (props) => {
   const {darkMode} = useContext(DarkModeContext)
+  const [user, userDispatch] = useContext(AuthContext)
   const editAvatar = () => {
     props.setEditAvatarShow(true);
     props.setEditProfileShow(false);
@@ -314,14 +315,13 @@ const EditProfile = (props) => {
               <div className="btn-edit" onClick={editAvatar}>Chỉnh sửa</div>
             </div>
             <div className="avatar-container">
-              {props.profileUser.avatar===null ? 
-              <img
-                src={require('../../images/default_avatar.png')}
-                alt=""
-              /> : <img
-                src={props.profileUser.avatar}
-                alt=""
-              />}
+              {props.profileUser.avatar===null ? (
+                <img src={require('../../images/default_avatar.png')} alt="" className="profilePic" />
+              ) : props.profileUser.id === user.id ? (
+                <img src={user.avatar} alt="" className="profilePic" />
+              ) : (
+                <img src={props.profileUser.avatar} alt="" className="profilePic" />
+              )}
             </div>
           </div>
           <div className="cover">
@@ -330,14 +330,13 @@ const EditProfile = (props) => {
               <div className="btn-edit" onClick={editCover}>Chỉnh sửa</div>
             </div>
             <div className="cover-container">
-              {props.profileUser.coverAvatar===null ? 
-              <img
-                src={require('../../images/default_cover.png')}
-                alt=""
-              /> : <img
-                src={props.profileUser.coverAvatar}
-                alt=""
-              />}
+              {props.profileUser.coverAvatar===null ? (
+              <img src={require('../../images/default_cover.png')} alt="" className="cover" />
+                ) : props.profileUser.id === user.id ? (
+                  <img src={user.coverAvatar} alt="" className="cover" />
+                ) : (
+                  <img src={props.profileUser.coverAvatar} alt="" className="cover" />
+              )}
             </div>
           </div>
           <div className="avatar">
@@ -352,10 +351,13 @@ const EditProfile = (props) => {
               </div>
               <div className="info-row">
                 <div className="info-title">Ngày tháng năm sinh:</div>
-                {props.profileUser.dob === null ?
-                  <div>Chưa cập nhật</div> :
+                {props.profileUser.dob === null===null ? (
+                  <div>Chưa cập nhật</div>
+                ) : props.profileUser.id === user.id ? (
+                  <div>{user.dob}</div>
+                ) : (
                   <div>{props.profileUser.dob}</div>
-                }
+                )}
               </div>
             </div>
           </div>
@@ -377,10 +379,10 @@ export const Profile = () => {
   const [editAvatarShow, setEditAvatarShow] = useState(false)
   const [editCoverShow, setEditCoverShow] = useState(false)
   const [editInformationShow, setEditInformationShow] = useState(false)
+  const [posts, setPosts] = useState()
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
-    console.log(user)
   }, [])
 
   useEffect(() => {
@@ -388,19 +390,15 @@ export const Profile = () => {
       try {
         let res = await authAPI().get(endpoints['profile'] + `/${id}`)
         setRole(res.data.role)
-        setProfileUser(res.data.user)
+        setProfileUser(res.data.user)       
+        setPosts(res.data.posts)
       } catch (ex) {
         setValidUser(false)
       }
     }
 
-    if (id == user.id) {
-      setRole(load("role"))
-      setProfileUser(user)
-    } else {
-      loadProfile()
-    }
-  }, [id, user])
+    loadProfile()
+  }, [id])
 
   if ((profileUser === null || role === null) && isValidUser === true) {
     return <div className="profile">
@@ -418,36 +416,32 @@ export const Profile = () => {
   return (
     <div className="profile">
       <div className="images">
-        {profileUser.coverAvatar===null ? 
-            <img
-              src={require('../../images/default_cover.png')}
-              alt=""
-              className="cover"
-            /> : <img
-              src={profileUser.coverAvatar}
-              alt=""
-              className="cover"
-            />}
+        {profileUser.coverAvatar===null ? (
+            <img src={require('../../images/default_cover.png')} alt="" className="cover" />
+          ) : profileUser.id === user.id ? (
+            <img src={user.coverAvatar} alt="" className="cover" />
+          ) : (
+            <img src={profileUser.coverAvatar} alt="" className="cover" />
+        )}
       </div>
       <div className="profileContainer">
         <div className="uInfo">
           <div className="left">
-            {profileUser.avatar===null ? 
-            <img
-              src={require('../../images/default_avatar.png')}
-              alt=""
-              className="profilePic"
-            /> : <img
-              src={profileUser.avatar}
-              alt=""
-              className="profilePic"
-            />}
+            {profileUser.avatar===null ? (
+              <img src={require('../../images/default_avatar.png')} alt="" className="profilePic" />
+            ) : profileUser.id === user.id ? (
+              <img src={user.avatar} alt="" className="profilePic" />
+            ) : (
+              <img src={profileUser.avatar} alt="" className="profilePic" />
+            )}
             
             <span className="user-name">{profileUser.lastName} {profileUser.firstName}</span>
-            {role.id == 1 ? (
+            {role.id === 1 ? (
               <span className="user-role">Cựu sinh viên</span>
-            ) : (
+            ) : role.id === 2 ? (
               <span className="user-role">Giảng viên</span>
+            ) : (
+              <span className="user-role">Quản trị viên</span>
             )}
           </div>
           <div className="center">
@@ -476,10 +470,10 @@ export const Profile = () => {
         </div>      
       </div>
       <div className="posts">
-        <PostLayout/>
-        {/* {posts.map(post=>(
+        {profileUser.id === user.id ? <PostLayout/> : <></>}        
+        {posts.map(post=>(
           <Post post={post} key={post.id}/>
-        ))} */}
+        ))}
     </div>
   </div>
   )

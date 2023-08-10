@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <h1 class="custom">Cấp tài khoản giảng viên</h1>
@@ -40,29 +40,29 @@
         </div>
     </div>
     <div class="form-floating mb-3 mt-3">
-        <input class="form-control" type="text" path="email" name="email" placeholder="Tài khoản email" />
+        <form:input class="form-control" type="text" path="email" name="email" placeholder="Tài khoản email" />
         <label for="email">Email</label>
     </div>
     <div class="form-floating mb-3 mt-3">
-        <input class="form-control" type="password" path="password" name="password" placeholder="Mật khẩu"
+        <form:input class="form-control" type="password" path="password" name="password" placeholder="Mật khẩu"
             value="ou@123" />
         <label for="password">Mật khẩu</label>
     </div>
     <h2>Thông tin giảng viên</h2>
     <div class="form-floating mb-3 mt-3">
-        <input class="form-control" id="firstName" type="text" path="user.firstName" 
+        <form:input class="form-control" id="firstName" type="text" path="user.firstName" 
             name="user.firstName" placeholder="Tên" />
         <label for="firstName">Tên giảng viên</label>
     </div>
     <div class="form-floating mb-3 mt-3">
-        <input class="form-control" type="text" path="user.lastName" name="user.lastName" placeholder="Họ tên lót" />
+        <form:input class="form-control" type="text" path="user.lastName" name="user.lastName" placeholder="Họ tên lót" />
         <label for="lastName">Họ tên lót giảng viên</label>
     </div>
     <div class="form-floating mb-3 mt-3">
-        <input id ="dob" class="form-control" type="date" path="user.dob" name="user.dob" />
+        <form:input id ="dob" class="form-control" type="date" path="user.dob" name="user.dob" />
         <label for="dob">Ngày tháng năm sinh</label>
     </div>
-    <input type="submit" value="Cấp tài khoản" />
+    <button type="submit">Cấp tài khoản</button>
 </form:form>
 
 <script>

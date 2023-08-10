@@ -7,6 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ou.pojo.Post;
 
 public interface PostService {
-    Post uploadPost(String postContent, Integer userId, List<MultipartFile> image) throws Exception;
+    Post uploadPost(String postContent, Integer userId, List<MultipartFile> image, boolean isActiveContent) throws Exception;
     List<Post> loadPost(Integer userId) throws Exception;
 }

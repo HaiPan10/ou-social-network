@@ -34,9 +34,9 @@ public class ApiPostController {
 
     @PostMapping(path = "/upload/{userId}")
     public ResponseEntity<Object> upLoadPost(@PathVariable Integer userId, String postContent,
-     List<MultipartFile> images) throws Exception {
+     List<MultipartFile> images, boolean isActiveContent) throws Exception {
         try {
-            return ResponseEntity.ok(postService.uploadPost(postContent, userId, images));
+            return ResponseEntity.ok(postService.uploadPost(postContent, userId, images, isActiveContent));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

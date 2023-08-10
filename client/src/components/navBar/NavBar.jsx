@@ -1,6 +1,5 @@
 import React, { useContext } from 'react'
 import { AuthContext } from '../../context/AuthContext'
-import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import GridViewOutlinedIcon from "@mui/icons-material/GridViewOutlined";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
@@ -32,9 +31,9 @@ export const NavBar = () => {
           <img />
           {/* <span>OU Social Network</span> */}
         </div>
-        <Link to="/">
+        {/* <Link to="/">
           <HomeOutlinedIcon/>
-        </Link>
+        </Link> */}
         {/* <GridViewOutlinedIcon/> */}
         <div className='search'>
           <SearchOutlinedIcon/>
