@@ -4,8 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.core.env.Environment;
@@ -13,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -25,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.ou.pojo.Account;
 import com.ou.pojo.User;
 import com.ou.service.interfaces.AccountService;
+import com.ou.validator.GrantAccountValidator;
 
 @Controller
 @RequestMapping("/admin/accounts")
@@ -33,11 +33,14 @@ public class AccountController {
     AccountService accountService;
     @Autowired
     private Environment env;
+    @Autowired
+    private GrantAccountValidator adminValidator;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+        binder.setValidator(adminValidator);
     }
 
     @GetMapping("/verification/")
@@ -77,30 +80,28 @@ public class AccountController {
         Account account = new Account();
         account.setUser(new User());
         model.addAttribute("account", account);
-        return "accountProvider";
+        return "provider";
     }
 
-    @PostMapping("/provider")
-    public String add(@Valid @ModelAttribute("account") Account account, BindingResult accountBindingResult) throws Exception {
+    @PostMapping(path = "/provider", produces = "text/plain; charset=UTF-8")
+    public String add(@ModelAttribute("account") Account account, BindingResult bindingResult) throws Exception {
         try {
             User user = account.getUser();
             account.setUser(null);
+            adminValidator.validate(account, bindingResult);
+            adminValidator.validate(user, bindingResult);
             System.out.printf("[INFO] - Account Provider: %s\n", account);
             System.out.printf("[INFO] - User Provider: %s\n", user);
-            if (accountBindingResult.hasErrors()) {
-                String invalidMessage = accountBindingResult
-                        .getAllErrors()
-                        .get(0)
-                        .getDefaultMessage();
-                System.out.printf("[INFO] - Error: %s\n", invalidMessage);
-                return "redirect:/admin/accounts/provider/";
+            if (bindingResult.hasErrors()) {
+                return "provider";
             }
 
             Account createdAccount = accountService.create(account, user);
             System.out.printf("[INFO] - Provider email: %s\n", createdAccount);
-            return "redirect:/admin/accounts/provider/";
+            return "provider";
         } catch (Exception e) {
-            throw new Exception(e.getMessage());
+            bindingResult.addError(new ObjectError("exceptionError", e.getMessage()));
+            return "provider";
         }
     }
 }

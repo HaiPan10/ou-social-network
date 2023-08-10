@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
@@ -34,6 +34,11 @@
 </form> -->
 <form:form id="provideAccount" modelAttribute="account" method="post">
     <h2>Tài khoản</h2>
+    <div class="form-group">
+        <div class="mb-3">
+            <form:errors path="*" cssClass="text-danger" element="div"/>
+        </div>
+    </div>
     <div class="form-floating mb-3 mt-3">
         <input class="form-control" type="text" path="email" name="email" placeholder="Tài khoản email" />
         <label for="email">Email</label>
@@ -45,7 +50,8 @@
     </div>
     <h2>Thông tin giảng viên</h2>
     <div class="form-floating mb-3 mt-3">
-        <input class="form-control" type="text" path="user.firstName" name="user.firstName" placeholder="Tên" />
+        <input class="form-control" id="firstName" type="text" path="user.firstName" 
+            name="user.firstName" placeholder="Tên" />
         <label for="firstName">Tên giảng viên</label>
     </div>
     <div class="form-floating mb-3 mt-3">
@@ -62,6 +68,10 @@
 <script>
     var provider = document.getElementById("account-providers-menu");
     provider.className += " active";
+
+    document.getElementById("firstName").addEventListener('change', (e) => {
+        console.log(e.target.value);
+    })
     // form.addEventListener("submit", function (e) {
     //     e.preventDefault();
     //     console.log("[DEBUG] - prevent the form submit");
