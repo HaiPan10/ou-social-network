@@ -98,7 +98,7 @@ public class AccountController {
 
             Account createdAccount = accountService.create(account, user);
             System.out.printf("[INFO] - Provider email: %s\n", createdAccount);
-            return "provider";
+            return "redirect:/admin/accounts/provider";
         } catch (Exception e) {
             bindingResult.addError(new ObjectError("exceptionError", e.getMessage()));
             return "provider";
