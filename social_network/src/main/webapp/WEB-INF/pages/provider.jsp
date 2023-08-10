@@ -62,7 +62,7 @@
         <form:input id ="dob" class="form-control" type="date" path="user.dob" name="user.dob" />
         <label for="dob">Ngày tháng năm sinh</label>
     </div>
-    <button type="submit">Cấp tài khoản</button>
+    <form:button type="submit">Cấp tài khoản</form:button>
 </form:form>
 
 <script>
