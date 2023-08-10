@@ -1,11 +1,7 @@
 package com.ou.repository.impl;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale.Category;
 import java.util.Optional;
 
 import javax.persistence.NoResultException;
@@ -21,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 
-import com.ou.pojo.Account;
 import com.ou.pojo.Post;
 import com.ou.pojo.User;
 import com.ou.repository.interfaces.PostRepository;

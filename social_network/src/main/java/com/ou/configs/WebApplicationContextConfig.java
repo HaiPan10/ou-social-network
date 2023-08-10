@@ -29,6 +29,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -206,6 +207,14 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
         CommonsMultipartResolver resolver = new CommonsMultipartResolver();
         resolver.setDefaultEncoding("UTF-8");
         return resolver;
+    }
+
+    @Bean
+    public CharacterEncodingFilter characterEncodingFilter() {
+        CharacterEncodingFilter filter = new CharacterEncodingFilter();
+        filter.setEncoding("UTF-8");
+        filter.setForceEncoding(true);
+        return filter;
     }
 
 }
