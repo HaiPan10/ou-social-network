@@ -140,4 +140,14 @@ public class AccountRepositoryImpl implements AccountRepository{
         query.setParameter("accountId", accountId);
         return (String) query.getSingleResult();
     }
+
+    @Override
+    public void updateAccount(Account account) {
+        Session session = sessionFactoryBean.getObject().getCurrentSession();
+        Account persistAccount = session.get(Account.class, account.getId());
+        if(account.getPassword() != null){
+            persistAccount.setPassword(account.getPassword());
+        }
+        session.saveOrUpdate(persistAccount);
+    }
 }

@@ -37,6 +37,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ou.pojo.Account;
 import com.ou.repository.interfaces.AccountRepository;
 
@@ -215,6 +216,11 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
         filter.setEncoding("UTF-8");
         filter.setForceEncoding(true);
         return filter;
+    }
+
+    @Bean
+    public ObjectMapper objectMapper(){
+        return new ObjectMapper();
     }
 
 }
