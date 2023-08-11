@@ -129,16 +129,15 @@ public class ApiAccountController {
         }
     }
 
-    @PostMapping(path="/change_password/{accountId}")
+    @PostMapping(path="/change_password/")
     public ResponseEntity<Object> changePassword(@Validated(value=MapValidator.class)
-        @RequestBody Map<String, Object> request, @PathVariable Integer accountId,
+        @RequestBody Map<String, Object> request,
         BindingResult bindingResult){
         try {
             if(bindingResult.hasErrors()){
                 return ResponseEntity.badRequest().body(ValidationUtils.getInvalidMessage(bindingResult));
             }
             Account account = mapper.convertValue(request.get("account"), Account.class);
-            account.setId(accountId);
             String authPassword = mapper.convertValue(request.get("authPassword"), String.class);
             accountService.changePassword(account, authPassword);
             return ResponseEntity.ok().body("Change Password Successfully");
