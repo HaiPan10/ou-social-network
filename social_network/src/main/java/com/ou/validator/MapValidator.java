@@ -30,10 +30,18 @@ public class MapValidator implements Validator{
         Account account = mapper.convertValue(requestParams.get("account"), Account.class);
         User user = mapper.convertValue(requestParams.get("user"), User.class);
         UserStudent userStudent = mapper.convertValue(requestParams.get("userStudent"), UserStudent.class);
-
-        webAppValidator.validate(account, errors);
-        webAppValidator.validate(user, errors);
-        webAppValidator.validate(userStudent, errors);
+        System.out.println("[DEBUG] - START VALIDATE IN THE MAP VALIDATOR");
+        if(account != null){
+            webAppValidator.validate(account, errors);
+        }
+        
+        if(user != null){
+            webAppValidator.validate(user, errors);
+        }
+        
+        if(userStudent != null){
+            webAppValidator.validate(userStudent, errors);
+        }
     }
     
 }
