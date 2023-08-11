@@ -187,4 +187,27 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
+    @Override
+    public void changePassword(Account account, String authPassword) throws Exception {
+        try {
+            Optional<Account> optionalAccount = accountRepository.findByEmail(account.getEmail());
+            if(!optionalAccount.isPresent()){
+                throw new Exception("Email không tồn tại");
+            };
+            Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                    account.getEmail(), authPassword)
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String encoded = bCryptPasswordEncoder.encode(account.getPassword());
+            account.setId(optionalAccount.get().getId());
+            account.setPassword(encoded);
+            account.setConfirmPassword(encoded);
+            accountRepository.updateAccount(account);
+        } 
+        catch (Exception e){
+            throw new Exception(e.getMessage());
+        }
+    }
+
 }

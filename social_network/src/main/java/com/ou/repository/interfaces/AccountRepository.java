@@ -15,4 +15,5 @@ public interface AccountRepository {
     Integer countPendingAccounts();
     boolean verifyAccount(Account account, String status);
     String getStatus(Integer accountId);
+    void updateAccount(Account account); 
 }

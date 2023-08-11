@@ -9,7 +9,6 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
@@ -20,21 +19,26 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.pojo.Account;
 import com.ou.pojo.User;
 import com.ou.service.interfaces.AccountService;
+import com.ou.service.interfaces.UserService;
 import com.ou.validator.GrantAccountValidator;
 
 @Controller
 @RequestMapping("/admin/accounts")
 public class AccountController {
     @Autowired
-    AccountService accountService;
+    private AccountService accountService;
     @Autowired
     private Environment env;
     @Autowired
     private GrantAccountValidator adminValidator;
+    @Autowired
+    private UserService userService;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -76,29 +80,33 @@ public class AccountController {
     }
 
     @GetMapping("/provider")
-    public String provideAccounts(ModelMap model) {
+    public String provideAccounts(Model model, @RequestParam(name="status",required = false) String status) {
         Account account = new Account();
         account.setUser(new User());
         model.addAttribute("account", account);
+        if(status != null){
+            model.addAttribute("status", status);
+        }
         return "provider";
     }
 
-    @PostMapping(path = "/provider", produces = "text/plain; charset=UTF-8")
-    public String add(@ModelAttribute("account") Account account, BindingResult bindingResult) throws Exception {
+    @PostMapping(path = "/provider")
+    public String add(@ModelAttribute("account") Account account,
+        @RequestPart(value = "fileInput", required = false) MultipartFile avatar,
+        BindingResult bindingResult) throws Exception {
         try {
             User user = account.getUser();
             account.setUser(null);
             adminValidator.validate(account, bindingResult);
             adminValidator.validate(user, bindingResult);
-            System.out.printf("[INFO] - Account Provider: %s\n", account);
-            System.out.printf("[INFO] - User Provider: %s\n", user);
             if (bindingResult.hasErrors()) {
                 return "provider";
             }
 
             Account createdAccount = accountService.create(account, user);
             System.out.printf("[INFO] - Provider email: %s\n", createdAccount);
-            return "provider";
+            userService.uploadAvatar(avatar, createdAccount.getId());
+            return "redirect:/admin/accounts/provider/?status=success";
         } catch (Exception e) {
             bindingResult.addError(new ObjectError("exceptionError", e.getMessage()));
             return "provider";

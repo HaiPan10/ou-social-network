@@ -45,7 +45,7 @@ public class PostRepositoryImpl implements PostRepository{
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Post> criteriaQuery = builder.createQuery(Post.class);
         
-        Root rPost = criteriaQuery.from(Post.class);
+        Root<Post> rPost = criteriaQuery.from(Post.class);
         List<Predicate> predicates = new ArrayList<>();
 
         predicates.add(builder.equal(rPost.get("userId"), userId));

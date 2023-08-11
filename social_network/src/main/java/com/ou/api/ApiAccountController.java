@@ -12,12 +12,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +31,7 @@ import com.ou.pojo.AuthResponse;
 import com.ou.pojo.User;
 import com.ou.pojo.UserStudent;
 import com.ou.service.interfaces.AccountService;
+import com.ou.utils.ValidationUtils;
 import com.ou.validator.MapValidator;
 import com.ou.validator.WebAppValidator;
 
@@ -44,6 +47,9 @@ public class ApiAccountController {
     
     @Autowired
     private WebAppValidator webAppValidator;
+
+    @Autowired
+    private ObjectMapper mapper;
 
     @InitBinder("params")
     public void initBinderMap(WebDataBinder binder) {
@@ -62,23 +68,9 @@ public class ApiAccountController {
             System.out.println("[DEBUG] - Register");
             mapValidator.validate(params, bindingResult);
             if (bindingResult.hasErrors()) {
-                // Print log
-                System.out.println("============================================");
-                bindingResult.getAllErrors().forEach(error -> {
-                    System.out.println("[ERROR CODE]: " + error.getCode());
-                    System.out.println("[MESSAGE]: " + error.getDefaultMessage());
-                });
-
-                String invalidMessage = bindingResult
-                        .getAllErrors()
-                        .get(0)
-                        .getDefaultMessage();
-
-
-                return ResponseEntity.badRequest().body(invalidMessage);
+                return ResponseEntity.badRequest().body(ValidationUtils.getInvalidMessage(bindingResult));
             }
 
-            ObjectMapper mapper = new ObjectMapper();
             Account account = mapper.convertValue(params.get("account"), Account.class);
             User user = mapper.convertValue(params.get("user"), User.class);
             UserStudent userStudent = mapper.convertValue(params.get("userStudent"), UserStudent.class);
@@ -111,11 +103,7 @@ public class ApiAccountController {
         BindingResult bindingResult) throws AccountNotFoundException {
         try {
             if (bindingResult.hasErrors()) {
-                String invalidMessage = bindingResult
-                        .getAllErrors()
-                        .get(0)
-                        .getDefaultMessage();
-                return ResponseEntity.badRequest().body(invalidMessage);
+                return ResponseEntity.badRequest().body(ValidationUtils.getInvalidMessage(bindingResult));
             }
             AuthResponse response = accountService.login(requestBody);
             if(response != null){
@@ -136,6 +124,23 @@ public class ApiAccountController {
     public ResponseEntity<Object> getStatus(@PathVariable Integer accountId) {
         try {
             return ResponseEntity.ok().body(accountService.getStatus(accountId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping(path="/change_password/")
+    public ResponseEntity<Object> changePassword(@Validated(value=MapValidator.class)
+        @RequestBody Map<String, Object> request,
+        BindingResult bindingResult){
+        try {
+            if(bindingResult.hasErrors()){
+                return ResponseEntity.badRequest().body(ValidationUtils.getInvalidMessage(bindingResult));
+            }
+            Account account = mapper.convertValue(request.get("account"), Account.class);
+            String authPassword = mapper.convertValue(request.get("authPassword"), String.class);
+            accountService.changePassword(account, authPassword);
+            return ResponseEntity.ok().body("Change Password Successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
