@@ -1,15 +1,26 @@
-import { useContext, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import "./postLayout.scss"
 import { AuthContext } from "../../context/AuthContext"
-import { Form } from "react-bootstrap";
+import { Form, ToggleButton } from "react-bootstrap";
 import { DarkModeContext } from "../../context/DarkModeContext";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { MDBSwitch } from 'mdb-react-ui-kit';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
 const UploadPost = (props) => {
   const {darkMode} = useContext(DarkModeContext)
   const [disableButton, setDisableButton] = useState(false);
   const [user, userDispatch] = useContext(AuthContext)
+  const [isActiveComment, setActiveComment] = useState(true)
+  const [selectedFiles, setSelectedFiles] = useState([]);
+
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    setSelectedFiles(files);
+  };
+
+  const handleClick = () => setActiveComment(!isActiveComment)
 
   const uploadPost = (evt) => {
     evt.preventDefault()
@@ -47,6 +58,7 @@ const UploadPost = (props) => {
         aria-labelledby="contained-modal-title-vcenter"
         centered
         className={`theme-${darkMode ? "dark" : "light"}`}
+        id='modal-post'
       >
         <Form onSubmit={uploadPost}>
           <Modal.Header closeButton>
@@ -54,13 +66,33 @@ const UploadPost = (props) => {
               Tạo bài viết
             </Modal.Title>
           </Modal.Header>
-          <Modal.Body>
-            <div className="user"></div>
-            <div className="content"></div>
-            <div className="image"></div>
+          <Modal.Body className="post-body">
+            <div className="user">
+              <div className="avatar">
+                {user.avatar===null ? (
+                  <img src={require('../../images/default_avatar.png')} />
+                ) : ( 
+                  <img src={user.avatar} alt="" />
+                )}
+              </div>
+              <div className="info">
+                <div>{user.lastName} {user.firstName}</div>
+                <div className="comment-toggle">
+                  <MDBSwitch id='flexSwitchCheckDefault' checked={isActiveComment} onClick={handleClick} label='Cho phép bình luận'/>
+                </div>
+              </div>
+            </div>
+            <div className="content">
+              <textarea placeholder="Chia sẻ trạng thái của bạn" rows={3} maxlength="255"/>
+            </div>
+            <div className="image">
+              {/* <input type="file" multiple accept="image/*"/> */}
+              <label for="fileInput" class="custom-file-input"><AddPhotoAlternateIcon/> Chọn hình ảnh</label>
+              <input type="file" id="fileInput" multiple accept="image/*" />
+            </div>
           </Modal.Body>
-          <Modal.Footer>
-            <Button onClick={props.onHide}>Đóng</Button>
+          <Modal.Footer className="post-footer">
+            <Button className="submit" type="submit">Đăng</Button>
           </Modal.Footer>
         </Form>
       </Modal>
@@ -73,8 +105,14 @@ export const PostLayout = () => {
   return (
     <div className='post-layout'>
         <div className="postLayoutContainer">
-            <div className="avatar"><img src={user.avatar} alt="" /></div>
-            <div className="show-modal" onClick={() => setUploadPostShow(true)}>Chia sẻ trạng thái của bạn</div>
+            <div className="avatar">
+              {user.avatar===null ? (
+                <img src={require('../../images/default_avatar.png')} />
+              ) : ( 
+                <img src={user.avatar} alt="" />
+              )}
+            </div>
+            <div className="show-modal" user={user} onClick={() => setUploadPostShow(true)}>Chia sẻ trạng thái của bạn</div>
         </div>
         <UploadPost show={uploadPostShow} onHide={() => setUploadPostShow(false)} />
     </div>

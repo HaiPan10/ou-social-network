@@ -1,6 +1,7 @@
 package com.ou.configs;
 
 import java.util.Properties;
+import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -39,6 +40,7 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.ou.pojo.Account;
 import com.ou.repository.interfaces.AccountRepository;
+import com.sun.mail.util.MailSSLSocketFactory; 
 
 @Configuration
 @EnableWebMvc
@@ -99,7 +101,7 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public JavaMailSender getJavaMailSender() {
+    public JavaMailSender getJavaMailSender() throws GeneralSecurityException {
         JavaMailSenderImpl javaMailSenderImpl = new JavaMailSenderImpl();
         javaMailSenderImpl.setHost("cp03hn.emailserver.net.vn");
         javaMailSenderImpl.setUsername("admin@ousocialnetwork.id.vn");
@@ -134,6 +136,11 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
         mailProperties.put("mail.imap.socketFactory.class", "javax.net.ssl.SSLSocketFactory"); // Required for SSL/TLS
         mailProperties.put("mail.imap.socketFactory.fallback", "false");
         mailProperties.put("mail.debug", "true");
+
+        MailSSLSocketFactory sf = new MailSSLSocketFactory();
+        sf.setTrustAllHosts(true); 
+        mailProperties.put("mail.imap.ssl.trust", "*");
+        mailProperties.put("mail.imap.ssl.socketFactory", sf);
         javaMailSenderImpl.setJavaMailProperties(mailProperties);
         return javaMailSenderImpl;
     }

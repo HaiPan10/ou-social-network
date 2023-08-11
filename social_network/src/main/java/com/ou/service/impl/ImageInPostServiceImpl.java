@@ -26,7 +26,7 @@ public class ImageInPostServiceImpl implements ImageInPostService {
 
     @Override
     public List<ImageInPost> uploadImageInPost(List<MultipartFile> imageList, Post newPost) {
-        List<String> imageUrl = imageList.stream()
+        List<String> imageUrl = imageList.parallelStream()
         .map(img -> {
             try {
                 return uploadFileService.uploadImage(img);

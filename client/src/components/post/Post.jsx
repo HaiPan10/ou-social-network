@@ -31,7 +31,13 @@ export const Post = ({post}) => {
             <div className="postContainer">
                 <div className="user">
                     <div className="userInfo">
-                        {post.userId.id === user.id ? <img src={user.avatar}/> : <img src={post.userId.avatar} />}
+                        {post.userId.id===null ? (
+                            <img src={require('../../images/default_avatar.png')} alt=""/>
+                        ) : post.userId.id === user.id ? (
+                            <img src={user.avatar} alt=""/>
+                        ) : (
+                            <img src={post.userId.avatar} alt=""/>
+                        )}
                         <div className="details">
                             <Link to={`/profile/${post.userId.id}`} style={{textDecoration:"none", color:"inherit"}}>
                                 <span className='name'>{post.userId.lastName} {post.userId.firstName}</span>

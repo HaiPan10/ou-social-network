@@ -13,7 +13,11 @@ export const LeftBar = () => {
         <div className='menu'>
           <Link to={`/profile/${user.id}`} className='turnoff-link-style' >
             <div className="user">
-              <img src={user.avatar} alt="" />
+              {user.avatar===null ? (
+                <img src={require('../../images/default_avatar.png')} />
+              ) : ( 
+                <img src={user.avatar} alt="" />
+              )}
               <span>{user.firstName}</span>
             </div>
           </Link>

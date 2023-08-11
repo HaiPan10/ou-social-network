@@ -14,6 +14,7 @@ import Modal from 'react-bootstrap/Modal';
 import { DarkModeContext } from "../../context/DarkModeContext";
 import { Form } from "react-bootstrap";
 import { PostLayout } from "../../components/postLayout/PostLayout";
+import 'moment/locale/vi'
 
 const UpdateAvatar = (props) => {
   const {darkMode} = useContext(DarkModeContext)
@@ -339,7 +340,7 @@ const EditProfile = (props) => {
               )}
             </div>
           </div>
-          <div className="avatar">
+          <div className="user-information">
             <div className="row-title">
               <h6>Thông tin cá nhân</h6>
               <div className="btn-edit" onClick={editInformation}>Chỉnh sửa</div>
@@ -392,6 +393,7 @@ export const Profile = () => {
         setRole(res.data.role)
         setProfileUser(res.data.user)       
         setPosts(res.data.posts)
+        console.log(res.data)
       } catch (ex) {
         setValidUser(false)
       }

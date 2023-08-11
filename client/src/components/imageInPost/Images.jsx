@@ -58,6 +58,38 @@ class Images extends Component {
     </Container>;
   }
 
+  renderHalfOne() {
+    const {images} = this.props;
+    const {countFrom} = this.state;
+    const overlay = images.length > countFrom && countFrom == 1 ? this.renderCountOverlay(true) : this.renderOverlay();
+
+    return  <Container>
+      <Row>
+        <Col xs={12} md={12} className={`border height-half-one background`} onClick={this.openModal.bind(this, 0)} style={{background: `url(${images[0]})`}}>
+          {overlay}
+        </Col>
+      </Row>
+    </Container>;
+  }
+
+  renderHalfTwo() {
+    const {images} = this.props;
+    const {countFrom} = this.state;
+    const overlay = images.length > countFrom && [2, 3].includes(+countFrom) ? this.renderCountOverlay(true) : this.renderOverlay();
+    const conditionalRender = [3, 4].includes(images.length) || images.length > +countFrom && [3, 4].includes(+countFrom);
+
+    return <Container>
+      <Row>
+        <Col xs={6} md={6} className="border height-half background" onClick={this.openModal.bind(this, conditionalRender ? 1 : 0)} style={{background: `url(${conditionalRender ? images[1] : images[0]})`}}>
+          {this.renderOverlay()}
+        </Col>
+        <Col xs={6} md={6} className="border height-half background" onClick={this.openModal.bind(this, conditionalRender ? 2 : 1)} style={{background: `url(${conditionalRender ? images[2] : images[1]})`}}>
+          {overlay}
+        </Col>
+      </Row>
+    </Container>;
+  }
+
   renderTwo() {
     const {images} = this.props;
     const {countFrom} = this.state;
@@ -79,8 +111,8 @@ class Images extends Component {
   renderThree(more) {
     const {images} = this.props;
     const {countFrom} = this.state;
-    const overlay = !countFrom || countFrom > 5 || images.length > countFrom && [4, 5].includes(+countFrom) ? this.renderCountOverlay(true) : this.renderOverlay(conditionalRender ? 3 : 4);
     const conditionalRender = images.length == 4 || images.length > +countFrom && +countFrom == 4;
+    const overlay = !countFrom || countFrom > 5 || images.length > countFrom && [4, 5].includes(+countFrom) ? this.renderCountOverlay(true) : this.renderOverlay(conditionalRender ? 3 : 4);
 
     return <Container>
       <Row>
@@ -131,8 +163,11 @@ class Images extends Component {
 
     return(
         <div className="grid-container">
-          {[1, 3, 4].includes(imagesToShow.length)  && this.renderOne()}
-          {imagesToShow.length >= 2 && imagesToShow.length != 4 && this.renderTwo()}
+          {[1].includes(imagesToShow.length) && this.renderOne()}
+          {[2].includes(imagesToShow.length) && this.renderHalfTwo()}
+          {[3].includes(imagesToShow.length) && this.renderHalfOne()}
+          {[4].includes(imagesToShow.length) && this.renderHalfOne()}
+          {imagesToShow.length > 2 && imagesToShow.length != 4 && this.renderTwo()}
           {imagesToShow.length >= 4 && this.renderThree()}
 
           {modal && <Modal onClose={this.onClose} index={index} images={images}/>}
