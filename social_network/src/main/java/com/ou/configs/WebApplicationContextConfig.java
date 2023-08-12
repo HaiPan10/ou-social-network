@@ -41,7 +41,7 @@ import com.cloudinary.utils.ObjectUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ou.pojo.Account;
 import com.ou.repository.interfaces.AccountRepository;
-import com.sun.mail.util.MailSSLSocketFactory; 
+import com.sun.mail.util.MailSSLSocketFactory;
 
 @Configuration
 @EnableWebMvc
@@ -140,8 +140,8 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
 
         MailSSLSocketFactory sf = new MailSSLSocketFactory();
         sf.setTrustAllHosts(true); 
-        mailProperties.put("mail.imap.ssl.trust", "*");
-        mailProperties.put("mail.imap.ssl.socketFactory", sf);
+        mailProperties.put("mail.smtp.ssl.trust", "*");
+        mailProperties.put("mail.smtp.ssl.socketFactory", sf);
         javaMailSenderImpl.setJavaMailProperties(mailProperties);
         return javaMailSenderImpl;
     }

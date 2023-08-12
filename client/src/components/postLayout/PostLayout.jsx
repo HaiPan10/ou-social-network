@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import "./postLayout.scss"
 import { AuthContext } from "../../context/AuthContext"
 import { Form, ToggleButton } from "react-bootstrap";
@@ -7,49 +7,84 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { MDBSwitch } from 'mdb-react-ui-kit';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import ImageInPost from '../imageInPost/ImageInPost'
+import ClearIcon from '@mui/icons-material/Clear';
+import { FileUploader } from "react-drag-drop-files";
+import { authAPI, endpoints } from "../../configs/Api";
+import ErrorAlert from "../ErrorAlert"
+import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 
 const UploadPost = (props) => {
   const {darkMode} = useContext(DarkModeContext)
-  const [disableButton, setDisableButton] = useState(false);
+  const [disableButton, setDisableButton] = useState(false)
   const [user, userDispatch] = useContext(AuthContext)
   const [isActiveComment, setActiveComment] = useState(true)
-  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [selectedFiles, setSelectedFiles] = useState([])
+  const [content, setContent] = useState('')
+  const [err, setErr] = useState()
+  const fileTypes = ["JPG", "PNG"]
+  const droppedFilesRef = useRef([]);
 
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files);
-    setSelectedFiles(files);
+  const handleContentChange = (event) => {
+    setContent(event.target.value);
+  }
+
+  const handleDrop = (droppedFile) => {
+    const imageUrls = [];
+    droppedFilesRef.current = [...droppedFilesRef.current, ...droppedFile];
+    for (let i = 0; i < droppedFile.length; i++) {
+      imageUrls.push(URL.createObjectURL(droppedFile[i]));
+    }
+    // const imageUrl = URL.createObjectURL(droppedFile);
+    setSelectedFiles(prevSelectedFiles => [...prevSelectedFiles, ...imageUrls]);
   };
 
+  const clear = () => {
+    setSelectedFiles([])
+  }
   const handleClick = () => setActiveComment(!isActiveComment)
 
   const uploadPost = (evt) => {
     evt.preventDefault()
-    setDisableButton(true)
     const process = async () => {
+      props.onHide()
+      setDisableButton(true)
       try {
-        // let res = await authAPI().post(endpoints['update_information'] + `/${props.profileUser.id}`, {
-        //   "dob": updateUser.dob
-        // })
-        // if (res.status === 200) {
-        //   setDisableButton(false)
-        //   save("current-user", res.data)
-        //   close()
-        //   userDispatch({
-        //     "type": "LOGIN", 
-        //     "payload": res.data
-        //   })
-        // }
+        let form = new FormData()
+        if (selectedFiles.length > 0) {
+          console.log(droppedFilesRef.current.length)
+          for (let i = 0; i < droppedFilesRef.current.length; i++) {
+            form.append("images", droppedFilesRef.current[i])
+          }
+        }
+        form.append("postContent", content)
+        form.append("isActiveComment", isActiveComment)              
+        let res = await authAPI().post(endpoints['upload'] + `/${user.id}`, form, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+        if (res.status === 200) {
+          clear()
+          droppedFilesRef.current = []
+          setActiveComment(true)
+          setContent('')
+          props.setReloadData(true)
+          setDisableButton(false)
+        }
       } catch (ex) {
-        
+        props.setUploadPostShow(true)
+        setErr(ex.response.data)
+        setDisableButton(false)
       }
     }
 
-    process()
-    // if () {
-    //   process()
-    // } else {
-    //   setDisableButton(false)
-    // }
+    if (selectedFiles.length === 0 && (content === '')) {
+      setErr( <><PriorityHighIcon/> Bài đăng này rỗng!</>)
+    } else {
+      setErr()
+      process()
+    }
   }
 
   return (
@@ -71,7 +106,7 @@ const UploadPost = (props) => {
               <div className="avatar">
                 {user.avatar===null ? (
                   <img src={require('../../images/default_avatar.png')} />
-                ) : ( 
+                ) : (
                   <img src={user.avatar} alt="" />
                 )}
               </div>
@@ -83,23 +118,34 @@ const UploadPost = (props) => {
               </div>
             </div>
             <div className="content">
-              <textarea placeholder="Chia sẻ trạng thái của bạn" rows={3} maxlength="255"/>
+              <textarea placeholder="Chia sẻ trạng thái của bạn" rows={3} maxlength="255" value={content} onChange={handleContentChange}/>
             </div>
+            {err?<ErrorAlert err={err} />:""}
             <div className="image">
-              {/* <input type="file" multiple accept="image/*"/> */}
-              <label for="fileInput" class="custom-file-input"><AddPhotoAlternateIcon/> Chọn hình ảnh</label>
-              <input type="file" id="fileInput" multiple accept="image/*" />
+              <FileUploader hoverTitle="Thả vào đây!" multiple={true} handleChange={handleDrop} name="file" types={fileTypes}/>
+              {selectedFiles.length === 0 ? 
+              <>
+              </> :
+                <div className="selected-images">
+                  <div className="editImage">
+                    <div>
+                      <label class="custom-file-input" onClick={clear}><ClearIcon/></label>
+                    </div>
+                  </div>
+                  <ImageInPost hideOverlay={true} images={selectedFiles} />
+                </div>
+              }
             </div>
           </Modal.Body>
           <Modal.Footer className="post-footer">
-            <Button className="submit" type="submit">Đăng</Button>
+            <Button className="submit" type="submit" disabled={disableButton}>Đăng</Button>
           </Modal.Footer>
         </Form>
       </Modal>
   );
 }
 
-export const PostLayout = () => {
+export const PostLayout = (props) => {
   const [user, userDispatch] = useContext(AuthContext)
   const [uploadPostShow, setUploadPostShow] = useState(false)
   return (
@@ -114,7 +160,7 @@ export const PostLayout = () => {
             </div>
             <div className="show-modal" user={user} onClick={() => setUploadPostShow(true)}>Chia sẻ trạng thái của bạn</div>
         </div>
-        <UploadPost show={uploadPostShow} onHide={() => setUploadPostShow(false)} />
+        <UploadPost show={uploadPostShow} onHide={() => setUploadPostShow(false)} setReloadData={props.setReloadData} setUploadPostShow={setUploadPostShow} />
     </div>
   )
 }

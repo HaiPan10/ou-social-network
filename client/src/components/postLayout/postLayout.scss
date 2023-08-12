@@ -1,5 +1,9 @@
 @import "../../style.scss";
 
+.fade {
+    z-index: 2;
+}
+
 #modal-post {
     @include themify($themes) {
         .modal-content {
@@ -7,6 +11,7 @@
             color: themed("textColor");
             width: 30vw;
             margin: auto;
+            z-index: -1;
 
             @include mobile {
                 width: 85vw;
@@ -16,7 +21,8 @@
                 display: flex;
                 flex-direction: column;
                 width: 100%;
-                height: 40vh;
+                // min-height: 40vh;
+                max-height: 80vh;
                 padding: 5px 15px;
 
                 .user {
@@ -80,14 +86,35 @@
                     }
                     
                     textarea::-webkit-scrollbar-thumb {
+                        background-color: darkgrey;
+                        outline: 1px solid slategrey;
+                    }
+                }
+
+                .alert {
+                    background-color: themed("bgSoft");
+                    color: #ffdddd;
+                    border: none;
+                    padding: 0;
+                }
+
+                .image::-webkit-scrollbar {
+                    width: 5px;
+                }
+                
+                .image::-webkit-scrollbar-track {
+                    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+                }
+                
+                .image::-webkit-scrollbar-thumb {
                     background-color: darkgrey;
                     outline: 1px solid slategrey;
-                    }
                 }
 
                 .image {
                     width: 100%;
                     height: 55%;
+                    overflow: auto;                 
                     
                     // input {
                     //     width: 100%;
@@ -96,6 +123,17 @@
                     //     cursor: pointer;
                         
                     // }
+
+                    .guZdik{
+                        min-width: 100%;
+                        max-width: 100%;
+                    }
+                    
+                    .jWkLDY {
+                        span {
+                            display: none;
+                        }
+                    }
 
                     input[type="file"] {
                         display: none;
@@ -119,6 +157,28 @@
 
                         &:hover {
                             background-color: themed("hoverColor");
+                        }
+                    }
+
+                    .selected-images {
+                        position: relative;
+                        .editImage {
+                            // display: flex;
+                            // flex-direction: row;
+                            // gap: 10px;
+                            position: absolute;
+                            z-index: 1;
+                            top: 5%;
+                            right: 5%;
+                            
+                            label {
+                                width: 40px;
+                                height: 40px;
+                                float: right;
+                                border-radius: 50%;
+                            }
+                        }
+                        .grid-container {
                         }
                     }
                 }
@@ -153,8 +213,8 @@
             .avatar {
                 width: 40px;
                 img {
-                    width: 100%;
-                    height: 100%;
+                    width: 40px;
+                    width: 40px;
                     border-radius: 50%;
                 }
             }
@@ -167,7 +227,8 @@
                 // justify-content: center;
                 background-color: themed("commentColor");
                 padding: 20px;
-                color: themed("textColor");
+                color: themed("textColorSoft");
+                font-size: 12px;
                 cursor: pointer;
 
                 &:hover {

@@ -3,6 +3,7 @@
   margin: auto;
   width: 100%;
   padding: 10px;
+  z-index: 999;
 
   .container {
     padding-left: 0;
@@ -21,7 +22,7 @@
     
     .border {
       border: 2px solid white;
-      border-radius: 6px;
+      // border-radius: 6px;
     }
     
     .background {

@@ -50,6 +50,7 @@ public class PostRepositoryImpl implements PostRepository{
 
         predicates.add(builder.equal(rPost.get("userId"), userId));
         criteriaQuery.where(predicates.toArray(Predicate[]::new));
+        criteriaQuery.orderBy(builder.desc(rPost.get("createdAt")));
 
         Query query = session.createQuery(criteriaQuery);
         try {

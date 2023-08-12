@@ -1,5 +1,16 @@
 @import "../../style.scss";
 
+.modal-header {
+  @include themify($themes) {
+    border-bottom: 0 none;
+    
+    .btn-close {
+      background-color: themed("hoverColor");
+      border-radius: 50%;
+    }
+  }
+}
+
 .modal-content {
   @include themify($themes) {
     background-color: themed("bgSoft");
@@ -73,6 +84,18 @@
     }
   }
 }
+
+.modal-footer {
+  @include themify($themes) {
+    .submit:disabled {
+      background-color: themed("commentColor");
+      border: none;
+    }
+
+    border-top: 0 none;
+  }
+}
+
 
 .profile {
   @include themify($themes) {

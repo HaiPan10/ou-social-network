@@ -14,7 +14,6 @@ import Modal from 'react-bootstrap/Modal';
 import { DarkModeContext } from "../../context/DarkModeContext";
 import { Form } from "react-bootstrap";
 import { PostLayout } from "../../components/postLayout/PostLayout";
-import 'moment/locale/vi'
 
 const UpdateAvatar = (props) => {
   const {darkMode} = useContext(DarkModeContext)
@@ -285,6 +284,7 @@ const UpdateInformation = (props) => {
 const EditProfile = (props) => {
   const {darkMode} = useContext(DarkModeContext)
   const [user, userDispatch] = useContext(AuthContext)
+
   const editAvatar = () => {
     props.setEditAvatarShow(true);
     props.setEditProfileShow(false);
@@ -381,6 +381,7 @@ export const Profile = () => {
   const [editCoverShow, setEditCoverShow] = useState(false)
   const [editInformationShow, setEditInformationShow] = useState(false)
   const [posts, setPosts] = useState()
+  const [reloadData, setReloadData] = useState(false);
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
@@ -393,14 +394,14 @@ export const Profile = () => {
         setRole(res.data.role)
         setProfileUser(res.data.user)       
         setPosts(res.data.posts)
-        console.log(res.data)
+        setReloadData(false)
       } catch (ex) {
         setValidUser(false)
       }
     }
 
     loadProfile()
-  }, [id])
+  }, [id, reloadData])
 
   if ((profileUser === null || role === null) && isValidUser === true) {
     return <div className="profile">
@@ -472,7 +473,7 @@ export const Profile = () => {
         </div>      
       </div>
       <div className="posts">
-        {profileUser.id === user.id ? <PostLayout/> : <></>}        
+        {profileUser.id === user.id ? <PostLayout setReloadData={setReloadData}/> : <></>}        
         {posts.map(post=>(
           <Post post={post} key={post.id}/>
         ))}
