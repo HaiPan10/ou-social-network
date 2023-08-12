@@ -214,7 +214,7 @@ const UpdateInformation = (props) => {
     setDisableButton(true)
     const process = async () => {
       try {
-        let res = await authAPI().post(endpoints['update_information'] + `/${props.profileUser.id}`, {
+        let res = await authAPI().patch(endpoints['update_information'] + `/${props.profileUser.id}`, {
           "dob": updateUser.dob
         })
         if (res.status === 200) {
@@ -261,13 +261,8 @@ const UpdateInformation = (props) => {
                 <div className="info-title">Ngày tháng năm sinh:</div>
                 <div><input type="date" onChange={(e) => 
                   {
-                    const selectedDate = e.target.value;
-                    const formattedDate = new Date(selectedDate).toLocaleDateString('en-GB', {
-                      day: '2-digit',
-                      month: '2-digit',
-                      year: 'numeric'
-                    }).split('/').join('-');
-                    setUpdateUser(updateUser => ({ ...updateUser, dob: formattedDate }));
+                    const selectedDateTime = e.target.value;
+                    setUpdateUser(updateUser => ({ ...updateUser, dob: selectedDateTime }));
                   }
                 } /></div>
               </div>
@@ -386,10 +381,6 @@ export const Profile = () => {
   const { reloadData } = useContext(ReloadContext)
 
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
-  }, [])
-
-  useEffect(() => {
     const loadProfile = async () => {
       try {
         let res = await authAPI().get(endpoints['profile'] + `/${id}`)
@@ -401,6 +392,7 @@ export const Profile = () => {
       }
     }
 
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
     loadProfile()
   }, [id, reload])
 

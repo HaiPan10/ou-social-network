@@ -10,6 +10,7 @@ import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import UploadPost from '../postLayout/UploadPost';
+import { ReloadContext } from '../../context/ReloadContext';
 
 export const LeftBar = () => {
   const [user, dispatch] = useContext(AuthContext)
@@ -18,6 +19,7 @@ export const LeftBar = () => {
   const [uploadPostShow, setUploadPostShow] = useState(false)
   const [dropdownVisible, setDropdownVisible] = useState(false)
   const dropdownRef = useRef(null)
+  const { reloadData } = useContext(ReloadContext)
 
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -60,7 +62,7 @@ export const LeftBar = () => {
               </div>
             </Link>
             <Link to={`/profile/${user.id}`} className='turnoff-link-style' >
-              <div className="user item">
+              <div className="user item" onClick={reloadData}>
                 {user.avatar===null ? (
                   <img src={require('../../images/default_avatar.png')} />
                 ) : ( 

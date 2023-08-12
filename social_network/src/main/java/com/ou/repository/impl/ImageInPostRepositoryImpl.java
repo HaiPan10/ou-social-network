@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -23,6 +24,20 @@ public class ImageInPostRepositoryImpl implements ImageInPostRepository{
         Session s = sessionFactoryBean.getObject().getCurrentSession();
         imageInPosts.forEach(img -> img.setId((Integer) s.save(img)));
         return imageInPosts;
+    }
+
+    @Override
+    public boolean deleteImageInPost(List<ImageInPost> imageInPosts) {
+        Session s = sessionFactoryBean.getObject().getCurrentSession();
+        imageInPosts.forEach(img -> {
+            ImageInPost persistImageInPost = s.get(ImageInPost.class, img.getId());
+            try {
+                s.delete(persistImageInPost);
+            } catch (HibernateException ex) {
+                ex.printStackTrace();
+            }
+        });
+        return true;
     }
     
 }

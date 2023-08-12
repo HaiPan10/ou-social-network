@@ -15,12 +15,12 @@ import { AuthContext } from "../../context/AuthContext"
 import { useContext, useEffect, useRef, useState } from "react"
 import { ReloadContext } from "../../context/ReloadContext";
 
-const UploadPost = (props) => {
+const EditPost = (props) => {
     const {darkMode} = useContext(DarkModeContext)
     const [disableButton, setDisableButton] = useState(false)
     const [user, userDispatch] = useContext(AuthContext)
     const [isActiveComment, setActiveComment] = useState(true)
-    const [selectedFiles, setSelectedFiles] = useState([])
+    const [selectedFiles, setSelectedFiles] = useState(props.post.imageInPostList.map(image => image.imageUrl))
     const [content, setContent] = useState('')
     const [err, setErr] = useState()
     const fileTypes = ["JPG", "PNG"]
@@ -46,7 +46,7 @@ const UploadPost = (props) => {
     }
     const handleClick = () => setActiveComment(!isActiveComment)
   
-    const uploadPost = (evt) => {
+    const editPost = (evt) => {
       evt.preventDefault()
       const process = async () => {
         props.onHide()
@@ -75,7 +75,7 @@ const UploadPost = (props) => {
             setDisableButton(false)
           }
         } catch (ex) {
-          props.setUploadPostShow(true)
+          props.setEditPostShow(true)
           setErr(ex.response.data)
           setDisableButton(false)
         }
@@ -97,10 +97,10 @@ const UploadPost = (props) => {
           className={`theme-${darkMode ? "dark" : "light"}`}
           id='modal-post'
         >
-          <Form onSubmit={uploadPost}>
+          <Form onSubmit={editPost}>
             <Modal.Header closeButton>
               <Modal.Title id="contained-modal-title-vcenter">
-                Tạo bài viết
+                Chỉnh sửa bài viết
               </Modal.Title>
             </Modal.Header>
             <Modal.Body className="post-body">
@@ -115,12 +115,12 @@ const UploadPost = (props) => {
                 <div className="info">
                   <div>{user.lastName} {user.firstName}</div>
                   <div className="comment-toggle">
-                    <MDBSwitch id='flexSwitchCheckDefault' checked={isActiveComment} onClick={handleClick} label='Cho phép bình luận'/>
+                    <MDBSwitch id='flexSwitchCheckDefault' checked={props.post.isActiveComment} onClick={handleClick} label='Cho phép bình luận'/>
                   </div>
                 </div>
               </div>
               <div className="content">
-                <textarea placeholder="Chia sẻ trạng thái của bạn" rows={3} maxlength="255" value={content} onChange={handleContentChange}/>
+                <textarea placeholder="Chia sẻ trạng thái của bạn" rows={3} maxlength="255" value={props.post.content} onChange={handleContentChange}/>
               </div>
               {err?<ErrorAlert err={err} />:""}
               <div className="image">
@@ -147,4 +147,4 @@ const UploadPost = (props) => {
     );
   }
 
-export default UploadPost
+export default EditPost

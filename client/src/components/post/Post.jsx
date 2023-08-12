@@ -14,6 +14,7 @@ import 'moment/locale/vi'
 import SpeakerNotesOffOutlinedIcon from '@mui/icons-material/SpeakerNotesOffOutlined';
 import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import EditPost from '../postLayout/EditPost';
 
 export const Post = ({post}) => {
     const [commentOpen, setCommentOpen] = useState(false)
@@ -21,6 +22,7 @@ export const Post = ({post}) => {
     const images = post.imageInPostList.map(image => image.imageUrl);
     const [user, userDispatch] = useContext(AuthContext)
     const [dropdownVisible, setDropdownVisible] = useState(false)
+    const [editPostShow, setEditPostShow] = useState(false)
     const dropdownRef = useRef(null);
 
     const toggleDropdown = () => {
@@ -61,14 +63,17 @@ export const Post = ({post}) => {
                             <span className='date'><Moment locale="vi" fromNow>{formattedDate}</Moment></span>
                         </div>
                     </div>
-                    {post.userId.id===user.id && 
-                        <div className="dropdown" ref={dropdownRef} onClick={toggleDropdown}>
-                            <div className='btn-edit' ><MoreHorizIcon/></div>
-                            {dropdownVisible && <div className="dropdown-content">
-                                <div><EditNoteOutlinedIcon/> Chỉnh sửa</div> 
-                                <div><DeleteOutlineOutlinedIcon/> Xóa</div>         
-                            </div>}
-                        </div>
+                    {post.userId.id===user.id &&
+                        <>
+                            <div className="dropdown" ref={dropdownRef} onClick={toggleDropdown}>
+                                <div className='btn-edit' ><MoreHorizIcon/></div>
+                                {dropdownVisible && <div className="dropdown-content">
+                                    <div onClick={() => setEditPostShow(true)}><EditNoteOutlinedIcon/> Chỉnh sửa</div>
+                                    <div><DeleteOutlineOutlinedIcon/> Xóa</div>
+                                </div>}
+                            </div>
+                            <EditPost show={editPostShow} onHide={() => setEditPostShow(false)} setEditPostShow={setEditPostShow} post={post} />
+                        </>
                     }
                 </div>
                 <div className="content">
