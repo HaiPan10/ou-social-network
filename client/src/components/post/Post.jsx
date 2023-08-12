@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import "./post.scss"
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
@@ -11,12 +11,34 @@ import Moment from 'react-moment';
 import ImageInPost from '../imageInPost/ImageInPost'
 import { AuthContext } from '../../context/AuthContext';
 import 'moment/locale/vi'
+import SpeakerNotesOffOutlinedIcon from '@mui/icons-material/SpeakerNotesOffOutlined';
+import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
 export const Post = ({post}) => {
     const [commentOpen, setCommentOpen] = useState(false)
     const liked = false;
     const images = post.imageInPostList.map(image => image.imageUrl);
     const [user, userDispatch] = useContext(AuthContext)
+    const [dropdownVisible, setDropdownVisible] = useState(false)
+    const dropdownRef = useRef(null);
+
+    const toggleDropdown = () => {
+        setDropdownVisible(!dropdownVisible);
+    }
+
+    const handleClickOutside = (event) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+          setDropdownVisible(false)
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+          document.removeEventListener('mousedown', handleClickOutside)
+        }
+    }, [])
 
     const formattedDate = post.createdAt.replace(/(\d{2})-(\d{2})-(\d{4}) (\d{2}:\d{2}:\d{2})/, '$3-$2-$1 $4');
 
@@ -25,8 +47,8 @@ export const Post = ({post}) => {
             <div className="postContainer">
                 <div className="user">
                     <div className="userInfo">
-                        {post.userId.id===null ? (
-                            <img src={require('../../images/default_avatar.png')} alt=""/>
+                        {post.userId.avatar===null ? (
+                            <img src={require('../../images/default_avatar.png')} />
                         ) : post.userId.id === user.id ? (
                             <img src={user.avatar} alt=""/>
                         ) : (
@@ -39,7 +61,15 @@ export const Post = ({post}) => {
                             <span className='date'><Moment locale="vi" fromNow>{formattedDate}</Moment></span>
                         </div>
                     </div>
-                    <MoreHorizIcon/>
+                    {post.userId.id===user.id && 
+                        <div className="dropdown" ref={dropdownRef} onClick={toggleDropdown}>
+                            <div className='btn-edit' ><MoreHorizIcon/></div>
+                            {dropdownVisible && <div className="dropdown-content">
+                                <div><EditNoteOutlinedIcon/> Chỉnh sửa</div> 
+                                <div><DeleteOutlineOutlinedIcon/> Xóa</div>         
+                            </div>}
+                        </div>
+                    }
                 </div>
                 <div className="content">
                     <p>{post.content}</p>
@@ -55,7 +85,7 @@ export const Post = ({post}) => {
                         <TextsmsOutlinedIcon />
                         {post.commentTotal} bình luận
                     </div> :
-                    <div> Bình luận bị khóa! </div> }
+                    <div className='lockComment'> <SpeakerNotesOffOutlinedIcon/> Bình luận bị khóa! </div> }
                     {/* <div className="item">
                         <ShareOutlinedIcon />
                         Share

@@ -7,7 +7,7 @@
 #modal-post {
     @include themify($themes) {
         .modal-content {
-            background-color: themed("bgSoft");
+            background-color: themed("bg");
             color: themed("textColor");
             width: 30vw;
             margin: auto;
@@ -64,7 +64,7 @@
 
                     textarea {
                         width: 100%;
-                        background-color: themed("bgSoft");
+                        background-color: themed("bg");
                         color: themed("textColor");
                         border: none;
                         overflow: auto;
@@ -198,7 +198,8 @@
 .post-layout {
     @include themify($themes) {
         border-radius: 20px;
-        background-color: themed("bgSoft");
+        border: 1px solid themed("border");
+        background-color: themed("bg");
         color: themed("textColor");
         height: 60px;
         width: 100%;
@@ -225,7 +226,7 @@
                 display: flex;
                 align-items: center;
                 // justify-content: center;
-                background-color: themed("commentColor");
+                background-color: themed("bgSoft");
                 padding: 20px;
                 color: themed("textColorSoft");
                 font-size: 12px;
