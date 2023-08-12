@@ -130,15 +130,16 @@ public class ApiAccountController {
     }
 
     @PostMapping(path="/change_password/")
-    public ResponseEntity<Object> changePassword(@Validated(value=MapValidator.class)
-        @RequestBody Map<String, Object> request,
+    public ResponseEntity<Object> changePassword(@RequestBody Map<String, Object> params,
         BindingResult bindingResult){
         try {
-            if(bindingResult.hasErrors()){
+            System.out.println("[DEBUG] - Register");
+            mapValidator.validate(params, bindingResult);
+            if (bindingResult.hasErrors()) {
                 return ResponseEntity.badRequest().body(ValidationUtils.getInvalidMessage(bindingResult));
             }
-            Account account = mapper.convertValue(request.get("account"), Account.class);
-            String authPassword = mapper.convertValue(request.get("authPassword"), String.class);
+            Account account = mapper.convertValue(params.get("account"), Account.class);
+            String authPassword = mapper.convertValue(params.get("authPassword"), String.class);
             accountService.changePassword(account, authPassword);
             return ResponseEntity.ok().body("Change Password Successfully");
         } catch (Exception e) {
