@@ -10,6 +10,7 @@ import { Comment } from '../comments/Comment';
 import Moment from 'react-moment';
 import ImageInPost from '../imageInPost/ImageInPost'
 import { AuthContext } from '../../context/AuthContext';
+import 'moment/locale/vi'
 
 export const Post = ({post}) => {
     const [commentOpen, setCommentOpen] = useState(false)
@@ -17,14 +18,7 @@ export const Post = ({post}) => {
     const images = post.imageInPostList.map(image => image.imageUrl);
     const [user, userDispatch] = useContext(AuthContext)
 
-    const formatDate = (inputDate) => {
-        const parts = inputDate.split('-');
-        const day = parts[0];
-        const month = parts[1];
-        const year = parts[2];
-        
-        return `${year}-${month}-${day}`;
-      };
+    const formattedDate = post.createdAt.replace(/(\d{2})-(\d{2})-(\d{4}) (\d{2}:\d{2}:\d{2})/, '$3-$2-$1 $4');
 
     return (
         <div className='post'>
@@ -42,7 +36,7 @@ export const Post = ({post}) => {
                             <Link to={`/profile/${post.userId.id}`} style={{textDecoration:"none", color:"inherit"}}>
                                 <span className='name'>{post.userId.lastName} {post.userId.firstName}</span>
                             </Link>
-                            <span className='date'><Moment locale="vi" fromNow>{formatDate(post.createdAt)}</Moment></span>
+                            <span className='date'><Moment locale="vi" fromNow>{formattedDate}</Moment></span>
                         </div>
                     </div>
                     <MoreHorizIcon/>

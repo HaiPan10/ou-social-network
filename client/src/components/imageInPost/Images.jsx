@@ -10,7 +10,8 @@ class Images extends Component {
     renderOverlay: () => 'Preview Image',
     overlayBackgroundColor: '#222222',
     onClickEach: null,
-    countFrom: 5
+    countFrom: 5,
+    isActiveClick: true,
   }
 
   constructor(props) {

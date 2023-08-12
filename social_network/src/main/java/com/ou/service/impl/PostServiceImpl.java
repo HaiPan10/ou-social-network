@@ -31,14 +31,19 @@ public class PostServiceImpl implements PostService {
     private CommentService commentService;
 
     @Override
-    public Post uploadPost(String postContent, Integer userId, List<MultipartFile> images, boolean isActiveContent) throws Exception {
+    public Post uploadPost(String postContent, Integer userId, List<MultipartFile> images, boolean isActiveComment) throws Exception {
         Post newPost = new Post();
+        if (postContent.length() == 0 && images == null) {
+            throw new Exception("Empty post!");
+        }
         newPost.setContent(postContent);
         newPost.setCreatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
         newPost.setUpdatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
-        newPost.setIsActiveComment(isActiveContent);
+        newPost.setIsActiveComment(isActiveComment);
         postRepository.uploadPost(newPost, userId);
-        newPost.setImageInPostList(imageInPostService.uploadImageInPost(images, newPost));
+        if (images != null) {
+            newPost.setImageInPostList(imageInPostService.uploadImageInPost(images, newPost));
+        }
         newPost.setReactionTotal(postReactionService.countReaction(newPost.getId()));
         newPost.setCommentTotal(commentService.countComment(newPost.getId()));
         return newPost;

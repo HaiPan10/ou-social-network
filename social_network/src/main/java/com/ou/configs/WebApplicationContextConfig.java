@@ -41,7 +41,7 @@ import com.cloudinary.utils.ObjectUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ou.pojo.Account;
 import com.ou.repository.interfaces.AccountRepository;
-import com.sun.mail.util.MailSSLSocketFactory; 
+import com.sun.mail.util.MailSSLSocketFactory;
 
 @Configuration
 @EnableWebMvc
