@@ -21,6 +21,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ou.pojo.Account;
+import com.ou.pojo.Status;
 import com.ou.repository.interfaces.AccountRepository;
 
 @Repository
@@ -144,10 +145,10 @@ public class AccountRepositoryImpl implements AccountRepository{
     @Override
     public void updateAccount(Account account) {
         Session session = sessionFactoryBean.getObject().getCurrentSession();
-        Account persistAccount = session.get(Account.class, account.getId());
-        if(account.getPassword() != null){
-            persistAccount.setPassword(account.getPassword());
+        try {
+            session.saveOrUpdate(account);
+        } catch (HibernateException e) {
+            e.printStackTrace();
         }
-        session.saveOrUpdate(persistAccount);
     }
 }

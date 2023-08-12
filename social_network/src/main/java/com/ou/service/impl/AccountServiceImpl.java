@@ -21,12 +21,14 @@ import com.ou.configs.JwtService;
 import com.ou.pojo.Account;
 import com.ou.pojo.AuthRequest;
 import com.ou.pojo.AuthResponse;
+import com.ou.pojo.Status;
 import com.ou.pojo.User;
 import com.ou.pojo.UserStudent;
 import com.ou.repository.interfaces.AccountRepository;
 import com.ou.service.interfaces.AccountService;
 import com.ou.service.interfaces.MailService;
 import com.ou.service.interfaces.RoleService;
+import com.ou.service.interfaces.ScheduleService;
 import com.ou.service.interfaces.UserService;
 import com.ou.service.interfaces.UserStudentService;
 
@@ -58,6 +60,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private JwtService jwtService;
+
+    @Autowired
+    private ScheduleService scheduleService;
 
     @Override
     public Account retrieve(Integer id) throws Exception {
@@ -177,12 +182,13 @@ public class AccountServiceImpl implements AccountService {
     public Account create(Account account, User user) throws Exception {
         try {
             account.setRoleId(roleService.retrieve(2));
-            account.setStatus("PASSWORD_CHANGE_REQUIRED");
+            account.setStatus(Status.PASSWORD_CHANGE_REQUIRED.toString());
             create(account);
             System.out.println("[DEBUG] - Saved account id: " + account.getId());
             userService.create(user, account);
             account.setUser(user);
             mailService.sendGrantedAccount(account);
+            scheduleService.changePasswordRequiredSchedule(account.getEmail());
             return account;
         } catch (Exception e) {
             throw new Exception(e.getMessage());
@@ -201,11 +207,14 @@ public class AccountServiceImpl implements AccountService {
                     account.getEmail(), authPassword)
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            Account authAccount = optionalAccount.get();
             String encoded = bCryptPasswordEncoder.encode(account.getPassword());
-            account.setId(optionalAccount.get().getId());
-            account.setPassword(encoded);
-            account.setConfirmPassword(encoded);
-            accountRepository.updateAccount(account);
+            authAccount.setPassword(encoded);
+            authAccount.setConfirmPassword(encoded);
+            if(authAccount.getStatus().equals(Status.PASSWORD_CHANGE_REQUIRED.toString())){
+                authAccount.setStatus(Status.ACTIVE.toString());
+            }
+            accountRepository.updateAccount(authAccount);
         } 
         catch (Exception e){
             throw new Exception(e.getMessage());
