@@ -25,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ou.pojo.Account;
 import com.ou.pojo.User;
 import com.ou.service.interfaces.AccountService;
-import com.ou.service.interfaces.MailService;
 import com.ou.service.interfaces.UserService;
 import com.ou.validator.GrantAccountValidator;
 
@@ -40,8 +39,6 @@ public class AccountController {
     private GrantAccountValidator adminValidator;
     @Autowired
     private UserService userService;
-    @Autowired
-    private MailService mailService;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -87,6 +84,8 @@ public class AccountController {
         Account account = new Account();
         account.setUser(new User());
         model.addAttribute("account", account);
+        String defaultPassword = env.getProperty("DEFAULT_PASSWORD");
+        model.addAttribute("defaultPassword", defaultPassword);
         if(status != null){
             model.addAttribute("status", status);
         }
@@ -105,10 +104,13 @@ public class AccountController {
             if (bindingResult.hasErrors()) {
                 return "provider";
             }
+            System.out.printf("[INFO] - Provider email: %s\n", account);
 
             Account createdAccount = accountService.create(account, user);
-            System.out.printf("[INFO] - Provider email: %s\n", createdAccount);
-            userService.uploadAvatar(avatar, createdAccount.getId());
+            System.out.printf("[INFO] - Provided email: %s\n", createdAccount);
+            if(!avatar.isEmpty()){
+                userService.uploadAvatar(avatar, createdAccount.getId());
+            }
             return "redirect:/admin/accounts/provider/?status=success";
         } catch (Exception e) {
             bindingResult.addError(new ObjectError("exceptionError", e.getMessage()));

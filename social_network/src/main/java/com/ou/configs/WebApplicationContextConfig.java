@@ -5,6 +5,8 @@ import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -228,6 +230,13 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
     @Bean
     public ObjectMapper objectMapper(){
         return new ObjectMapper();
+    }
+
+    @Bean
+    public ScheduledExecutorService getScheduledService(){
+        int threadNumber = Integer.parseInt(environment.getProperty("THREAD_NUMBER"));
+        ScheduledExecutorService configs = Executors.newScheduledThreadPool(threadNumber);
+        return configs;
     }
 
 }

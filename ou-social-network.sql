@@ -22,7 +22,8 @@ CREATE TABLE `account` (
 				'ACTIVE', 
 				'AUTHENTICATION_PENDING',
                 'EMAIL_VERIFICATION_PENDING',
-                'REJECT') DEFAULT 'ACTIVE',
+                'REJECT',
+                'PASSWORD_CHANGE_REQUIRED') DEFAULT 'ACTIVE',
     role_id INT UNSIGNED NOT NULL,
     
     PRIMARY KEY (id),
