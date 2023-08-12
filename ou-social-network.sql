@@ -18,7 +18,11 @@ CREATE TABLE `account` (
     password VARCHAR(300) NOT NULL,
     created_date DATETIME,
     verification_code VARCHAR(64),
-    status ENUM('LOCKED', 'ACTIVE', 'AUTHENTICATION_PENDING', 'EMAIL_VERIFICATION_PENDING' , 'REJECT') DEFAULT 'ACTIVE',
+    status ENUM('LOCKED',
+				'ACTIVE', 
+				'AUTHENTICATION_PENDING',
+                'EMAIL_VERIFICATION_PENDING',
+                'REJECT') DEFAULT 'ACTIVE',
     role_id INT UNSIGNED NOT NULL,
     
     PRIMARY KEY (id),

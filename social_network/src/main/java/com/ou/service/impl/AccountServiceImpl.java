@@ -177,10 +177,12 @@ public class AccountServiceImpl implements AccountService {
     public Account create(Account account, User user) throws Exception {
         try {
             account.setRoleId(roleService.retrieve(2));
+            account.setStatus("PASSWORD_CHANGE_REQUIRED");
             create(account);
             System.out.println("[DEBUG] - Saved account id: " + account.getId());
             userService.create(user, account);
             account.setUser(user);
+            mailService.sendGrantedAccount(account);
             return account;
         } catch (Exception e) {
             throw new Exception(e.getMessage());
