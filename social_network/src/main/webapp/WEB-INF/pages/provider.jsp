@@ -50,8 +50,8 @@
         <label for="email">Email</label>
     </div>
     <div class="form-floating mb-3 mt-3">
-        <form:input class="form-control" type="password" path="password" name="password" placeholder="Mật khẩu"
-            value="ou@123" />
+        <form:input class="form-control" type="text" path="password" name="password" placeholder="Mật khẩu"
+            value="ou@123" readonly="true"/>
         <label for="password">Mật khẩu</label>
     </div>
     <h2>Thông tin giảng viên</h2>

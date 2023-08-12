@@ -75,4 +75,24 @@ public class MailServiceImpl implements MailService {
             sendEmail(account.getEmail(), "Xác thực email", mailBody);
         }
     }
+
+    @Override
+    public void sendGrantedAccount(Account account) throws Exception {
+        if(account == null){
+            throw new Exception("Tài khoản không tồn tại!"); 
+        } else {
+            String mailBody = String.format("Kính gửi thầy/cô %s,<br>"
+            + "<p>Tài khoản mạng mạng xã hội cựu sinh viên trường đại học Mở TP.HCM của thầy/cô đã được kích hoạt</p>"
+            + "Thông tin tài khoản bao gồm:<br>"
+            + "Email: %s<br>"
+            + "Password: ou@123<br>"
+            + "Xin quý thầy cô hãy đổi password trong vòng 24h hoặc tài khoản sẽ bị khóa.<br>"
+            + "Chúng tôi xin cảm ơn sự quan tâm của quý thầy cô,<br>"
+            + "OU Social Network",
+                String.format("%s %s",account.getUser().getLastName(),account.getUser().getFirstName()),
+                account.getEmail()
+            );
+            sendEmail(account.getEmail(), "Thông tin cấp tài khoản", mailBody);
+        }
+    }
 }

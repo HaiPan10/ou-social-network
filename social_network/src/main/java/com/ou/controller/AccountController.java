@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ou.pojo.Account;
 import com.ou.pojo.User;
 import com.ou.service.interfaces.AccountService;
+import com.ou.service.interfaces.MailService;
 import com.ou.service.interfaces.UserService;
 import com.ou.validator.GrantAccountValidator;
 
@@ -39,6 +40,8 @@ public class AccountController {
     private GrantAccountValidator adminValidator;
     @Autowired
     private UserService userService;
+    @Autowired
+    private MailService mailService;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {

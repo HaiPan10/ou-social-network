@@ -181,6 +181,7 @@ public class AccountServiceImpl implements AccountService {
             System.out.println("[DEBUG] - Saved account id: " + account.getId());
             userService.create(user, account);
             account.setUser(user);
+            mailService.sendGrantedAccount(account);
             return account;
         } catch (Exception e) {
             throw new Exception(e.getMessage());
