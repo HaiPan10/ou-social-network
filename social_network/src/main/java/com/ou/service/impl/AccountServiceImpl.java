@@ -96,7 +96,7 @@ public class AccountServiceImpl implements AccountService {
     public AuthResponse create(Account account, User user, UserStudent userStudent) throws Exception {
         try {
             account.setRoleId(roleService.retrieve(1));
-            account.setStatus("EMAIL_VERIFICATION_PENDING");
+            account.setStatus(Status.EMAIL_VERIFICATION_PENDING.toString());
             account.setVerificationCode(RandomString.make(64));
             create(account);
             userService.create(user, account);
