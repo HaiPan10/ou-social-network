@@ -9,6 +9,7 @@ import userReducer from "./reducers/userReducer";
 import { load, save } from 'react-cookies';
 import { Layout } from "./components/layout/Layout";
 import { DarkModeContext, DarkModeContextProvider } from "./context/DarkModeContext";
+import { ReloadContextProvider } from "./context/ReloadContext";
 
 
 const App = () => {
@@ -18,7 +19,9 @@ const App = () => {
       path:"/",
       element: (
         <DarkModeContextProvider>
-          <Layout/>
+          <ReloadContextProvider>
+            <Layout/>
+          </ReloadContextProvider>
         </DarkModeContextProvider>
       ),
       children: [

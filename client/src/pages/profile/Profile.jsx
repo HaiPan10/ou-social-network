@@ -14,6 +14,7 @@ import Modal from 'react-bootstrap/Modal';
 import { DarkModeContext } from "../../context/DarkModeContext";
 import { Form } from "react-bootstrap";
 import { PostLayout } from "../../components/postLayout/PostLayout";
+import { ReloadContext } from "../../context/ReloadContext";
 
 const UpdateAvatar = (props) => {
   const {darkMode} = useContext(DarkModeContext)
@@ -213,7 +214,7 @@ const UpdateInformation = (props) => {
     setDisableButton(true)
     const process = async () => {
       try {
-        let res = await authAPI().post(endpoints['update_information'] + `/${props.profileUser.id}`, {
+        let res = await authAPI().patch(endpoints['update_information'] + `/${props.profileUser.id}`, {
           "dob": updateUser.dob
         })
         if (res.status === 200) {
@@ -260,13 +261,8 @@ const UpdateInformation = (props) => {
                 <div className="info-title">Ngày tháng năm sinh:</div>
                 <div><input type="date" onChange={(e) => 
                   {
-                    const selectedDate = e.target.value;
-                    const formattedDate = new Date(selectedDate).toLocaleDateString('en-GB', {
-                      day: '2-digit',
-                      month: '2-digit',
-                      year: 'numeric'
-                    }).split('/').join('-');
-                    setUpdateUser(updateUser => ({ ...updateUser, dob: formattedDate }));
+                    const selectedDateTime = e.target.value;
+                    setUpdateUser(updateUser => ({ ...updateUser, dob: selectedDateTime }));
                   }
                 } /></div>
               </div>
@@ -381,11 +377,8 @@ export const Profile = () => {
   const [editCoverShow, setEditCoverShow] = useState(false)
   const [editInformationShow, setEditInformationShow] = useState(false)
   const [posts, setPosts] = useState()
-  const [reloadData, setReloadData] = useState(false);
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
-  }, [])
+  const { reload } = useContext(ReloadContext)
+  const { reloadData } = useContext(ReloadContext)
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -394,14 +387,14 @@ export const Profile = () => {
         setRole(res.data.role)
         setProfileUser(res.data.user)       
         setPosts(res.data.posts)
-        setReloadData(false)
       } catch (ex) {
         setValidUser(false)
       }
     }
 
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
     loadProfile()
-  }, [id, reloadData])
+  }, [id, reload])
 
   if ((profileUser === null || role === null) && isValidUser === true) {
     return <div className="profile">
@@ -473,7 +466,7 @@ export const Profile = () => {
         </div>      
       </div>
       <div className="posts">
-        {profileUser.id === user.id ? <PostLayout setReloadData={setReloadData}/> : <></>}        
+        {profileUser.id === user.id ? <PostLayout/> : <></>}        
         {posts.map(post=>(
           <Post post={post} key={post.id}/>
         ))}

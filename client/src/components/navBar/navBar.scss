@@ -2,7 +2,6 @@
 
 .navBar {
     @include themify($themes) {
-        display: flex;
         align-items: center;
         justify-content: space-between;
         padding: 10px 20px;
@@ -13,6 +12,11 @@
         background-color: themed("bg");
         color: themed("textColor");
         z-index: 999;
+        display: none;
+        
+        @include mobile {
+            display: flex;
+        }
 
         .left {
             display: flex;

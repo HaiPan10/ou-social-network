@@ -63,4 +63,13 @@ public class PostServiceImpl implements PostService {
             throw new Exception("Lỗi user không hợp lệ!");
         }
     }
+
+    @Override
+    public boolean update(Post post, List<MultipartFile> images) throws Exception {
+        if (images != null) {
+            imageInPostService.deleteImageInPost(post.getImageInPostList());
+            post.setImageInPostList(imageInPostService.uploadImageInPost(images, post));
+        }
+        return postRepository.update(post);
+    }
 }

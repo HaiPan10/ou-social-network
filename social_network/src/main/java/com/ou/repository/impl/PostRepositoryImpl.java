@@ -12,6 +12,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -58,6 +59,28 @@ public class PostRepositoryImpl implements PostRepository{
             return Optional.of(posts);
         } catch (NoResultException e) {
             return Optional.empty();
+        }
+    }
+
+    @Override
+    public boolean update(Post post) throws Exception {
+        Session s = sessionFactoryBean.getObject().getCurrentSession();
+        try {
+            Post persistPost = s.get(Post.class, post.getId());
+            if (persistPost == null) {
+                throw new Exception("Không tìm thấy bài đăng!");
+            }
+            if (post.getContent() != null) {
+                persistPost.setContent(post.getContent());
+            }
+            if (post.getIsActiveComment() != null) {
+                persistPost.setIsActiveComment(post.getIsActiveComment());
+            }
+            s.update(post);
+            return true;
+        } catch (HibernateException ex) {
+            ex.printStackTrace();
+            return false;
         }
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,9 +25,7 @@ public class ApiUserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/update_avatar/{userId}",
-        method = RequestMethod.POST
-    )
+    @PostMapping(value = "/update_avatar/{userId}")
     public ResponseEntity<Object> updateAvatar(MultipartFile uploadAvatar, @PathVariable Integer userId){
         try {
             return ResponseEntity.ok().body(userService.uploadAvatar(uploadAvatar, userId));
@@ -35,9 +34,7 @@ public class ApiUserController {
         }
     }
 
-    @RequestMapping(value = "/update_cover/{userId}",
-        method = RequestMethod.POST
-    )
+    @PostMapping(value = "/update_cover/{userId}")
     public ResponseEntity<Object> updateCover(MultipartFile uploadCover, @PathVariable Integer userId){
         try {
             return ResponseEntity.ok().body(userService.uploadCover(uploadCover, userId));
@@ -46,7 +43,7 @@ public class ApiUserController {
         }
     }
 
-    @PostMapping(value = "update_information/{userId}")
+    @PatchMapping(value = "update_information/{userId}")
     public ResponseEntity<Object> updateInformation(@RequestBody User user, @PathVariable Integer userId){
         try {
             System.out.println(user.getDob());
