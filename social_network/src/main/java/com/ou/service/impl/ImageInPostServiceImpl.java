@@ -16,12 +16,12 @@ import com.ou.pojo.ImageInPost;
 import com.ou.pojo.Post;
 import com.ou.repository.interfaces.ImageInPostRepository;
 import com.ou.service.interfaces.ImageInPostService;
-import com.ou.service.interfaces.UploadFileService;
+import com.ou.service.interfaces.CloudinaryService;
 
 @Service
 public class ImageInPostServiceImpl implements ImageInPostService {
     @Autowired
-    private UploadFileService uploadFileService;
+    private CloudinaryService cloudinaryService;
     @Autowired
     private ImageInPostRepository imageInPostRepository;
 
@@ -30,7 +30,7 @@ public class ImageInPostServiceImpl implements ImageInPostService {
         List<String> imageUrl = imageList.parallelStream()
         .map(img -> {
             try {
-                return uploadFileService.uploadImage(img);
+                return cloudinaryService.uploadImage(img);
             } catch (IOException e) {
                 try {
                     throw new Exception("Up ảnh thất bại");

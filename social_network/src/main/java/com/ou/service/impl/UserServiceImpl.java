@@ -14,7 +14,7 @@ import com.ou.pojo.User;
 import com.ou.repository.interfaces.UserRepository;
 import com.ou.service.interfaces.AccountService;
 import com.ou.service.interfaces.PostService;
-import com.ou.service.interfaces.UploadFileService;
+import com.ou.service.interfaces.CloudinaryService;
 import com.ou.service.interfaces.UserService;
 
 @Service
@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private UploadFileService uploadFileService;
+    private CloudinaryService cloudinaryService;
 
     @Autowired
     private AccountService accountService;
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User uploadAvatar(MultipartFile uploadAvatar, Integer userId) throws IOException {
         try {
-            String url = uploadFileService.uploadImage(uploadAvatar);            
+            String url = cloudinaryService.uploadImage(uploadAvatar);            
             return userRepository.updateAvatar(userId, url);
         } catch (IOException e) {
             throw new IOException("Fail to upload avatar");
@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User uploadCover(MultipartFile uploadCover, Integer userId) throws IOException {
         try {
-            String url = uploadFileService.uploadImage(uploadCover);            
+            String url = cloudinaryService.uploadImage(uploadCover);            
             return userRepository.updateCover(userId, url);
         } catch (IOException e) {
             throw new IOException("Fail to upload avatar");

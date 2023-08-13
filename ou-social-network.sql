@@ -83,6 +83,7 @@ DROP TABLE IF EXISTS `ou-social-network`.`image_in_post`;
 CREATE TABLE `image_in_post` (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     image_url VARCHAR(300),
+    content_type VARCHAR(20),
     created_at DATETIME,
     updated_at DATETIME,
     post_id INT UNSIGNED NOT NULL,

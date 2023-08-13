@@ -1,5 +1,7 @@
 package com.ou.api;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;
@@ -7,11 +9,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ou.service.interfaces.CloudinaryService;
+
 @RestController
 @RequestMapping("/api/test")
 public class TestController {
     @Autowired
     private ApplicationContext applicationContext;
+    @Autowired CloudinaryService uploadFileService;
 
     @GetMapping("beans")
     public ResponseEntity<String> retrives(){
@@ -21,5 +26,10 @@ public class TestController {
             sb.append(bean + "\n");
         }
         return ResponseEntity.ok().body(sb.toString());
+    }
+
+    @GetMapping("/cloudinary/delete")
+    public ResponseEntity<Object> deleteImage() throws IOException {
+        return ResponseEntity.ok().body(uploadFileService.deleteImage());
     }
 }
