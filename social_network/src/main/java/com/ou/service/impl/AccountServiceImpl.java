@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -64,6 +65,9 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private ScheduleService scheduleService;
 
+    @Autowired
+    private Environment env;
+
     @Override
     public Account retrieve(Integer id) throws Exception {
         Optional<Account> accountOptional = accountRepository.retrieve(id);
@@ -99,6 +103,10 @@ public class AccountServiceImpl implements AccountService {
             account.setStatus(Status.EMAIL_VERIFICATION_PENDING.toString());
             account.setVerificationCode(RandomString.make(64));
             create(account);
+            String defaultAvatar = this.env.getProperty("DEFAULT_AVATAR").toString();
+            String defaultCover = this.env.getProperty("DEFAULT_COVER").toString();
+            user.setAvatar(defaultAvatar);
+            user.setCoverAvatar(defaultCover);
             userService.create(user, account);
             userStudentService.create(userStudent, user);
             user.setUserStudent(userStudent);

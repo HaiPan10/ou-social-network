@@ -60,14 +60,12 @@ public class ApiPostController {
     }
     
     @PostMapping
-    ResponseEntity<Object> update(List<MultipartFile> images, @Valid Post post, BindingResult bindingResult) throws Exception {
-        images.forEach(i -> System.out.println(i));
-        System.out.println(post.toString());
-        return ResponseEntity.ok("haha");
-        // if (bindingResult.hasErrors()) {
-        //     return ResponseEntity.badRequest().body(ValidationUtils.getInvalidMessage(bindingResult));
-        // }
-        // return ResponseEntity.ok(postService.update(post, images));
+    ResponseEntity<Object> update(List<MultipartFile> images, Post post, boolean isEditImage) throws Exception {
+        try {
+            return ResponseEntity.ok(postService.update(post, images, isEditImage));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping(path = "{postId}")

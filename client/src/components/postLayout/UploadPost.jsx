@@ -43,6 +43,7 @@ const UploadPost = (props) => {
   
     const clear = () => {
       setSelectedFiles([])
+      droppedFilesRef.current = []
     }
     const handleClick = () => setActiveComment(!isActiveComment)
   
@@ -106,11 +107,7 @@ const UploadPost = (props) => {
             <Modal.Body className="post-body">
               <div className="user">
                 <div className="avatar">
-                  {user.avatar===null ? (
-                    <img src={require('../../images/default_avatar.png')} />
-                  ) : (
-                    <img src={user.avatar} alt="" />
-                  )}
+                  <img src={user.avatar} alt="" />
                 </div>
                 <div className="info">
                   <div>{user.lastName} {user.firstName}</div>

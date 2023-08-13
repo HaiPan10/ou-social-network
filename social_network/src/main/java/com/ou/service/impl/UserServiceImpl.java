@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,6 +32,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PostService postService;
 
+    @Autowired
+    private Environment env;
+
     @Override
     public User create(User user, Account account) {
         user.setAccount(account);
@@ -44,7 +48,8 @@ public class UserServiceImpl implements UserService {
             User persistUser = retrieve(userId);
             String oldUrl = persistUser.getAvatar();
             User returnUser = userRepository.updateAvatar(persistUser, newUrl);
-            if (oldUrl != null) {
+            String defaultAvatar = this.env.getProperty("DEFAULT_AVATAR").toString();
+            if (!oldUrl.equals(defaultAvatar)) {
                 cloudinaryService.deleteImage(oldUrl);
             }
             return returnUser;
@@ -59,8 +64,9 @@ public class UserServiceImpl implements UserService {
             String newUrl = cloudinaryService.uploadImage(uploadCover);
             User persistUser = retrieve(userId);
             String oldUrl = persistUser.getCoverAvatar();
+            String defaultCover = this.env.getProperty("DEFAULT_COVER").toString();
             User returnUser = userRepository.updateCover(persistUser, newUrl);
-            if (oldUrl != null) {
+            if (!oldUrl.equals(defaultCover)) {
                 cloudinaryService.deleteImage(oldUrl);
             }
             return returnUser;

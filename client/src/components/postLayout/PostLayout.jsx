@@ -10,11 +10,7 @@ export const PostLayout = (props) => {
     <div className='post-layout'>
         <div className="postLayoutContainer">
             <div className="avatar">
-              {user.avatar===null ? (
-                <img src={require('../../images/default_avatar.png')} />
-              ) : (
-                <img src={user.avatar} alt="" />
-              )}
+              <img src={user.avatar} alt="" />
             </div>
             <div className="show-modal" user={user} onClick={() => setUploadPostShow(true)}>Chia sẻ trạng thái của bạn</div>
         </div>

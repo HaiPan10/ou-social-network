@@ -20,7 +20,7 @@ public class CloudinaryUtils {
     public static String getImageType(String imageUrl) {
         Matcher matcher = parseUrl(imageUrl);
         if (matcher.find()) {
-            return matcher.group(2);
+            return matcher.group(2).substring(1);
         }        
         return null;
     }

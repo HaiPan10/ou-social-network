@@ -26,23 +26,36 @@ const EditPost = (props) => {
     const fileTypes = ["JPG", "PNG"]
     const droppedFilesRef = useRef([]);
     const { reloadData } = useContext(ReloadContext)
-  
+    const [isEditImage, setIsEditImage] = useState(false)
+
     useEffect(() => {
-      props.post.imageInPostList.forEach((image) => {
-        // const file = new File([image.imageUrl], `image.jpg{image.id}`, { type: response.data.type });
-      })
-      // const file = new File([response.data], 'image.jpg', { type: response.data.type });
-      // selectedFiles.forEach((image) => {
-      //   const img = new Image()
-      //   img.src = image
-      //   img.onload = () => {
-      //     droppedFilesRef.current.push(img)
-      //   }
-      // })
-    }, [])
+      const fetchAndAddFiles = async () => {
+        for (let image of props.post.imageInPostList) {
+          try {
+            const response = await fetch(image.imageUrl);
+            const imageBlob = await response.blob();
+        
+            const file = new File([imageBlob], `image${image.id}`, { type: image.contentType });
+            droppedFilesRef.current.push(file);
+          } catch (error) {
+            console.error("Error fetching or creating file:", error);
+          }
+        }
+      };
+    
+      if (props.show) {
+        fetchAndAddFiles()
+        setActiveComment(props.post.isActiveComment)
+        setSelectedFiles(props.post.imageInPostList.map(image => image.imageUrl))
+        setContent(props.post.content)
+        setIsEditImage(false)
+        setErr()
+      }
+    }, [props.show]);
+    
 
     const handleContentChange = (event) => {
-      setContent(event.target.value);
+      setContent(event.target.value)
     }
 
     const handleDrop = (droppedFile) => {
@@ -54,10 +67,13 @@ const EditPost = (props) => {
       }
       // const imageUrl = URL.createObjectURL(droppedFile);
       setSelectedFiles(prevSelectedFiles => [...prevSelectedFiles, ...imageUrls]);
+      setIsEditImage(true)
     }
   
     const clear = () => {
       setSelectedFiles([])
+      droppedFilesRef.current = []
+      setIsEditImage(true)
     }
     const handleClick = () => setActiveComment(!isActiveComment)
   
@@ -69,14 +85,14 @@ const EditPost = (props) => {
         try {
           let form = new FormData()
           if (selectedFiles.length > 0) {
-            console.log(droppedFilesRef.current.length)
             for (let i = 0; i < droppedFilesRef.current.length; i++) {
               form.append("images", droppedFilesRef.current[i])
             }
           }
           form.append("id", props.post.id)
           form.append("content", content)
-          form.append("isActiveComment", isActiveComment)              
+          form.append("isActiveComment", isActiveComment)
+          form.append("isEditImage", isEditImage)
           let res = await authAPI().post(endpoints['edit_post'], form, {
             headers: {
               'Content-Type': 'multipart/form-data'
@@ -84,7 +100,7 @@ const EditPost = (props) => {
           })
           if (res.status === 200) {
             droppedFilesRef.current = []
-            // reloadData()
+            reloadData()
             setDisableButton(false)
           }
         } catch (ex) {
@@ -96,6 +112,8 @@ const EditPost = (props) => {
   
       if (selectedFiles.length === 0 && (content === '')) {
         setErr( <><PriorityHighIcon/> Bài đăng này rỗng!</>)
+      } else if (!isEditImage && content===props.post.content && isActiveComment===props.post.isActiveComment) {
+        setErr( <><PriorityHighIcon/> Không có thay đổi nào!</>)
       } else {
         setErr()
         process()
@@ -119,11 +137,7 @@ const EditPost = (props) => {
             <Modal.Body className="post-body">
               <div className="user">
                 <div className="avatar">
-                  {user.avatar===null ? (
-                    <img src={require('../../images/default_avatar.png')} />
-                  ) : (
-                    <img src={user.avatar} alt="" />
-                  )}
+                  <img src={user.avatar} alt="" />
                 </div>
                 <div className="info">
                   <div>{user.lastName} {user.firstName}</div>

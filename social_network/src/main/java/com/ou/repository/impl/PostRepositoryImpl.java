@@ -63,24 +63,30 @@ public class PostRepositoryImpl implements PostRepository{
     }
 
     @Override
-    public boolean update(Post post) throws Exception {
+    public boolean update(Post persistPost, Post post) {
         Session s = sessionFactoryBean.getObject().getCurrentSession();
         try {
-            Post persistPost = s.get(Post.class, post.getId());
-            if (persistPost == null) {
-                throw new Exception("Không tìm thấy bài đăng!");
-            }
             if (post.getContent() != null) {
                 persistPost.setContent(post.getContent());
             }
             if (post.getIsActiveComment() != null) {
                 persistPost.setIsActiveComment(post.getIsActiveComment());
             }
-            s.update(post);
+            s.update(persistPost);
             return true;
         } catch (HibernateException ex) {
             ex.printStackTrace();
             return false;
+        }
+    }
+
+    @Override
+    public Optional<Post> retrieve(Integer postId) {
+        Session s = sessionFactoryBean.getObject().getCurrentSession();
+        try {
+            return Optional.ofNullable((Post) s.get(Post.class, postId));
+        } catch (NoResultException e) {
+            return Optional.empty();
         }
     }
 }
