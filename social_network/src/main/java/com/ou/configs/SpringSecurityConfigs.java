@@ -60,7 +60,7 @@ public class SpringSecurityConfigs extends WebSecurityConfigurerAdapter {
             management.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         });
         http.formLogin(login ->
-                login.loginPage("/")
+                login.loginPage("/login")
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .successHandler(loginSuccessHandler)
