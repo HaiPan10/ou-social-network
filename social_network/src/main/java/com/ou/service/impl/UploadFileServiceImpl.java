@@ -1,6 +1,7 @@
 package com.ou.service.impl;
 
 import java.io.IOException;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,9 +18,17 @@ public class UploadFileServiceImpl implements UploadFileService{
 
     @Override
     public String uploadImage(MultipartFile image) throws IOException {
-        return cloudinary.uploader()
-                        .upload(image.getBytes(), ObjectUtils.asMap("resource_type", "auto"))
-                        .get("secure_url").toString();
+        Map<String, String> response = cloudinary.uploader()
+                        .upload(image.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+
+        System.out.println(response);
+        return response.get("secure_url").toString();
+                        // .get("secure_url").toString();
+    }
+
+    @Override
+    public Map<String, String> deleteImage() throws IOException {
+        return cloudinary.uploader().destroy("glhiwkfnwsvn1cdnwgbl", ObjectUtils.emptyMap());
     }
     
 }

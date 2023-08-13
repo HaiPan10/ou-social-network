@@ -61,10 +61,13 @@ public class ApiPostController {
     
     @PostMapping
     ResponseEntity<Object> update(List<MultipartFile> images, @Valid Post post, BindingResult bindingResult) throws Exception {
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body(ValidationUtils.getInvalidMessage(bindingResult));
-        }
-        return ResponseEntity.ok(postService.update(post, images));
+        images.forEach(i -> System.out.println(i));
+        System.out.println(post.toString());
+        return ResponseEntity.ok("haha");
+        // if (bindingResult.hasErrors()) {
+        //     return ResponseEntity.badRequest().body(ValidationUtils.getInvalidMessage(bindingResult));
+        // }
+        // return ResponseEntity.ok(postService.update(post, images));
     }
 
     @DeleteMapping(path = "{postId}")

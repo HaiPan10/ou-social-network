@@ -94,7 +94,7 @@ const UpdateAvatar = (props) => {
                     alt=""
                   />}
                 </div>
-                <div style={{display:"flex", justifyContent:"center"}}><input type="file" ref={avatar} name="uploadAvatar" onChange={handleAvatarChange}/></div>
+                <div style={{display:"flex", justifyContent:"center"}}><input type="file" ref={avatar} name="uploadAvatar" onChange={handleAvatarChange} accept="image/png, image/jpeg"/></div>
               </div>
           </Modal.Body>
           <Modal.Footer>
@@ -184,7 +184,7 @@ const UpdateCover = (props) => {
                     alt=""
                   />}
                 </div>
-                <div style={{display:"flex", justifyContent:"center"}}><input type="file" ref={cover} name="uploadCover" onChange={handleCoverChange}/></div>
+                <div style={{display:"flex", justifyContent:"center"}}><input type="file" ref={cover} name="uploadCover" onChange={handleCoverChange} accept="image/png, image/jpeg"/></div>
               </div>
           </Modal.Body>
           <Modal.Footer>

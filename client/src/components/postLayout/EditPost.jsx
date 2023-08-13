@@ -19,27 +19,42 @@ const EditPost = (props) => {
     const {darkMode} = useContext(DarkModeContext)
     const [disableButton, setDisableButton] = useState(false)
     const [user, userDispatch] = useContext(AuthContext)
-    const [isActiveComment, setActiveComment] = useState(true)
+    const [isActiveComment, setActiveComment] = useState(props.post.isActiveComment)
     const [selectedFiles, setSelectedFiles] = useState(props.post.imageInPostList.map(image => image.imageUrl))
-    const [content, setContent] = useState('')
+    const [content, setContent] = useState(props.post.content)
     const [err, setErr] = useState()
     const fileTypes = ["JPG", "PNG"]
     const droppedFilesRef = useRef([]);
     const { reloadData } = useContext(ReloadContext)
   
+    useEffect(() => {
+      props.post.imageInPostList.forEach((image) => {
+        // const file = new File([image.imageUrl], `image.jpg{image.id}`, { type: response.data.type });
+      })
+      // const file = new File([response.data], 'image.jpg', { type: response.data.type });
+      // selectedFiles.forEach((image) => {
+      //   const img = new Image()
+      //   img.src = image
+      //   img.onload = () => {
+      //     droppedFilesRef.current.push(img)
+      //   }
+      // })
+    }, [])
+
     const handleContentChange = (event) => {
       setContent(event.target.value);
     }
 
     const handleDrop = (droppedFile) => {
       const imageUrls = [];
+      console.log([...droppedFile])
       droppedFilesRef.current = [...droppedFilesRef.current, ...droppedFile];
       for (let i = 0; i < droppedFile.length; i++) {
         imageUrls.push(URL.createObjectURL(droppedFile[i]));
       }
       // const imageUrl = URL.createObjectURL(droppedFile);
       setSelectedFiles(prevSelectedFiles => [...prevSelectedFiles, ...imageUrls]);
-    };
+    }
   
     const clear = () => {
       setSelectedFiles([])
@@ -59,19 +74,17 @@ const EditPost = (props) => {
               form.append("images", droppedFilesRef.current[i])
             }
           }
-          form.append("postContent", content)
+          form.append("id", props.post.id)
+          form.append("content", content)
           form.append("isActiveComment", isActiveComment)              
-          let res = await authAPI().post(endpoints['upload'] + `/${user.id}`, form, {
+          let res = await authAPI().post(endpoints['edit_post'], form, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
           })
           if (res.status === 200) {
-            clear()
             droppedFilesRef.current = []
-            setActiveComment(true)
-            setContent('')
-            reloadData()
+            // reloadData()
             setDisableButton(false)
           }
         } catch (ex) {
@@ -115,12 +128,12 @@ const EditPost = (props) => {
                 <div className="info">
                   <div>{user.lastName} {user.firstName}</div>
                   <div className="comment-toggle">
-                    <MDBSwitch id='flexSwitchCheckDefault' checked={props.post.isActiveComment} onClick={handleClick} label='Cho phép bình luận'/>
+                    <MDBSwitch id='flexSwitchCheckDefault' checked={isActiveComment} onClick={handleClick} label='Cho phép bình luận'/>
                   </div>
                 </div>
               </div>
               <div className="content">
-                <textarea placeholder="Chia sẻ trạng thái của bạn" rows={3} maxlength="255" value={props.post.content} onChange={handleContentChange}/>
+                <textarea placeholder="Chia sẻ trạng thái của bạn" rows={3} maxlength="255" value={content} onChange={handleContentChange}/>
               </div>
               {err?<ErrorAlert err={err} />:""}
               <div className="image">
