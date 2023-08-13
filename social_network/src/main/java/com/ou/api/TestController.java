@@ -28,8 +28,8 @@ public class TestController {
         return ResponseEntity.ok().body(sb.toString());
     }
 
-    @GetMapping("/cloudinary/delete")
-    public ResponseEntity<Object> deleteImage() throws IOException {
-        return ResponseEntity.ok().body(uploadFileService.deleteImage());
-    }
+    // @GetMapping("/cloudinary/delete")
+    // public ResponseEntity<Object> deleteImage() throws IOException {
+    //     return ResponseEntity.ok().body(uploadFileService.deleteImage());
+    // }
 }
