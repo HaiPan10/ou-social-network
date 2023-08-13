@@ -40,10 +40,6 @@ public class ImageInPost implements Serializable {
     @Column(name = "image_url")
     private String imageUrl;
 
-    @Size(max = 20)
-    @Column(name = "content_type")
-    private String contentType;
-
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "dd-MM-yyyy")
