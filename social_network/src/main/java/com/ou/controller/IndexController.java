@@ -18,9 +18,7 @@ public class IndexController {
     @Autowired
     private HttpServletResponse response;
 
-    private final String token = "eyJhbGciOiJIUzUxMiJ9."+
-    "eyJzdWIiOiIxLGFkbWluNDU2QGdtYWlsLmNvbSIsImlhdCI6MTY5MDU2MDQ3MCwiZXhwIjoxNjkxODc0NDcwfQ."+
-    "mJwVyrSOWCbctLObFjn7NTey9BvvZ_5LdCdzPPFfuPh8pdQmWAERTzkSZ7tno8Nqx6Dha5hudjxkpbZ6XqKKng";
+    private final String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxLGFkbWluNDU2QGdtYWlsLmNvbSIsImlhdCI6MTY5MTkwNTQ3NSwiZXhwIjoxNjkzMjE5NDc1fQ.PNTkYw-_hwqil3ZtdlocsgwkfKZpR1WjcTgOB4OXOeciaofwEwG-mhvVvZPXy-DLK_5nWjOM2G3vdAV9bcH7JQ";
 
     /*=========================*/
 

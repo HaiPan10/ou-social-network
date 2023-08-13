@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +50,9 @@ public class ApiAccountController {
     @Autowired
     private ObjectMapper mapper;
 
+    @Autowired
+    private Environment env;
+
     @InitBinder("params")
     public void initBinderMap(WebDataBinder binder) {
         binder.setValidator(mapValidator);
@@ -86,7 +90,7 @@ public class ApiAccountController {
         try {            
             if (accountService.verifyEmail(accountId, verificationCode)) {
                 HttpHeaders headers = new HttpHeaders();
-                headers.setLocation(URI.create("http://localhost:3000/"));
+                headers.setLocation(URI.create(String.format("%s/", env.getProperty("CLIENT_HOSTNAME"))));
                 return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
             } else {
                 return null;

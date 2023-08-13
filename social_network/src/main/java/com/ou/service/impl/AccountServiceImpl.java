@@ -131,6 +131,16 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean verifyAccount(Account account, String status) {
+        try {
+            if(status.equals(Status.ACTIVE.toString())){
+                mailService.sendAcceptedMail(account);
+            } else if(status.equals(Status.REJECT.toString())){
+                mailService.sendRejectMail(account);
+            }
+        } catch (Exception e) {
+            System.out.println("[ERROR] - System fail to send mail to client");
+            System.out.println("[ERROR] - Message: " + e.getMessage());
+        }
         return accountRepository.verifyAccount(account, status);
     }
 
