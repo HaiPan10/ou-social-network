@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.ou.service.interfaces.CloudinaryService;
+import com.ou.utils.CloudinaryUtils;
 
 @Service
 public class CloudinaryServiceImpl implements CloudinaryService{
@@ -18,17 +19,14 @@ public class CloudinaryServiceImpl implements CloudinaryService{
 
     @Override
     public String uploadImage(MultipartFile image) throws IOException {
-        Map<String, String> response = cloudinary.uploader()
-                        .upload(image.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
-
-        System.out.println(response);
-        return response.get("secure_url").toString();
-                        // .get("secure_url").toString();
+        return cloudinary.uploader().upload(image.getBytes(), ObjectUtils.asMap("resource_type", "auto"))
+        .get("secure_url").toString();
     }
 
     @Override
-    public Map<String, String> deleteImage(String imageUrl) throws IOException {
-        return cloudinary.uploader().destroy("glhiwkfnwsvn1cdnwgbl", ObjectUtils.emptyMap());
+    public void deleteImage(String imageUrl) throws IOException {
+        System.out.println(CloudinaryUtils.getPublicId(imageUrl));
+        Map<String, String> response = cloudinary.uploader().destroy(CloudinaryUtils.getPublicId(imageUrl), ObjectUtils.emptyMap());
+        System.out.println(response);
     }
-    
 }

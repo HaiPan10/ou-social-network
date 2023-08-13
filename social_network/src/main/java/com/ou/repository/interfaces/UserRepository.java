@@ -7,7 +7,7 @@ import com.ou.pojo.User;
 public interface UserRepository {
     User create(User user);
     Optional<User> retrieve(Integer id);
-    User updateAvatar(Integer userId, String url);
-    User updateCover(Integer userId, String url);
+    User updateAvatar(User persistUser, String url);
+    User updateCover(User persistUser, String url);
     Object updateUser(User user, Integer userId);
 }

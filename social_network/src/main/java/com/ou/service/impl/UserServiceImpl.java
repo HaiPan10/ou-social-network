@@ -38,20 +38,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User uploadAvatar(MultipartFile uploadAvatar, Integer userId) throws IOException {
+    public User uploadAvatar(MultipartFile uploadAvatar, Integer userId) throws Exception {
         try {
-            String url = cloudinaryService.uploadImage(uploadAvatar);            
-            return userRepository.updateAvatar(userId, url);
+            String newUrl = cloudinaryService.uploadImage(uploadAvatar);
+            User persistUser = retrieve(userId);
+            String oldUrl = persistUser.getAvatar();
+            User returnUser = userRepository.updateAvatar(persistUser, newUrl);
+            if (oldUrl != null) {
+                cloudinaryService.deleteImage(oldUrl);
+            }
+            return returnUser;
         } catch (IOException e) {
             throw new IOException("Fail to upload avatar");
         }
     }
 
     @Override
-    public User uploadCover(MultipartFile uploadCover, Integer userId) throws IOException {
+    public User uploadCover(MultipartFile uploadCover, Integer userId) throws Exception {
         try {
-            String url = cloudinaryService.uploadImage(uploadCover);            
-            return userRepository.updateCover(userId, url);
+            String newUrl = cloudinaryService.uploadImage(uploadCover);
+            User persistUser = retrieve(userId);
+            String oldUrl = persistUser.getCoverAvatar();
+            User returnUser = userRepository.updateCover(persistUser, newUrl);
+            if (oldUrl != null) {
+                cloudinaryService.deleteImage(oldUrl);
+            }
+            return returnUser;
         } catch (IOException e) {
             throw new IOException("Fail to upload avatar");
         }

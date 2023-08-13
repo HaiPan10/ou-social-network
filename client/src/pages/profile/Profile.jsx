@@ -22,6 +22,7 @@ const UpdateAvatar = (props) => {
   const [disableButton, setDisableButton] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState(null);
   const [user, userDispatch] = useContext(AuthContext)
+  const { reloadData } = useContext(ReloadContext)
 
   const handleAvatarChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -54,6 +55,7 @@ const UpdateAvatar = (props) => {
               "type": "LOGIN", 
               "payload": res.data
             })
+            reloadData()
           }
         } else {
           setDisableButton(false)
@@ -112,6 +114,7 @@ const UpdateCover = (props) => {
   const [disableButton, setDisableButton] = useState(false);
   const [selectedCover, setSelectedCover] = useState(null);
   const [user, userDispatch] = useContext(AuthContext)
+  const { reloadData } = useContext(ReloadContext)
 
   const handleCoverChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -144,6 +147,7 @@ const UpdateCover = (props) => {
               "type": "LOGIN", 
               "payload": res.data
             })
+            reloadData()
           }
         } catch (ex) {
           
