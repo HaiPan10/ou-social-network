@@ -9,10 +9,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
-import com.ou.service.interfaces.UploadFileService;
+import com.ou.service.interfaces.CloudinaryService;
 
 @Service
-public class UploadFileServiceImpl implements UploadFileService{
+public class CloudinaryServiceImpl implements CloudinaryService{
     @Autowired
     private Cloudinary cloudinary;
 

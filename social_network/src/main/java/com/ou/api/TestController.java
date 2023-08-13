@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ou.service.interfaces.UploadFileService;
+import com.ou.service.interfaces.CloudinaryService;
 
 @RestController
 @RequestMapping("/api/test")
 public class TestController {
     @Autowired
     private ApplicationContext applicationContext;
-    @Autowired UploadFileService uploadFileService;
+    @Autowired CloudinaryService uploadFileService;
 
     @GetMapping("beans")
     public ResponseEntity<String> retrives(){
