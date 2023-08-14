@@ -5,7 +5,7 @@ import { authAPI, endpoints } from '../../configs/Api'
 import Loading from '../Loading'
 import Moment from 'react-moment';
 import 'moment/locale/vi'
-import { Form } from 'react-bootstrap'
+import SendIcon from '@mui/icons-material/Send';
 
 export const Comment = (props) => {
     const [user, dispatch] = useContext(AuthContext)
@@ -45,17 +45,17 @@ export const Comment = (props) => {
           }
         }
 
-        if (content !== '') {
-            process()
-        }
+        process()
     }
 
     return (
         <div className='comments'>
             <div className="write">
-                <img src={user.avatar} alt="" />
-                <input type="text" value={content} maxlength="255" onChange={(e) => {setContent(e.target.value)}} placeholder="Viết bình luận" />
-                <button onClick={uploadComment}>Gửi</button>
+                <form onSubmit={uploadComment}>
+                    <img src={user.avatar} alt="" />
+                    <input type="text" value={content} maxlength="255" required onChange={(e) => {setContent(e.target.value)}} placeholder="Viết bình luận" />
+                    <button type='submit'><SendIcon/></button>
+                </form>
             </div>
             { comments !== null ? 
                 <>
