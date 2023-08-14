@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,6 +33,15 @@ public class ApiCommentController {
         }
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(commentService.create(comment, postId, userId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping(path = "{postId}")
+    ResponseEntity<Object> loadComment(@PathVariable Integer postId) {
+        try {
+            return ResponseEntity.ok(commentService.loadComment(postId));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

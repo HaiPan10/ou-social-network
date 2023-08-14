@@ -153,7 +153,7 @@ export const Post = ({post, posts, setPosts}) => {
                         Share
                     </div> */}
                 </div>
-                {commentOpen && <Comment comments={post.comments}/>}
+                {commentOpen && <Comment post={post}/>}
             </div>
         </div>
   )

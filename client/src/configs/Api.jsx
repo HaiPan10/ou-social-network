@@ -13,6 +13,7 @@ export const endpoints = {
     "upload": "/posts/upload",
     "edit_post": "/posts",
     "delete_post": "/posts",
+    "comment": "/comments"
 }
 
 export const authAPI = () => axios.create({

@@ -56,6 +56,7 @@ public class Comment implements Serializable {
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
     private Date updatedDate;
 
+    @JsonIgnore
     @JoinColumn(name = "post_id", referencedColumnName = "id")
     @ManyToOne
     private Post postId;
