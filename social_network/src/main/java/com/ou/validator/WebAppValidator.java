@@ -12,6 +12,7 @@ import org.springframework.validation.Validator;
 
 import com.ou.pojo.Account;
 import com.ou.pojo.AuthRequest;
+import com.ou.pojo.Comment;
 import com.ou.pojo.User;
 import com.ou.pojo.UserStudent;
 
@@ -33,7 +34,8 @@ public class WebAppValidator implements Validator{
         return Account.class.isAssignableFrom(clazz) ||
             User.class.isAssignableFrom(clazz) ||
             UserStudent.class.isAssignableFrom(clazz) ||
-            AuthRequest.class.isAssignableFrom(clazz);
+            AuthRequest.class.isAssignableFrom(clazz) ||
+            Comment.class.isAssignableFrom(clazz);
     }
 
     @Override
