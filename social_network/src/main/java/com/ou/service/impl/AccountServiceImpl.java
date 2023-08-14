@@ -239,4 +239,9 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
+    @Override
+    public Account loadAccountByEmail(String email) {
+        return accountRepository.findByEmail(email).get();
+    }
+
 }

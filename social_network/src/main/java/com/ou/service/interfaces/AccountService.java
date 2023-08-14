@@ -24,4 +24,5 @@ public interface AccountService{
     String getStatus(Integer accountId);
     Account create(Account account, User user) throws Exception;
     void changePassword(Account account, String authPassword)throws Exception;
+    Account loadAccountByEmail(String email);
 }

@@ -12,7 +12,7 @@ public class DispatcherServletInit extends
             SpringSecurityConfigs.class,
             JwtService.class,
             TilesConfig.class,
-            JwtTokenFilter.class
+            JwtSecurityConfigs.class
         };
     }
 
