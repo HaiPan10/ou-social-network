@@ -23,8 +23,6 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -204,11 +202,6 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
                         account.getEmail(), account.getPassword(), authorities);
             }
         };
-    }
-
-    @Bean
-    public AuthenticationManager getAuthenticationManager(AuthenticationConfiguration auth) throws Exception {
-        return auth.getAuthenticationManager();
     }
 
     @Bean
