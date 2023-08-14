@@ -7,18 +7,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ou.pojo.Notification;
-import com.ou.service.interfaces.NotificationService;
+import com.google.firebase.messaging.BatchResponse;
+import com.ou.pojo.Notice;
+import com.ou.service.interfaces.FirebaseService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("api/notification")
 public class ApiNotificationController {
     @Autowired
-    private NotificationService notificationService;
+    private FirebaseService notificationService;
 
-    @PostMapping("/token")
-    public String sendPnsToDevice(@RequestBody Notification notification) throws Exception {
-        return notificationService.pushNotification(notification);
+    @PostMapping("")
+    public BatchResponse sendNotification(@RequestBody Notice notice) throws Exception {
+        return notificationService.sendNotification(notice);
     }
 }
