@@ -31,6 +31,14 @@ public class ApiPostController {
     @Autowired 
     private PostService postService;
 
+    @Autowired
+    private WebAppValidator webAppValidator;
+
+    @InitBinder()
+    public void initBinderWeb(WebDataBinder binder) {
+        binder.setValidator(webAppValidator);
+    }
+
     @PostMapping(path = "/upload/{userId}")
     public ResponseEntity<Object> upLoadPost(@PathVariable Integer userId, String postContent,
      List<MultipartFile> images, boolean isActiveComment) throws Exception {
@@ -52,6 +60,7 @@ public class ApiPostController {
     
     @PostMapping
     ResponseEntity<Object> update(List<MultipartFile> images, @Valid Post post, boolean isEditImage, BindingResult bindingResult) throws Exception {
+        webAppValidator.validate(post, bindingResult);
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ValidationUtils.getInvalidMessage(bindingResult));
         }
