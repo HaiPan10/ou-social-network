@@ -1,32 +1,89 @@
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import './comment.scss'
 import { AuthContext } from '../../context/AuthContext'
+import { authAPI, endpoints } from '../../configs/Api'
+import Loading from '../Loading'
+import Moment from 'react-moment';
+import 'moment/locale/vi'
+import SendIcon from '@mui/icons-material/Send';
 
 export const Comment = (props) => {
     const [user, dispatch] = useContext(AuthContext)
+    const [comments, setComments] = useState(null)
+    const [content, setContent] = useState('')
+    const [reloadComment, setReloadComment] = useState(true)
+
+    useEffect(() => {
+        const loadComment = async () => {
+          try {
+            let res = await authAPI().get(endpoints['comment'] + `/${props.post.id}`)
+            if (res.status === 200) {
+                setComments(res.data)
+                setReloadComment(false)
+            }
+          } catch (ex) {
+          }
+        }
+    
+        if (reloadComment) {
+            loadComment()
+        }
+    }, [props.post.Id, reloadComment])
+
+    const uploadComment = (evt) => {
+        evt.preventDefault()
+        const process = async () => {
+          try {
+            setContent('')          
+            let res = await authAPI().post(endpoints['comment'] + `/${props.post.id}` + `/${user.id}`, {
+                "content": content
+            })
+            if (res.status === 201) {
+              setReloadComment(true)
+            }
+          } catch (ex) {
+          }
+        }
+
+        process()
+    }
+
     return (
         <div className='comments'>
             <div className="write">
-                <img src={user.avatar} alt="" />
-                <input type="text" placeholder="Viết bình luận" />
-                <button>Gửi</button>
+                <form onSubmit={uploadComment}>
+                    <img src={user.avatar} alt="" />
+                    <input type="text" value={content} maxlength="255" required onChange={(e) => {setContent(e.target.value)}} placeholder="Viết bình luận" />
+                    <button type='submit'><SendIcon/></button>
+                </form>
             </div>
-            {/* {props.comments.map((comment) => (
-                <div className="comment">
-                    <img src={comment.avatar} alt="" />
-                    <div className='content'>
-                        <div className="info">
-                            <span>{comment.name}</span>
-                            <p>{comment.desc}</p>
-                        </div>
-                        <div className='comment-action'>
-                            <span>Thích</span>
-                            <span>Phản hồi</span>
-                            <span className="date">1 phút trước</span>
-                        </div>
-                    </div>
+            { comments !== null ? 
+                <>
+                    {comments.map((comment) => {
+                        const formattedDate = comment.createdDate.replace(/(\d{2})-(\d{2})-(\d{4}) (\d{2}:\d{2}:\d{2})/, '$3-$2-$1 $4')
+                        return (
+                            <div className="comment">
+                                <img src={comment.userId.avatar} alt="" />
+                                <div className='comment-content'>
+                                    <div className="info">
+                                        <span>{comment.userId.lastName} {comment.userId.firstName}</span>
+                                        <p>{comment.content}</p>
+                                    </div>
+                                    <div className='comment-action'>
+                                        <span>Thích</span>
+                                        <span>Phản hồi</span>
+                                        <span className="date"><Moment locale="vi" fromNow>{formattedDate}</Moment></span>
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    })}
+                </>
+                :
+                <div className="loading">
+                    <Loading/>
                 </div>
-            ))} */}
+            }            
         </div>
     )
 }

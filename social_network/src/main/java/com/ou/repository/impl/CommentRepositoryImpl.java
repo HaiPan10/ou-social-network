@@ -1,6 +1,18 @@
 package com.ou.repository.impl;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +44,30 @@ public class CommentRepositoryImpl implements CommentRepository {
         Session session = sessionFactoryBean.getObject().getCurrentSession();
         comment.setPostId(persistPost);
         comment.setUserId(persistUser);
+        comment.setCreatedDate(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+        comment.setUpdatedDate(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
         comment.setId((Integer) session.save(comment));
         return comment;
     }
-    
+
+    @Override
+    public List<Comment> loadComment(Integer postId) {
+        // Session session = sessionFactoryBean.getObject().getCurrentSession();
+        // Query query = session.createQuery("SELECT p.commentList FROM Post p WHERE p.id = :postId");
+        // query.setParameter("postId", postId);
+        // return query.getResultList();
+        Session session = sessionFactoryBean.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Comment> criteriaQuery = builder.createQuery(Comment.class);
+        
+        Root<Comment> rComment = criteriaQuery.from(Comment.class);
+        List<Predicate> predicates = new ArrayList<>();
+
+        predicates.add(builder.equal(rComment.get("postId"), postId));
+        criteriaQuery.where(predicates.toArray(Predicate[]::new));
+        criteriaQuery.orderBy(builder.desc(rComment.get("createdDate")));
+
+        Query query = session.createQuery(criteriaQuery);
+        return query.getResultList();
+    }
 }
