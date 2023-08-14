@@ -6,12 +6,13 @@ export const endpoints = {
     "verify": "/email/verify",
     "login": "/accounts/login",
     "status": "/accounts/status",
-    "profile": "/user/profile",
-    "update_avatar": "/user/update_avatar",
-    "update_cover": "/user/update_cover",
-    "update_information": "/user/update_information",
-    "upload": "/post/upload",
-    "edit_post": "/post"
+    "profile": "/users/profile",
+    "update_avatar": "/users/update_avatar",
+    "update_cover": "/users/update_cover",
+    "update_information": "/users/update_information",
+    "upload": "/posts/upload",
+    "edit_post": "/posts",
+    "delete_post": "/posts",
 }
 
 export const authAPI = () => axios.create({

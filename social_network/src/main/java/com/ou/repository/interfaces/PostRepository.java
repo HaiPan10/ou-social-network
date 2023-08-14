@@ -10,4 +10,5 @@ public interface PostRepository {
     Optional<List<Post>> loadPost(Integer userId);
     boolean update(Post persistPost, Post post);
     Optional<Post> retrieve(Integer postId);
+    boolean delete(Post persistPost);
 }

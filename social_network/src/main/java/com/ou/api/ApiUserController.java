@@ -19,7 +19,7 @@ import com.ou.service.interfaces.UserService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 public class ApiUserController {
     @Autowired
     private UserService userService;

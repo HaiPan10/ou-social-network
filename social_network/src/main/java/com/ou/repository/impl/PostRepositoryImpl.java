@@ -1,6 +1,9 @@
 package com.ou.repository.impl;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 
+import com.ou.pojo.ImageInPost;
 import com.ou.pojo.Post;
 import com.ou.pojo.User;
 import com.ou.repository.interfaces.PostRepository;
@@ -72,6 +76,7 @@ public class PostRepositoryImpl implements PostRepository{
             if (post.getIsActiveComment() != null) {
                 persistPost.setIsActiveComment(post.getIsActiveComment());
             }
+            persistPost.setUpdatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
             s.update(persistPost);
             return true;
         } catch (HibernateException ex) {
@@ -87,6 +92,19 @@ public class PostRepositoryImpl implements PostRepository{
             return Optional.ofNullable((Post) s.get(Post.class, postId));
         } catch (NoResultException e) {
             return Optional.empty();
+        }
+    }
+
+    @Override
+    public boolean delete(Post persistPost) {
+        Session s = sessionFactoryBean.getObject().getCurrentSession();
+        System.out.println("DELETE POST: " + persistPost);
+        try {
+            s.delete(persistPost);
+            return true;
+        } catch (HibernateException ex) {
+            ex.printStackTrace();
+            return false;
         }
     }
 }

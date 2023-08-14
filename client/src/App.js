@@ -25,7 +25,7 @@ const App = () => {
         </DarkModeContextProvider>
       ),
       children: [
-        { 
+        {
           path: "/",
           element: <Home />,
         },

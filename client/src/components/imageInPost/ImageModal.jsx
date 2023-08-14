@@ -33,16 +33,17 @@ class ImageModal extends Component {
     render(){
         const {images, currentImageIndex} = this.state;
         const {onClose, index} = this.props;
+        const totalImages = images.length;
 
         return(
             <Lightbox
-        mainSrc={images[currentImageIndex]}
-        nextSrc={images[(currentImageIndex + 1) % images.length]}
-        prevSrc={images[(currentImageIndex + images.length - 1) % images.length]}
-        onCloseRequest={onClose}
-        onMovePrevRequest={this.onMovePrevRequest}
-        onMoveNextRequest={this.onMoveNextRequest}
-    />
+                mainSrc={images[currentImageIndex]}
+                nextSrc={totalImages > 1 ? images[(currentImageIndex + 1) % images.length] : null}
+                prevSrc={totalImages > 1 ? images[(currentImageIndex + images.length - 1) % images.length] : null}
+                onCloseRequest={onClose}
+                onMovePrevRequest={totalImages > 1 ? this.onMovePrevRequest : null}
+                onMoveNextRequest={totalImages > 1 ? this.onMoveNextRequest : null}
+            />
     )
     }
 

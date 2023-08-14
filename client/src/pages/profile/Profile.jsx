@@ -15,6 +15,7 @@ import { DarkModeContext } from "../../context/DarkModeContext";
 import { Form } from "react-bootstrap";
 import { PostLayout } from "../../components/postLayout/PostLayout";
 import { ReloadContext } from "../../context/ReloadContext";
+import ImageModal from '../../components/imageInPost/ImageModal'
 
 const UpdateAvatar = (props) => {
   const {darkMode} = useContext(DarkModeContext)
@@ -361,6 +362,11 @@ export const Profile = () => {
   const [posts, setPosts] = useState()
   const { reload } = useContext(ReloadContext)
   const { reloadData } = useContext(ReloadContext)
+  const [showAvatarModal, setShowAvatarModal] = useState(false);
+  const [showCoverModal, setShowCoverModal] = useState(false);
+
+  const toggleAvatarModal = () => setShowAvatarModal(!showAvatarModal);
+  const toggleCoverModal = () => setShowCoverModal(!showCoverModal);
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -395,18 +401,54 @@ export const Profile = () => {
     <div className="profile">
       <div className="images">
         {profileUser.id === user.id ? (
-          <img src={user.coverAvatar} alt="" className="cover" />
+          <>
+            <img src={user.coverAvatar} alt="" className="cover" onClick={toggleCoverModal}/>
+            {showCoverModal && (
+              <ImageModal
+                  images={[user.coverAvatar]}
+                  index={0}
+                  onClose={toggleCoverModal}
+              />
+            )}
+          </>
         ) : (
-          <img src={profileUser.coverAvatar} alt="" className="cover" />
+          <>
+            <img src={profileUser.coverAvatar} alt="" className="cover" onClick={toggleCoverModal}/>
+            {showCoverModal && (
+              <ImageModal
+                  images={[profileUser.coverAvatar]}
+                  index={0}
+                  onClose={toggleCoverModal}
+              />
+            )}
+          </>
         )}
       </div>
       <div className="profileContainer">
         <div className="uInfo">
           <div className="left">
             {profileUser.id === user.id ? (
-              <img src={user.avatar} alt="" className="profilePic" />
+              <>
+                <img src={user.avatar} alt="" className="profilePic" onClick={toggleAvatarModal} />
+                {showAvatarModal && (
+                    <ImageModal
+                        images={[user.avatar]}
+                        index={0}
+                        onClose={toggleAvatarModal}
+                    />
+                )}
+              </>
             ) : (
-              <img src={profileUser.avatar} alt="" className="profilePic" />
+              <>
+                <img src={profileUser.avatar} alt="" className="profilePic" />
+                {showAvatarModal && (
+                  <ImageModal
+                      images={[profileUser.avatar]}
+                      index={0}
+                      onClose={toggleAvatarModal}
+                  />
+                )}
+              </>
             )}
             
             <span className="user-name">{profileUser.lastName} {profileUser.firstName}</span>
@@ -422,7 +464,6 @@ export const Profile = () => {
           </div>
           {profileUser.id !== user.id ? 
             <div className="right">
-              <button><PersonAddIcon/> Thêm bạn bè</button>
               <button className="softColor"><MessageIcon/> Nhắn tin</button>
             </div> :
             <div className="right">
@@ -446,7 +487,7 @@ export const Profile = () => {
       <div className="posts">
         {profileUser.id === user.id ? <PostLayout/> : <></>}        
         {posts.map(post=>(
-          <Post post={post} key={post.id}/>
+          <Post post={post} key={post.id} posts={posts} setPosts={setPosts}/>
         ))}
     </div>
   </div>

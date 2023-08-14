@@ -41,8 +41,9 @@ export const LeftBar = () => {
 
   const logout = (evt) => {
     evt.preventDefault()
+    
     dispatch({
-      "type": "LOGOUT",
+      "type": "LOGOUT"
     })
   }
 

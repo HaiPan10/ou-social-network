@@ -48,13 +48,15 @@ export const Register = () => {
                 "userStudent": userStudent
             })
             
-            save('access-token', res.data.accessToken)
-            save('current-user', res.data.user)
-            save('role', res.data.role)
-            userDispatch({
-              "type": "LOGIN", 
-              "payload": res.data.user
-            })
+            if (res.status === 201) {
+              save('access-token', res.data.accessToken)
+              save('current-user', res.data.user)
+              save('role', res.data.role)
+              userDispatch({
+                "type": "LOGIN", 
+                "payload": res.data.user
+              })
+            }
         } catch (ex) {
           setErr(ex.response.data)
           setDisableButton(false);

@@ -1,20 +1,24 @@
 package com.ou.service.impl;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.cloudinary.Cloudinary;
 import com.ou.pojo.ImageInPost;
 import com.ou.pojo.Post;
 import com.ou.repository.interfaces.PostRepository;
+import com.ou.service.interfaces.CloudinaryService;
 import com.ou.service.interfaces.CommentService;
 import com.ou.service.interfaces.ImageInPostService;
 import com.ou.service.interfaces.PostReactionService;
@@ -32,6 +36,8 @@ public class PostServiceImpl implements PostService {
     private PostReactionService postReactionService;
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private CloudinaryService cloudinaryService;
 
     @Override
     public Post uploadPost(String postContent, Integer userId, List<MultipartFile> images, boolean isActiveComment) throws Exception {
@@ -102,5 +108,20 @@ public class PostServiceImpl implements PostService {
         }
     }
 
-    
+    @Override
+    public boolean delete(Integer postId) throws Exception {
+        Post persistPost = retrieve(postId);
+        List<String> oldImageUrls = persistPost.getImageInPostList().stream().map(img -> img.getImageUrl()).collect(Collectors.toList());
+        System.out.println("GOT PERSIST: " + persistPost);        
+        if (postRepository.delete(persistPost)) {
+            oldImageUrls.forEach(oldImage -> {
+                try {
+                    cloudinaryService.deleteImage(oldImage);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+        return true;
+    }    
 }

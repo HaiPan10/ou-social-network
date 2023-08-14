@@ -67,7 +67,7 @@ const UploadPost = (props) => {
               'Content-Type': 'multipart/form-data'
             }
           })
-          if (res.status === 200) {
+          if (res.status === 201) {
             clear()
             droppedFilesRef.current = []
             setActiveComment(true)

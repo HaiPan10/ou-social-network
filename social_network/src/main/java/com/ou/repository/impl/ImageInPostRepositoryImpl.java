@@ -31,6 +31,7 @@ public class ImageInPostRepositoryImpl implements ImageInPostRepository{
         Session s = sessionFactoryBean.getObject().getCurrentSession();
         imageInPosts.forEach(img -> {
             ImageInPost persistImageInPost = s.get(ImageInPost.class, img.getId());
+            System.out.println("GOT PERSIST: " + persistImageInPost);
             try {
                 s.delete(persistImageInPost);
             } catch (HibernateException ex) {

@@ -7,15 +7,14 @@ export const Comment = (props) => {
     return (
         <div className='comments'>
             <div className="write">
-                {/* <img src={user.avatar} alt="" /> */}
-                <img src={require('../../images/default_avatar.png')} alt="" />
+                <img src={user.avatar} alt="" />
                 <input type="text" placeholder="Viết bình luận" />
                 <button>Gửi</button>
             </div>
-            {props.comments.map((comment) => (
+            {/* {props.comments.map((comment) => (
                 <div className="comment">
                     <img src={comment.avatar} alt="" />
-                    <div className='comment-content'>
+                    <div className='content'>
                         <div className="info">
                             <span>{comment.name}</span>
                             <p>{comment.desc}</p>
@@ -27,7 +26,7 @@ export const Comment = (props) => {
                         </div>
                     </div>
                 </div>
-            ))}
+            ))} */}
         </div>
     )
 }

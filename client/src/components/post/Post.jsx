@@ -15,14 +15,70 @@ import SpeakerNotesOffOutlinedIcon from '@mui/icons-material/SpeakerNotesOffOutl
 import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import EditPost from '../postLayout/EditPost';
+import { ReloadContext } from '../../context/ReloadContext';
+import { authAPI, endpoints } from '../../configs/Api';
+import { DarkModeContext } from '../../context/DarkModeContext';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import { Form } from "react-bootstrap";
 
-export const Post = ({post}) => {
+const DeleteConfirmation = (props) => {
+    const {darkMode} = useContext(DarkModeContext)
+    const [disableButton, setDisableButton] = useState(false)
+    // const { reloadData } = useContext(ReloadContext)
+    const [user, userDispatch] = useContext(AuthContext)
+  
+    const deletePost = (evt) => {
+      evt.preventDefault()
+      const process = async () => {
+        props.onHide()
+        props.setPosts(props.posts.filter(post => post.id !== props.post.id));
+        try {
+          let res = await authAPI().delete(endpoints['delete_post'] + `/${props.post.id}`)
+          if (res.status === 204) {
+            // reloadData()
+          }
+        } catch (ex) {
+          
+        }
+      }
+
+      if (user.id === props.post.userId.id) {
+        process()
+      }
+    }
+  
+    return (
+        <Modal
+          {...props}
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+          className={`theme-${darkMode ? "dark" : "light"}`}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title id="contained-modal-title-vcenter">
+              <DeleteOutlineOutlinedIcon/> Xóa bài đăng
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Bạn có chắc chắn muốn xóa bài đăng này ?
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={props.onHide} className="close-btn">Đóng</Button>
+            <Button type="submit" onClick={deletePost}>Xác nhận xóa</Button>
+          </Modal.Footer>
+        </Modal>
+    );
+  }
+
+export const Post = ({post, posts, setPosts}) => {
     const [commentOpen, setCommentOpen] = useState(false)
     const liked = false;
     const images = post.imageInPostList.map(image => image.imageUrl);
     const [user, userDispatch] = useContext(AuthContext)
     const [dropdownVisible, setDropdownVisible] = useState(false)
     const [editPostShow, setEditPostShow] = useState(false)
+    const [deletePostShow, setDeletePostShow] = useState(false)
     const dropdownRef = useRef(null);
 
     const toggleDropdown = () => {
@@ -69,10 +125,11 @@ export const Post = ({post}) => {
                                 <div className='btn-edit' ><MoreHorizIcon/></div>
                                 {dropdownVisible && <div className="dropdown-content">
                                     <div onClick={() => setEditPostShow(true)}><EditNoteOutlinedIcon/> Chỉnh sửa</div>
-                                    <div><DeleteOutlineOutlinedIcon/> Xóa</div>
+                                    <div onClick={() => setDeletePostShow(true)}><DeleteOutlineOutlinedIcon/> Xóa</div>
                                 </div>}
                             </div>
                             <EditPost show={editPostShow} onHide={() => setEditPostShow(false)} setEditPostShow={setEditPostShow} post={post} />
+                            <DeleteConfirmation show={deletePostShow} onHide={() => setDeletePostShow(false)} post={post} posts={posts} setPosts={setPosts}/>
                         </>
                     }
                 </div>

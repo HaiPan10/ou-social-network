@@ -2,8 +2,12 @@ package com.ou.api;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,28 +21,21 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.pojo.Post;
 import com.ou.service.interfaces.PostService;
+import com.ou.utils.ValidationUtils;
 import com.ou.validator.WebAppValidator;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping("api/post")
+@RequestMapping("api/posts")
 public class ApiPostController {
     @Autowired 
     private PostService postService;
-
-    @Autowired
-    private WebAppValidator webAppValidator;
-
-    @InitBinder("requestBody")
-    public void initBinderWeb(WebDataBinder binder) {
-        binder.setValidator(webAppValidator);
-    }
 
     @PostMapping(path = "/upload/{userId}")
     public ResponseEntity<Object> upLoadPost(@PathVariable Integer userId, String postContent,
      List<MultipartFile> images, boolean isActiveComment) throws Exception {
         try {
-            return ResponseEntity.ok(postService.uploadPost(postContent, userId, images, isActiveComment));
+            return ResponseEntity.status(HttpStatus.CREATED).body(postService.uploadPost(postContent, userId, images, isActiveComment));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -54,7 +51,10 @@ public class ApiPostController {
     }
     
     @PostMapping
-    ResponseEntity<Object> update(List<MultipartFile> images, Post post, boolean isEditImage) throws Exception {
+    ResponseEntity<Object> update(List<MultipartFile> images, @Valid Post post, boolean isEditImage, BindingResult bindingResult) throws Exception {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(ValidationUtils.getInvalidMessage(bindingResult));
+        }
         try {
             return ResponseEntity.ok(postService.update(post, images, isEditImage));
         } catch (Exception e) {
@@ -63,7 +63,11 @@ public class ApiPostController {
     }
 
     @DeleteMapping(path = "{postId}")
-    void delete(@PathVariable Integer postId) {
-        System.out.println("delete");
+    ResponseEntity<Object> delete(@PathVariable Integer postId) {
+        try {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(postService.delete(postId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
