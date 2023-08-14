@@ -1,10 +1,5 @@
 package com.ou.utils;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.springframework.validation.BindingResult;
-
 public class CloudinaryUtils {
     
     // public static String getPublicId(String imageUrl){

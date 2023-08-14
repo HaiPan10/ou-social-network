@@ -1,6 +1,8 @@
 package com.ou.configs;
 
 import java.util.Properties;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -16,6 +18,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -41,6 +45,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.ou.pojo.Account;
 import com.ou.repository.interfaces.AccountRepository;
 import com.sun.mail.util.MailSSLSocketFactory;
@@ -63,6 +71,9 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private ResourceLoader resourceLoader;
 
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
@@ -141,7 +152,7 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
         mailProperties.put("mail.debug", "true");
 
         MailSSLSocketFactory sf = new MailSSLSocketFactory();
-        sf.setTrustAllHosts(true); 
+        sf.setTrustAllHosts(true);
         mailProperties.put("mail.smtp.ssl.trust", "*");
         mailProperties.put("mail.smtp.ssl.socketFactory", sf);
         javaMailSenderImpl.setJavaMailProperties(mailProperties);
@@ -229,15 +240,50 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public ObjectMapper objectMapper(){
+    public ObjectMapper objectMapper() {
         return new ObjectMapper();
     }
 
     @Bean
-    public ScheduledExecutorService getScheduledService(){
+    public ScheduledExecutorService getScheduledService() {
         int threadNumber = Integer.parseInt(environment.getProperty("THREAD_NUMBER"));
         ScheduledExecutorService configs = Executors.newScheduledThreadPool(threadNumber);
         return configs;
     }
 
+    @Bean
+    public FirebaseMessaging firebaseMessaging(FirebaseApp firebaseApp) {
+        System.out.println("[DEBUG] - Starting create Firebase Messaging");
+        return FirebaseMessaging.getInstance(firebaseApp);
+    }
+
+    @Bean
+    public FirebaseApp firebaseApp(GoogleCredentials credentials) {
+        if(FirebaseApp.getApps().isEmpty()){
+            System.out.println("[DEBUG] - Starting create Firebase app");
+            FirebaseOptions options = FirebaseOptions.builder()
+                    .setCredentials(credentials)
+                    .build();
+            System.out.println("[DEBUG] - Successfully create Firebase options");
+            return FirebaseApp.initializeApp(options);
+        } else {
+            return FirebaseApp.getInstance();
+        }
+        
+    }
+
+    @Bean
+    public GoogleCredentials googleCredentials() throws IOException {
+        try {
+            Resource resource = resourceLoader.getResource("classpath:serviceAccountKey.json");
+            try (InputStream serviceAccount = resource.getInputStream()) {
+                System.out.println("[DEBUG] - ACCOUNT SERVICE CREDENTIAL");
+                return GoogleCredentials.fromStream(serviceAccount);
+            }
+
+        } catch (IOException ex) {
+            System.out.println("[DEBUG] - DEFAULT CREDENTIAL");
+            throw new IOException("FAIL TO INIT FIREBASE APP");
+        }
+    }
 }
