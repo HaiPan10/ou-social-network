@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,6 +32,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PostService postService;
 
+    @Autowired
+    private Environment env;
+
     @Override
     public User create(User user, Account account) {
         user.setAccount(account);
@@ -38,20 +42,34 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User uploadAvatar(MultipartFile uploadAvatar, Integer userId) throws IOException {
+    public User uploadAvatar(MultipartFile uploadAvatar, Integer userId) throws Exception {
         try {
-            String url = cloudinaryService.uploadImage(uploadAvatar);            
-            return userRepository.updateAvatar(userId, url);
+            String newUrl = cloudinaryService.uploadImage(uploadAvatar);
+            User persistUser = retrieve(userId);
+            String oldUrl = persistUser.getAvatar();
+            User returnUser = userRepository.updateAvatar(persistUser, newUrl);
+            String defaultAvatar = this.env.getProperty("DEFAULT_AVATAR").toString();
+            if (!oldUrl.equals(defaultAvatar)) {
+                cloudinaryService.deleteImage(oldUrl);
+            }
+            return returnUser;
         } catch (IOException e) {
             throw new IOException("Fail to upload avatar");
         }
     }
 
     @Override
-    public User uploadCover(MultipartFile uploadCover, Integer userId) throws IOException {
+    public User uploadCover(MultipartFile uploadCover, Integer userId) throws Exception {
         try {
-            String url = cloudinaryService.uploadImage(uploadCover);            
-            return userRepository.updateCover(userId, url);
+            String newUrl = cloudinaryService.uploadImage(uploadCover);
+            User persistUser = retrieve(userId);
+            String oldUrl = persistUser.getCoverAvatar();
+            String defaultCover = this.env.getProperty("DEFAULT_COVER").toString();
+            User returnUser = userRepository.updateCover(persistUser, newUrl);
+            if (!oldUrl.equals(defaultCover)) {
+                cloudinaryService.deleteImage(oldUrl);
+            }
+            return returnUser;
         } catch (IOException e) {
             throw new IOException("Fail to upload avatar");
         }

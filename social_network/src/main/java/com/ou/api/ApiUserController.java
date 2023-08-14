@@ -25,7 +25,7 @@ public class ApiUserController {
     private UserService userService;
 
     @PostMapping(value = "/update_avatar/{userId}")
-    public ResponseEntity<Object> updateAvatar(MultipartFile uploadAvatar, @PathVariable Integer userId){
+    public ResponseEntity<Object> updateAvatar(MultipartFile uploadAvatar, @PathVariable Integer userId) throws Exception{
         try {
             return ResponseEntity.ok().body(userService.uploadAvatar(uploadAvatar, userId));
         } catch (IOException e) {
@@ -34,7 +34,7 @@ public class ApiUserController {
     }
 
     @PostMapping(value = "/update_cover/{userId}")
-    public ResponseEntity<Object> updateCover(MultipartFile uploadCover, @PathVariable Integer userId){
+    public ResponseEntity<Object> updateCover(MultipartFile uploadCover, @PathVariable Integer userId) throws Exception{
         try {
             return ResponseEntity.ok().body(userService.uploadCover(uploadCover, userId));
         } catch (IOException e) {

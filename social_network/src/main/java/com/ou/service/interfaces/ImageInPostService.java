@@ -9,5 +9,5 @@ import com.ou.pojo.Post;
 
 public interface ImageInPostService {
     List<ImageInPost> uploadImageInPost(List<MultipartFile> imageList, Post newPost);
-    boolean deleteImageInPost(List<ImageInPost> imageInPosts);
+    void deleteImageInPost(List<ImageInPost> imageInPosts);
 }

@@ -85,14 +85,7 @@ const UpdateAvatar = (props) => {
                   <h6>Ảnh đại diện</h6>
                 </div>
                 <div className="avatar-container">
-                  {selectedAvatar === null && props.profileUser.avatar===null ? 
-                  <img
-                    src={require('../../images/default_avatar.png')}
-                    alt=""
-                  /> : <img
-                    src={selectedAvatar || props.profileUser.avatar}
-                    alt=""
-                  />}
+                  <img src={selectedAvatar || props.profileUser.avatar} alt="" />
                 </div>
                 <div style={{display:"flex", justifyContent:"center"}}><input type="file" ref={avatar} name="uploadAvatar" onChange={handleAvatarChange} accept="image/png, image/jpeg"/></div>
               </div>
@@ -175,14 +168,7 @@ const UpdateCover = (props) => {
                   <h6>Ảnh bìa</h6>
                 </div>
                 <div className="cover-container">
-                  {selectedCover === null && props.profileUser.coverAvatar===null ? 
-                  <img
-                    src={require('../../images/default_cover.png')}
-                    alt=""
-                  /> : <img
-                    src={selectedCover || props.profileUser.coverAvatar}
-                    alt=""
-                  />}
+                  <img src={selectedCover || props.profileUser.coverAvatar} alt="" />
                 </div>
                 <div style={{display:"flex", justifyContent:"center"}}><input type="file" ref={cover} name="uploadCover" onChange={handleCoverChange} accept="image/png, image/jpeg"/></div>
               </div>
@@ -312,9 +298,7 @@ const EditProfile = (props) => {
               <div className="btn-edit" onClick={editAvatar}>Chỉnh sửa</div>
             </div>
             <div className="avatar-container">
-              {props.profileUser.avatar===null ? (
-                <img src={require('../../images/default_avatar.png')} alt="" className="profilePic" />
-              ) : props.profileUser.id === user.id ? (
+              {props.profileUser.id === user.id ? (
                 <img src={user.avatar} alt="" className="profilePic" />
               ) : (
                 <img src={props.profileUser.avatar} alt="" className="profilePic" />
@@ -327,11 +311,9 @@ const EditProfile = (props) => {
               <div className="btn-edit" onClick={editCover}>Chỉnh sửa</div>
             </div>
             <div className="cover-container">
-              {props.profileUser.coverAvatar===null ? (
-              <img src={require('../../images/default_cover.png')} alt="" className="cover" />
-                ) : props.profileUser.id === user.id ? (
-                  <img src={user.coverAvatar} alt="" className="cover" />
-                ) : (
+              {props.profileUser.id === user.id ? (
+                <img src={user.coverAvatar} alt="" className="cover" />
+              ) : (
                   <img src={props.profileUser.coverAvatar} alt="" className="cover" />
               )}
             </div>
@@ -348,7 +330,7 @@ const EditProfile = (props) => {
               </div>
               <div className="info-row">
                 <div className="info-title">Ngày tháng năm sinh:</div>
-                {props.profileUser.dob === null===null ? (
+                {props.profileUser.dob === null ? (
                   <div>Chưa cập nhật</div>
                 ) : props.profileUser.id === user.id ? (
                   <div>{user.dob}</div>
@@ -412,20 +394,16 @@ export const Profile = () => {
   return (
     <div className="profile">
       <div className="images">
-        {profileUser.coverAvatar===null ? (
-            <img src={require('../../images/default_cover.png')} alt="" className="cover" />
-          ) : profileUser.id === user.id ? (
-            <img src={user.coverAvatar} alt="" className="cover" />
-          ) : (
-            <img src={profileUser.coverAvatar} alt="" className="cover" />
+        {profileUser.id === user.id ? (
+          <img src={user.coverAvatar} alt="" className="cover" />
+        ) : (
+          <img src={profileUser.coverAvatar} alt="" className="cover" />
         )}
       </div>
       <div className="profileContainer">
         <div className="uInfo">
           <div className="left">
-            {profileUser.avatar===null ? (
-              <img src={require('../../images/default_avatar.png')} alt="" className="profilePic" />
-            ) : profileUser.id === user.id ? (
+            {profileUser.id === user.id ? (
               <img src={user.avatar} alt="" className="profilePic" />
             ) : (
               <img src={profileUser.avatar} alt="" className="profilePic" />

@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -54,4 +55,12 @@ public class ImageInPost implements Serializable {
     @JoinColumn(name = "post_id", referencedColumnName = "id")
     @ManyToOne
     private Post postId;
+
+    @Transient
+    private String contentType;
+
+    @Override
+    public String toString() {
+        return "ImageInPost [id=" + id + ", imageUrl=" + imageUrl + ", contentType=" + contentType + "]";
+    }
 }

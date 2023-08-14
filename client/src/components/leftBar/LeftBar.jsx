@@ -63,11 +63,7 @@ export const LeftBar = () => {
             </Link>
             <Link to={`/profile/${user.id}`} className='turnoff-link-style' >
               <div className="user item" onClick={reloadData}>
-                {user.avatar===null ? (
-                  <img src={require('../../images/default_avatar.png')} />
-                ) : ( 
-                  <img src={user.avatar} alt="" />
-                )}
+                <img src={user.avatar} alt="" />
                 <span>Trang cá nhân</span>
               </div>
             </Link>

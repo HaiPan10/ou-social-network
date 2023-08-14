@@ -56,8 +56,18 @@ public class ImageInPostServiceImpl implements ImageInPostService {
     }
 
     @Override
-    public boolean deleteImageInPost(List<ImageInPost> imageInPosts) {
-        return imageInPostRepository.deleteImageInPost(imageInPosts);
+    public void deleteImageInPost(List<ImageInPost> imageInPosts) {
+        List<String> oldImageUrls = imageInPosts.stream().map(img -> img.getImageUrl()).collect(Collectors.toList());
+        System.out.println(oldImageUrls);
+        if (imageInPostRepository.deleteImageInPost(imageInPosts)) {
+            oldImageUrls.forEach(oldImage -> {
+                try {
+                    cloudinaryService.deleteImage(oldImage);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+        }
     }
 }
 

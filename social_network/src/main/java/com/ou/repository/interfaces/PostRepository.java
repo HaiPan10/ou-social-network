@@ -8,5 +8,6 @@ import com.ou.pojo.Post;
 public interface PostRepository {
     Post uploadPost(Post post, Integer userId) throws Exception;
     Optional<List<Post>> loadPost(Integer userId);
-    boolean update(Post post) throws Exception;
+    boolean update(Post persistPost, Post post);
+    Optional<Post> retrieve(Integer postId);
 }

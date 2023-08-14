@@ -28,18 +28,16 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User updateAvatar(Integer userId, String url) {
+    public User updateAvatar(User persistUser, String url) {
         Session s = sessionFactoryBean.getObject().getCurrentSession();
-        User persistUser = s.get(User.class, userId);
         persistUser.setAvatar(url);
         s.saveOrUpdate(persistUser);
         return persistUser;
     }
 
     @Override
-    public User updateCover(Integer userId, String url) {
+    public User updateCover(User persistUser, String url) {
         Session s = sessionFactoryBean.getObject().getCurrentSession();
-        User persistUser = s.get(User.class, userId);
         persistUser.setCoverAvatar(url);
         s.saveOrUpdate(persistUser);
         return persistUser;

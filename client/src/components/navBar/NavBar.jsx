@@ -45,11 +45,7 @@ export const NavBar = () => {
         <NotificationsOutlinedIcon/>
         <div className="dropdown">
           <div className='user'>
-            {user.avatar===null ? (
-              <img src={require('../../images/default_avatar.png')} />
-            ) : ( 
-              <img src={user.avatar} alt="" />
-            )}
+            <img src={user.avatar} alt="" />
             <span>{user.firstName}</span>
           </div>
           <div className="dropdown-content">

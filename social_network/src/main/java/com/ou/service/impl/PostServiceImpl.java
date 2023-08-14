@@ -2,6 +2,7 @@ package com.ou.service.impl;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -11,12 +12,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ou.pojo.ImageInPost;
 import com.ou.pojo.Post;
 import com.ou.repository.interfaces.PostRepository;
 import com.ou.service.interfaces.CommentService;
 import com.ou.service.interfaces.ImageInPostService;
 import com.ou.service.interfaces.PostReactionService;
 import com.ou.service.interfaces.PostService;
+import com.ou.utils.CloudinaryUtils;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -57,6 +60,7 @@ public class PostServiceImpl implements PostService {
             posts.forEach(p -> {
                 p.setReactionTotal(postReactionService.countReaction(p.getId()));
                 p.setCommentTotal(commentService.countComment(p.getId()));
+                p.getImageInPostList().forEach(img -> img.setContentType(String.format("image/%s", CloudinaryUtils.getImageType(img.getImageUrl()))));
             });
             return posts;
         } else {
@@ -65,11 +69,38 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public boolean update(Post post, List<MultipartFile> images) throws Exception {
-        if (images != null) {
-            imageInPostService.deleteImageInPost(post.getImageInPostList());
-            post.setImageInPostList(imageInPostService.uploadImageInPost(images, post));
+    public boolean update(Post post, List<MultipartFile> images, boolean isEditImage) throws Exception {
+        Post persistPost = retrieve(post.getId());
+        if (isEditImage) {
+            System.out.println("EDIT IMAGE");
+            List<ImageInPost> imageInPostList = persistPost.getImageInPostList();
+            if (imageInPostList.size() != 0) {
+                System.out.println("DELETE OLD IMAGES");
+                imageInPostService.deleteImageInPost(imageInPostList);
+            }
+            if (images != null) {
+                System.out.println("UPLOAD NEW IMAGES");
+                persistPost.setImageInPostList(imageInPostService.uploadImageInPost(images, persistPost));
+            } else {
+                System.out.println("SET FOR NO IMAGES");
+                imageInPostList.clear();
+                persistPost.setImageInPostList(imageInPostList);
+            }
+        } else {
+            System.out.println("NO CHANGE FOR IMAGE");
         }
-        return postRepository.update(post);
+        return postRepository.update(persistPost, post);
     }
+
+    @Override
+    public Post retrieve(Integer postId) throws Exception {
+        Optional<Post> postOptional = postRepository.retrieve(postId);
+        if (postOptional.isPresent()) {
+            return postOptional.get();
+        } else {
+            throw new Exception("Không tìm thấy bài đăng!");
+        }
+    }
+
+    
 }
