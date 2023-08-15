@@ -5,7 +5,7 @@ import "./home.scss"
 import { Post } from "../../components/post/Post"
 import { useEffect } from "react"
 import { PostLayout } from "../../components/postLayout/PostLayout"
-import {FireBaseTest} from "../../components/firebaseTest/FireBaseTest"
+// import {FireBaseTest} from "../../components/firebaseTest/FireBaseTest"
 
 export const Home = () => {
   
@@ -17,7 +17,6 @@ export const Home = () => {
     <div className="home">
       <div className="posts">
         <PostLayout/>
-        <FireBaseTest/>
         {/* {posts.map(post=>(
           <Post post={post} key={post.id}/>
         ))} */}

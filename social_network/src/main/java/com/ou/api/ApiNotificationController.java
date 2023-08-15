@@ -12,7 +12,9 @@ import com.ou.pojo.Notice;
 import com.ou.service.interfaces.FirebaseService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+// @CrossOrigin(origins = "http://localhost:3000")
+// @CrossOrigin(origins = "http://34.101.76.209:80")
+@CrossOrigin(origins = "*")
 @RequestMapping("api/notification")
 public class ApiNotificationController {
     @Autowired

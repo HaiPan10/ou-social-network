@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: tomcat
-        image: phonglai0809/webapp:latest
+        image: phonglai0809/ou-social-network:latest
         ports:
         - containerPort: 80
