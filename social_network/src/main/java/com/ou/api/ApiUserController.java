@@ -18,7 +18,9 @@ import com.ou.pojo.User;
 import com.ou.service.interfaces.UserService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+// @CrossOrigin(origins = "http://localhost:3000")
+// @CrossOrigin(origins = "http://34.101.76.209:80")
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/users")
 public class ApiUserController {
     @Autowired

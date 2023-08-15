@@ -23,7 +23,8 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler{
         // } else {
         //     // response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         // }
-        response.sendRedirect("/social_network/admin/dashboard");
+        // response.sendRedirect("/social_network/admin/dashboard");
+        response.sendRedirect("/admin/dashboard");
     }
     
 }

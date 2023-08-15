@@ -35,7 +35,9 @@ import com.ou.validator.MapValidator;
 import com.ou.validator.WebAppValidator;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+// @CrossOrigin(origins = "http://localhost:3000")
+// @CrossOrigin(origins = "http://34.101.76.209:80")
+@CrossOrigin(origins = "*")
 @RequestMapping("api/accounts")
 public class ApiAccountController {
     @Autowired
