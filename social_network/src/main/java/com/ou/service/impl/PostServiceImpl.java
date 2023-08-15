@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.cloudinary.Cloudinary;
 import com.ou.pojo.ImageInPost;
 import com.ou.pojo.Post;
 import com.ou.repository.interfaces.PostRepository;
