@@ -14,8 +14,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.ou.handler.LoginSuccessHandler;
-
 @Configuration
 @EnableWebSecurity
 @EnableTransactionManagement
@@ -32,8 +30,8 @@ public class SpringSecurityConfigs extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService accountService;
 
-	@Autowired
-	private LoginSuccessHandler loginSuccessHandler;
+	// @Autowired
+	// private LoginSuccessHandler loginSuccessHandler;
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -54,7 +52,7 @@ public class SpringSecurityConfigs extends WebSecurityConfigurerAdapter {
                 login.loginPage("/login")
                 .usernameParameter("email")
                 .passwordParameter("password")
-                .successHandler(loginSuccessHandler)
+                .defaultSuccessUrl("/admin/dashboard")
                 .failureUrl("/login?error"));
         http.logout(logout -> logout.logoutSuccessUrl("/"));
         http.authorizeRequests(requests ->
