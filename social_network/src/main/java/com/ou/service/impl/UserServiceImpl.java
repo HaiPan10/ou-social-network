@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
             String oldUrl = persistUser.getAvatar();
             User returnUser = userRepository.updateAvatar(persistUser, newUrl);
             String defaultAvatar = this.env.getProperty("DEFAULT_AVATAR").toString();
-            if (!oldUrl.equals(defaultAvatar)) {
+            if (oldUrl != null && !oldUrl.equals(defaultAvatar)) {
                 cloudinaryService.deleteImage(oldUrl);
             }
             return returnUser;

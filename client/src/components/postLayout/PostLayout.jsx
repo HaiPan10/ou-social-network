@@ -14,7 +14,7 @@ export const PostLayout = (props) => {
             </div>
             <div className="show-modal" user={user} onClick={() => setUploadPostShow(true)}>Chia sẻ trạng thái của bạn</div>
         </div>
-        <UploadPost show={uploadPostShow} onHide={() => setUploadPostShow(false)} setReloadData={props.setReloadData} setUploadPostShow={setUploadPostShow} />
+        <UploadPost show={uploadPostShow} setReloadData={props.setReloadData} setUploadPostShow={setUploadPostShow} />
     </div>
   )
 }

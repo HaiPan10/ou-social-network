@@ -11,8 +11,10 @@ import LightModeOutlinedIcon from '@mui/icons-material/LightModeOutlined';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import UploadPost from '../postLayout/UploadPost';
 import { ReloadContext } from '../../context/ReloadContext';
+import LockPersonIcon from '@mui/icons-material/LockPerson';
+import ChangePassword from '../changePassword/ChangePassword';
 
-export const LeftBar = () => {
+export const LeftBar = (props) => {
   const [user, dispatch] = useContext(AuthContext)
   const { toggle } = useContext(DarkModeContext)
   const {darkMode} = useContext(DarkModeContext)
@@ -20,6 +22,7 @@ export const LeftBar = () => {
   const [dropdownVisible, setDropdownVisible] = useState(false)
   const dropdownRef = useRef(null)
   const { reloadData } = useContext(ReloadContext)
+  const [changePasswordShow, setChangePasswordShow] = useState(false)
 
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -77,14 +80,24 @@ export const LeftBar = () => {
           <div className='menu-bottom'>
             <div className="dropdown" ref={dropdownRef}>
               <div className="setting item" onClick={toggleDropdown}>
-                <SettingsIcon className='icon' />
+                <div className='icon-wrapper'>
+                  <SettingsIcon className='icon' />
+                  {props.status === "PASSWORD_CHANGE_REQUIRED" && <div className='piority'/> }
+                </div>
                 <span>Cài đặt</span>
               </div>
               {dropdownVisible && <div className="dropdown-content">
-                <div onClick={logout}>Đăng xuất <LogoutOutlinedIcon/></div>
-                {!darkMode ? <div onClick = {toggle}>Chế độ tối <DarkModeOutlinedIcon/></div> : 
-                <div onClick = {toggle}>Chế độ sáng <LightModeOutlinedIcon/></div>}            
+                <div className='icon-wrapper'  onClick={logout}> <LogoutOutlinedIcon/> Đăng xuất</div>
+                <div className='icon-wrapper' onClick={() =>setChangePasswordShow(true)}>
+                  <div> <LockPersonIcon/> Đổi mật khẩu</div>
+                  {props.status === "PASSWORD_CHANGE_REQUIRED" && <div className='piority-setting'>
+                    <div className="piority-item"></div>
+                  </div> }
+                </div>
+                {!darkMode ? <div className='icon-wrapper' onClick = {toggle}> <DarkModeOutlinedIcon/> Chế độ tối</div> : 
+                <div className='icon-wrapper' onClick = {toggle}> <LightModeOutlinedIcon/> Chế độ sáng</div>}            
               </div>}
+              <ChangePassword show={changePasswordShow} setChangePasswordShow={setChangePasswordShow}/>
             </div>
           </div>
         </div>

@@ -45,6 +45,16 @@ const UploadPost = (props) => {
       setSelectedFiles([])
       droppedFilesRef.current = []
     }
+
+    const close = () => {
+      props.setUploadPostShow(false)
+      clear()
+      droppedFilesRef.current = []
+      setActiveComment(true)
+      setContent('')
+      setDisableButton(false)
+    }
+
     const handleClick = () => setActiveComment(!isActiveComment)
   
     const uploadPost = (evt) => {
@@ -96,6 +106,7 @@ const UploadPost = (props) => {
           aria-labelledby="contained-modal-title-vcenter"
           centered
           className={`theme-${darkMode ? "dark" : "light"}`}
+          onHide={close}
           id='modal-post'
         >
           <Form onSubmit={uploadPost}>

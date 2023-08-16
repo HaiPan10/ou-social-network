@@ -25,13 +25,14 @@ const UpdateAvatar = (props) => {
   const [user, userDispatch] = useContext(AuthContext)
 
   const handleAvatarChange = (event) => {
-    const selectedFile = event.target.files[0];
-    setSelectedAvatar(URL.createObjectURL(selectedFile));
+    const selectedFile = event.target.files[0]
+    setSelectedAvatar(URL.createObjectURL(selectedFile))
   };
 
   const close = () => {
-    props.setEditAvatarShow(false);
-    props.setEditProfileShow(true);
+    props.setEditAvatarShow(false)
+    setSelectedAvatar(null)
+    props.setEditProfileShow(true)
   };
 
   const updateAvatar = (evt) => {
@@ -73,6 +74,7 @@ const UpdateAvatar = (props) => {
         aria-labelledby="contained-modal-title-vcenter"
         centered
         className={`theme-${darkMode ? "dark" : "light"}`}
+        onHide={close}
       >
         <Form onSubmit={updateAvatar}>
           <Modal.Header closeButton>
@@ -108,13 +110,14 @@ const UpdateCover = (props) => {
   const [user, userDispatch] = useContext(AuthContext)
 
   const handleCoverChange = (event) => {
-    const selectedFile = event.target.files[0];
-    setSelectedCover(URL.createObjectURL(selectedFile));
+    const selectedFile = event.target.files[0]
+    setSelectedCover(URL.createObjectURL(selectedFile))
   };
 
   const close = () => {
-    props.setEditCoverShow(false);
-    props.setEditProfileShow(true);
+    props.setEditCoverShow(false)
+    setSelectedCover(null)
+    props.setEditProfileShow(true)
   };
 
   const updateCover = (evt) => {
@@ -156,6 +159,7 @@ const UpdateCover = (props) => {
         aria-labelledby="contained-modal-title-vcenter"
         centered
         className={`theme-${darkMode ? "dark" : "light"}`}
+        onHide={close}
       >
         <Form onSubmit={updateCover}>
           <Modal.Header closeButton>
@@ -188,11 +192,12 @@ const UpdateInformation = (props) => {
   const [disableButton, setDisableButton] = useState(false);
   const [user, userDispatch] = useContext(AuthContext)
   const [updateUser, setUpdateUser] = useState({
-    "dob": "",
+    "dob": props.profileUser.dob,
   })
 
   const close = () => {
     props.setEditInformationShow(false);
+    setUpdateUser(updateUser => ({ ...updateUser, dob: props.profileUser.dob }))
     props.setEditProfileShow(true);
   };
 
@@ -231,6 +236,7 @@ const UpdateInformation = (props) => {
         aria-labelledby="contained-modal-title-vcenter"
         centered
         className={`theme-${darkMode ? "dark" : "light"}`}
+        onHide={close}
       >
         <Form onSubmit={updateInformation}>
           <Modal.Header closeButton>
@@ -246,10 +252,10 @@ const UpdateInformation = (props) => {
               </div>
               <div className="info-row">
                 <div className="info-title">Ngày tháng năm sinh:</div>
-                <div><input type="date" onChange={(e) => 
+                <div><input type="date" value={updateUser.dob} onChange={(e) => 
                   {
-                    const selectedDateTime = e.target.value;
-                    setUpdateUser(updateUser => ({ ...updateUser, dob: selectedDateTime }));
+                    const selectedDateTime = e.target.value
+                    setUpdateUser(updateUser => ({ ...updateUser, dob: selectedDateTime }))
                   }
                 } /></div>
               </div>
@@ -299,11 +305,7 @@ const EditProfile = (props) => {
               <div className="btn-edit" onClick={editAvatar}>Chỉnh sửa</div>
             </div>
             <div className="avatar-container">
-              {props.profileUser.id === user.id ? (
-                <img src={user.avatar} alt="" className="profilePic" />
-              ) : (
-                <img src={props.profileUser.avatar} alt="" className="profilePic" />
-              )}
+              <img src={user.avatar} alt="" className="profilePic" />
             </div>
           </div>
           <div className="cover">
@@ -312,11 +314,7 @@ const EditProfile = (props) => {
               <div className="btn-edit" onClick={editCover}>Chỉnh sửa</div>
             </div>
             <div className="cover-container">
-              {props.profileUser.id === user.id ? (
-                <img src={user.coverAvatar} alt="" className="cover" />
-              ) : (
-                  <img src={props.profileUser.coverAvatar} alt="" className="cover" />
-              )}
+              <img src={user.coverAvatar} alt="" className="cover" />
             </div>
           </div>
           <div className="user-information">
@@ -331,13 +329,7 @@ const EditProfile = (props) => {
               </div>
               <div className="info-row">
                 <div className="info-title">Ngày tháng năm sinh:</div>
-                {props.profileUser.dob === null ? (
-                  <div>Chưa cập nhật</div>
-                ) : props.profileUser.id === user.id ? (
-                  <div>{user.dob}</div>
-                ) : (
-                  <div>{props.profileUser.dob}</div>
-                )}
+                <input type="date" readOnly value={user.dob} />
               </div>
             </div>
           </div>
@@ -473,13 +465,13 @@ export const Profile = () => {
           <EditProfile show={editProfileShow} onHide={() => setEditProfileShow(false)} profileUser={profileUser}
             setEditProfileShow={setEditProfileShow} setEditAvatarShow={setEditAvatarShow} setEditCoverShow={setEditCoverShow} setEditInformationShow={setEditInformationShow}
           />
-          <UpdateAvatar show={editAvatarShow} onHide={() => setEditAvatarShow(false)} profileUser={profileUser}
+          <UpdateAvatar show={editAvatarShow} profileUser={profileUser}
             setEditProfileShow={setEditProfileShow} setEditAvatarShow={setEditAvatarShow}
           />
-          <UpdateCover show={editCoverShow} onHide={() => setEditCoverShow(false)} profileUser={profileUser}
+          <UpdateCover show={editCoverShow} profileUser={profileUser}
             setEditProfileShow={setEditProfileShow} setEditCoverShow={setEditCoverShow}
           />
-          <UpdateInformation show={editInformationShow} onHide={() => setEditInformationShow(false)} profileUser={profileUser}
+          <UpdateInformation show={editInformationShow} profileUser={profileUser}
             setEditProfileShow={setEditProfileShow} setEditInformationShow={setEditInformationShow}
           />
         </div>      

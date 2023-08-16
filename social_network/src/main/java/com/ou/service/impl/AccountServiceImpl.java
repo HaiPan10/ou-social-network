@@ -234,8 +234,8 @@ public class AccountServiceImpl implements AccountService {
             }
             accountRepository.updateAccount(authAccount);
         } 
-        catch (Exception e){
-            throw new Exception(e.getMessage());
+        catch(AuthenticationException exception){
+            throw new Exception("Email hoặc mật khẩu không đúng.");
         }
     }
 

@@ -13,7 +13,8 @@ export const endpoints = {
     "upload": "/posts/upload",
     "edit_post": "/posts",
     "delete_post": "/posts",
-    "comment": "/comments"
+    "comment": "/comments",
+    "change_password": "/accounts/change_password"
 }
 
 export const authAPI = () => axios.create({

@@ -14,11 +14,14 @@ import '../../style.scss'
 import './layout.scss'
 import { DarkModeContext } from '../../context/DarkModeContext';
 import 'react-image-lightbox/style.css';
+import { ReloadContext } from "../../context/ReloadContext";
 
 export const Layout = () => {
     const [user, dispatch] = useContext(AuthContext)
     const [status, setStatus] = useState()
     const {darkMode} = useContext(DarkModeContext)
+    const { reload } = useContext(ReloadContext)
+    
     useEffect(() => {
         if (user !== null) {
             const getStatus = async () => {
@@ -26,7 +29,7 @@ export const Layout = () => {
                     let res = await authAPI().get(endpoints['status'] + `/${user.id}`)
                     setStatus(res.data)
                 } catch (ex) {  
-                    setStatus("ERROR")      
+                    setStatus("ERROR")
                 }  
             }
     
@@ -34,19 +37,19 @@ export const Layout = () => {
         } else {
             setStatus("LOGIN")
         }
-    }, [])
+    }, [reload])
 
     if (user === null) {
         return <Navigate to="/login" />
     }
 
     let pageContent;
-    if (status === "ACTIVE") {
+    if (status === "ACTIVE" || status === "PASSWORD_CHANGE_REQUIRED") {
         pageContent = (
             <div className={`theme-${darkMode ? "dark" : "light"}`}>
                 <NavBar />
                 <div style={{ display: "flex" }}>
-                    <LeftBar />
+                    <LeftBar status={status}/>
                     <div style={{flex: 6}}><Outlet /></div>
                     <RightBar />
                 </div>

@@ -133,7 +133,7 @@ public class ApiAccountController {
         }
     }
 
-    @PostMapping(path="/change_password/")
+    @PostMapping(path="/change_password")
     public ResponseEntity<Object> changePassword(@RequestBody Map<String, Object> params,
         BindingResult bindingResult){
         try {
