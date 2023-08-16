@@ -106,9 +106,15 @@ public class AccountController {
             }
             System.out.printf("[INFO] - Provider email: %s\n", account);
 
+            if(avatar.isEmpty()){
+                String defaultAvatar = this.env.getProperty("DEFAULT_AVATAR").toString();
+                user.setAvatar(defaultAvatar);
+            }
+            String defaultCover = this.env.getProperty("DEFAULT_COVER").toString();
+            user.setCoverAvatar(defaultCover);
             Account createdAccount = accountService.create(account, user);
             System.out.printf("[INFO] - Provided email: %s\n", createdAccount);
-            if(!avatar.isEmpty()){
+            if(!avatar.isEmpty()) {
                 userService.uploadAvatar(avatar, createdAccount.getId());
             }
             return "redirect:/admin/accounts/provider/?status=success";
