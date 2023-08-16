@@ -39,6 +39,7 @@ const ChangePassword = (props) => {
         setAuthPassword("")
         setAccount(account => ({...account, ["password"]:""}))
         setAccount(account => ({...account, ["confirmPassword"]:""}))
+        setAccount(account => ({...account, ["email"]:""}))
         setErr()
     }
 
