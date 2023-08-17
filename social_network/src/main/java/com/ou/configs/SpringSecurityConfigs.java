@@ -1,7 +1,5 @@
 package com.ou.configs;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -53,7 +51,7 @@ public class SpringSecurityConfigs extends WebSecurityConfigurerAdapter {
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/admin/dashboard")
-                .failureUrl("/login?error"));
+                .failureUrl("/"));
         http.logout(logout -> logout.logoutSuccessUrl("/"));
         http.authorizeRequests(requests ->
                 requests.antMatchers("/**/admin/**")
@@ -65,9 +63,9 @@ public class SpringSecurityConfigs extends WebSecurityConfigurerAdapter {
                         .anyRequest()
                         .authenticated());
         http.exceptionHandling(handling ->
-            handling.authenticationEntryPoint((requests, reponse, ex) -> {
+            handling.accessDeniedHandler((requests, reponse, ex) -> {
                 System.out.printf("[EXCEPTION] - %s\n", ex.getMessage());
-                reponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, ex.getMessage());
+                reponse.sendRedirect(requests.getContextPath() + "/logout");
         }));
     }
 }

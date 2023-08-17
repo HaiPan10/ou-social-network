@@ -75,6 +75,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public boolean update(Post post, List<MultipartFile> images, boolean isEditImage) throws Exception {
         Post persistPost = retrieve(post.getId());
+
         if (isEditImage) {
             System.out.println("EDIT IMAGE");
             List<ImageInPost> imageInPostList = persistPost.getImageInPostList();
