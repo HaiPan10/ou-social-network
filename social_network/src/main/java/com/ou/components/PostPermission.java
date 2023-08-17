@@ -2,13 +2,8 @@ package com.ou.components;
 
 import java.io.Serializable;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Component;
-
-import com.ou.pojo.Post;
-import com.ou.service.interfaces.PostService;
 
 
 public class PostPermission implements PermissionEvaluator {

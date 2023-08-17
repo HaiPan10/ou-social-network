@@ -9,8 +9,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -77,14 +75,6 @@ public class PostServiceImpl implements PostService {
     @Override
     public boolean update(Post post, List<MultipartFile> images, boolean isEditImage) throws Exception {
         Post persistPost = retrieve(post.getId());
-
-        // check is the owner of the post through authentication
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(!authentication.getName().equals(persistPost.getUserId().getAccount().getEmail())){
-            System.out.println("[DEBUG] - Authentication email: " + authentication.getName());
-            System.out.println("[DEBUG] - Request email: " + persistPost.getUserId().getAccount().getEmail());
-            throw new Exception("Not owner");
-        }
 
         if (isEditImage) {
             System.out.println("EDIT IMAGE");
