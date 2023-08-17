@@ -50,6 +50,11 @@
                 <div class="authentication-inner">
                     <div class="card">
                         <div class="card-body">
+                            <c:if test="${not empty SPRING_SECURITY_LAST_EXCEPTION.message}">
+                                <div class="alert alert-danger">
+                                    Đăng nhập thất bại
+                                </div>
+                            </c:if>
                             <h4 class="mb-2">Trang quản trị mạng xã hội cựu sinh viên trường đại học Mở TP.HCM</h4>
                             <p class="mb-4">Vui lòng đăng nhập</p>
 

@@ -53,7 +53,7 @@ public class SpringSecurityConfigs extends WebSecurityConfigurerAdapter {
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .defaultSuccessUrl("/admin/dashboard")
-                .failureUrl("/login?error"));
+                .failureUrl("/"));
         http.logout(logout -> logout.logoutSuccessUrl("/"));
         http.authorizeRequests(requests ->
                 requests.antMatchers("/**/admin/**")
