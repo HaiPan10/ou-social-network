@@ -65,9 +65,9 @@ public class SpringSecurityConfigs extends WebSecurityConfigurerAdapter {
                         .anyRequest()
                         .authenticated());
         http.exceptionHandling(handling ->
-            handling.authenticationEntryPoint((requests, reponse, ex) -> {
+            handling.accessDeniedHandler((requests, reponse, ex) -> {
                 System.out.printf("[EXCEPTION] - %s\n", ex.getMessage());
-                reponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, ex.getMessage());
+                reponse.sendRedirect(requests.getContextPath() + "/logout");
         }));
     }
 }
