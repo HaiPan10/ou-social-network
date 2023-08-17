@@ -24,7 +24,6 @@ import { Form } from "react-bootstrap";
 
 const DeleteConfirmation = (props) => {
     const {darkMode} = useContext(DarkModeContext)
-    const [disableButton, setDisableButton] = useState(false)
     // const { reloadData } = useContext(ReloadContext)
     const [user, userDispatch] = useContext(AuthContext)
   
@@ -105,13 +104,10 @@ export const Post = ({post, posts, setPosts}) => {
             <div className="postContainer">
                 <div className="user">
                     <div className="userInfo">
-                        {post.userId.avatar===null ? (
-                            <img src={require('../../images/default_avatar.png')} />
-                        ) : post.userId.id === user.id ? (
-                            <img src={user.avatar} alt=""/>
-                        ) : (
-                            <img src={post.userId.avatar} alt=""/>
-                        )}
+                        <Link to={`/profile/${post.userId.id}`}>
+                          <img src={post.userId.avatar} alt=""/>
+                        </Link>
+                        
                         <div className="details">
                             <Link to={`/profile/${post.userId.id}`} style={{textDecoration:"none", color:"inherit"}}>
                                 <span className='name'>{post.userId.lastName} {post.userId.firstName}</span>
@@ -153,7 +149,7 @@ export const Post = ({post, posts, setPosts}) => {
                         Share
                     </div> */}
                 </div>
-                {commentOpen && <Comment post={post}/>}
+                {post.isActiveComment && commentOpen && <Comment post={post}/>}
             </div>
         </div>
   )
