@@ -65,14 +65,13 @@ public class JwtSecurityConfigs extends WebSecurityConfigurerAdapter {
         http.cors(cors -> cors.configurationSource(corsConfigurationSource));
         http.antMatcher("/api/**").httpBasic(basic -> basic.authenticationEntryPoint(restServicesEntryPoint()))
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeRequests(requests ->
-                        requests.antMatchers("/api/accounts/login",
-                                "/api/accounts/register",
-                                // "/api/email/verify/**",
-                                "/api/accounts/verify/**/**")
-                                .permitAll()
-                                .anyRequest()
-                                .authenticated())
+                .authorizeRequests(requests -> requests.antMatchers("/api/accounts/login",
+                        "/api/accounts/register",
+                        // "/api/email/verify/**",
+                        "/api/accounts/verify/**/**")
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated())
                 .exceptionHandling(handling -> handling.accessDeniedHandler(customAccessDeniedHandler()));
         http.addFilterBefore(jwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
