@@ -6,8 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,6 +56,28 @@ public class ApiCommentController {
     ResponseEntity<Object> loadComment(@PathVariable Integer postId) {
         try {
             return ResponseEntity.ok(commentService.loadComment(postId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PatchMapping()
+    ResponseEntity<Object> editComment(@RequestBody Comment comment, BindingResult bindingResult) {
+        try {
+            webAppValidator.validate(comment, bindingResult);
+            if (bindingResult.hasErrors()) {
+                return ResponseEntity.badRequest().body(ValidationUtils.getInvalidMessage(bindingResult));
+            }
+            return ResponseEntity.ok(commentService.editComment(comment));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping(path = "{commentId}")
+    ResponseEntity<Object> delete(@PathVariable Integer commentId) {
+        try {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(commentService.delete(commentId));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

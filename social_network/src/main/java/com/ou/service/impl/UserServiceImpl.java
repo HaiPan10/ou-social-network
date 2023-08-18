@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
         if (!(retrieveAccount.getStatus().equals("ACTIVE") || retrieveAccount.getStatus().equals("PASSWORD_CHANGE_REQUIRED"))) {
             throw new Exception("Not activated Account!");
         }
-        if (retrieveAccount.getRoleId().getId().equals(1)) {
+        if (retrieveAccount.getRoleId().getId().equals(3)) {
             throw new Exception("This is not a page for client!");
         }
         Map<String, Object> jsonObject = new HashMap<>();

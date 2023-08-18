@@ -1,6 +1,7 @@
 package com.ou.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,5 +44,29 @@ public class CommentServiceImpl implements CommentService{
     @Override
     public List<Comment> loadComment(Integer postId) {
         return commentRepository.loadComment(postId);
+    }
+
+    
+
+    @Override
+    public Comment editComment(Comment comment) throws Exception {
+        Comment persistComment = retrieve(comment.getId());
+        return commentRepository.editComment(persistComment, comment);
+    }
+
+    @Override
+    public Comment retrieve(Integer commentId) throws Exception {
+        Optional<Comment> commentOptional = commentRepository.retrieve(commentId);
+        if (commentOptional.isPresent()) {
+            return commentOptional.get();
+        } else {
+            throw new Exception("Không tìm thấy comment!");
+        }
+    }
+
+    @Override
+    public boolean delete(Integer commentId) throws Exception {
+        Comment persistComment = retrieve(commentId);
+        return commentRepository.delete(persistComment);
     }
 }

@@ -11,6 +11,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -66,5 +67,36 @@ public class CommentRepositoryImpl implements CommentRepository {
 
         Query query = session.createQuery(criteriaQuery);
         return query.getResultList();
+    }
+
+    @Override
+    public Optional<Comment> retrieve(Integer commentId) {
+        Session s = sessionFactoryBean.getObject().getCurrentSession();
+        try {
+            return Optional.ofNullable((Comment) s.get(Comment.class, commentId));
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public Comment editComment(Comment persistComment, Comment comment) {
+        Session s = sessionFactoryBean.getObject().getCurrentSession();
+        persistComment.setContent(comment.getContent());
+        persistComment.setUpdatedDate(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+        s.update(persistComment);
+        return persistComment;
+    }
+
+    @Override
+    public boolean delete(Comment persistComment) {
+        Session s = sessionFactoryBean.getObject().getCurrentSession();
+        try {
+            s.delete(persistComment);
+            return true;
+        } catch (HibernateException ex) {
+            ex.printStackTrace();
+            return false;
+        }
     }
 }
