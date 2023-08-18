@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.Map;
 
 import javax.security.auth.login.AccountNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ou.configs.JwtService;
 import com.ou.pojo.Account;
 import com.ou.pojo.AuthRequest;
 import com.ou.pojo.AuthResponse;
@@ -54,6 +56,9 @@ public class ApiAccountController {
 
     @Autowired
     private Environment env;
+
+    @Autowired
+    private JwtService jwtService;
 
     @InitBinder("params")
     public void initBinderMap(WebDataBinder binder) {
@@ -124,9 +129,10 @@ public class ApiAccountController {
         }
     }
 
-    @GetMapping(path="/status/{accountId}")
-    public ResponseEntity<Object> getStatus(@PathVariable Integer accountId) {
+    @GetMapping(path="/status")
+    public ResponseEntity<Object> getStatus(HttpServletRequest httpServletRequest) {
         try {
+            Integer accountId = Integer.parseInt(jwtService.getAccountId(httpServletRequest));
             return ResponseEntity.ok().body(accountService.getStatus(accountId));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

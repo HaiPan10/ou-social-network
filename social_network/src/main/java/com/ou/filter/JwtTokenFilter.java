@@ -45,7 +45,7 @@ public class JwtTokenFilter extends UsernamePasswordAuthenticationFilter {
         // DEBUG header
         System.out.println("[DEBUG] - Header Authorization: " + request.getHeader("Authorization"));
 
-        String header = getAuthorization(request);
+        String header = jwtService.getAuthorization(request);
         request.setCharacterEncoding("UTF-8");
 
         if (header == null || !header.startsWith("Bearer")) {
@@ -55,7 +55,7 @@ public class JwtTokenFilter extends UsernamePasswordAuthenticationFilter {
 
         System.out.println("[DEBUG] - Has Authorization Bearer");
 
-        String token = getAccessToken(header);
+        String token = jwtService.getAccessToken(header);
 
         if (!jwtService.isValidAccessToken(token)) {
             filterChain.doFilter(servletRequest, servletResponse);
@@ -68,26 +68,26 @@ public class JwtTokenFilter extends UsernamePasswordAuthenticationFilter {
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
-    private String getAuthorization(HttpServletRequest request) {
-        String header = request.getHeader("Authorization");
-        if (header == null) {
-            Cookie[] cookies = request.getCookies();
-            if (cookies != null) {
-                for (Cookie cookie : cookies) {
-                    if (cookie.getName().equals("Authorization")) {
-                        header = "Bearer " + cookie.getValue();
-                        break;
-                    }
-                }
-            }
-        }
-        return header;
-    }
+    // private String getAuthorization(HttpServletRequest request) {
+    //     String header = request.getHeader("Authorization");
+    //     if (header == null) {
+    //         Cookie[] cookies = request.getCookies();
+    //         if (cookies != null) {
+    //             for (Cookie cookie : cookies) {
+    //                 if (cookie.getName().equals("Authorization")) {
+    //                     header = "Bearer " + cookie.getValue();
+    //                     break;
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     return header;
+    // }
 
-    private String getAccessToken(String header) {
-        String token = header.split(" ")[1].trim();
-        return token;
-    }
+    // private String getAccessToken(String header) {
+    //     String token = header.split(" ")[1].trim();
+    //     return token;
+    // }
 
     private void setAuthenticationContext(String token, HttpServletRequest request) {
         Account account = getAccount(token);

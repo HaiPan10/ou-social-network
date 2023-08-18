@@ -2,6 +2,9 @@ package com.ou.configs;
 
 import java.util.Date;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -69,5 +72,33 @@ public class JwtService {
                 .setSigningKey(SECRECT)
                 .parseClaimsJws(token)
                 .getBody();
+    }
+
+    public String getAuthorization(HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+        if (header == null) {
+            Cookie[] cookies = request.getCookies();
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if (cookie.getName().equals("Authorization")) {
+                        header = "Bearer " + cookie.getValue();
+                        break;
+                    }
+                }
+            }
+        }
+        return header;
+    }
+
+    public String getAccessToken(String header) {
+        String token = header.split(" ")[1].trim();
+        return token;
+    }
+
+    public String getAccountId(HttpServletRequest request){
+        String header = getAuthorization(request);
+        String token = getAccessToken(header);
+        String[] claims = getSubject(token).split(",");
+        return claims[0];
     }
 }

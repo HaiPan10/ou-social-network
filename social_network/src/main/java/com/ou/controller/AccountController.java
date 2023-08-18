@@ -154,4 +154,15 @@ public class AccountController {
         }
         return "accountDetail";
     }
+
+    @PostMapping("{id}")
+    public String update(@PathVariable(value = "id") Integer accountId, Model model, @ModelAttribute Account account) {
+        try {
+            System.out.println("[DEBUG] - " + account);
+            return "accountDetail";
+        } catch (Exception e) {
+
+        }
+        return "accountDetail";
+    }
 }

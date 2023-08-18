@@ -36,16 +36,15 @@
             name="dob" value="${account.user.dob}" readonly="true"/>
         <label for="dob">Ngày tháng năm sinh</label>
     </div>
-    <div>
-        <form:select class="form-select" id="status" name="status" path="status"
-            defaultValue="${account.status}">
-            <c:forEach items="${status}" var="s">
-                <form:option value="${s}"></form:option>
-            </c:forEach>
-        </form:select>
+    <div class="form-floating mb-3 mt-3">
+        <form:input id ="status" type="text" class="form-control" path="status"
+            name="status" value="${account.status}" readonly="true"/>
+        <label for="status">Tình trạng</label>
     </div>
     <div class="form-floating mb-3 mt-3">
-        <form:button class="btn btn-primary" type="submit">Sửa thông tin</form:button>
+        <form:button id="unlock" class="btn btn-primary" type="submit">Gỡ Khóa Tài Khoản</form:button>
+        <form:button id="passwordChange" class="btn btn-primary" type="submit">Reset Thời Gian Đổi Mật Khẩu</form:button>
+        <form:button id="lock" class="btn btn-primary" type="submit">Khóa Tài Khoản</form:button>
     </div>
     
 </form:form>
@@ -53,9 +52,17 @@
 <script>
     var provider = document.getElementById("account-detail");
     provider.className += " active";
+    var status = document.getElementById("status");
 
-    var date = document.getElementById("dob");
-    var dateString = date.value.spilt(" ")[0];
-    Console.log(dateString);
-    date.value = dateString;
+    document.getElementById("lock").addEventListener('submit', (e) => {
+        status.value = "LOCKED"
+    });
+
+    document.getElementById("unlock").addEventListener('submit', (e) => {
+        status.value = "ACTIVE"
+    });
+
+    document.getElementById("passwordChange").addEventListener('submit', (e) => {
+        status.value = "PASSWORD_CHANGE_REQUIRED"
+    });
 </script>
