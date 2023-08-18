@@ -21,7 +21,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ou.pojo.Account;
-import com.ou.pojo.Status;
 import com.ou.repository.interfaces.AccountRepository;
 
 @Repository
@@ -150,5 +149,13 @@ public class AccountRepositoryImpl implements AccountRepository{
         } catch (HibernateException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Integer countAccounts() {
+        Session session = sessionFactoryBean.getObject().getCurrentSession();
+        Query query = session.createQuery("SELECT Count(*) FROM Account");
+
+        return Integer.parseInt(query.getSingleResult().toString());
     }
 }

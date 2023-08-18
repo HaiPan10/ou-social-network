@@ -53,4 +53,11 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
         <put-attribute name="pageCss"
                        value="" />
     </definition>
+    <definition name="accountDetail" extends="baseLayout">
+        <put-attribute name="title" value="Chi tiết tài khoản" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/accountDetail.jsp" />
+        <put-attribute name="pageCss"
+                       value="" />
+    </definition>
 </tiles-definitions>

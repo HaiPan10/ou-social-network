@@ -58,7 +58,7 @@
                             <h4 class="mb-2">Trang quản trị mạng xã hội cựu sinh viên trường đại học Mở TP.HCM</h4>
                             <p class="mb-4">Vui lòng đăng nhập</p>
 
-                            <spring:url value="/login" var="login" />
+                            <spring:url value="/" var="login" />
                             <form id="formAuthentication" class="mb-3" action="${login}" method="post">
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email</label>

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.pojo.Account;
+import com.ou.pojo.Status;
 import com.ou.pojo.User;
 import com.ou.service.interfaces.AccountService;
 import com.ou.service.interfaces.UserService;
@@ -69,7 +70,23 @@ public class AccountController {
     }
 
     @GetMapping
-    public String accounts(Model model) {
+    public String accounts(Model model, @RequestParam Map<String, String> params) {
+        List<Account> accounts = accountService.list();
+        model.addAttribute("accounts", accounts);
+        Integer pageSize = Integer.parseInt(env.getProperty("PENDING_ACCOUNT_PAGE_SIZE"));
+        model.addAttribute("counter", Math.ceil(accountService.countAccounts() * 1.0 / pageSize));
+        int page;
+        if (params != null) {
+            String p = params.get("page");
+            if (p != null && !p.isEmpty()) {
+                page = Integer.parseInt(p);
+            } else {
+                page = 1;
+            }
+        } else {
+            page = 1;
+        }
+        model.addAttribute("currentPage", page);
         return "accounts";
     }
 
@@ -122,5 +139,18 @@ public class AccountController {
             bindingResult.addError(new ObjectError("exceptionError", e.getMessage()));
             return "provider";
         }
+    }
+
+    @GetMapping("{id}")
+    public String retrieve(@PathVariable(value = "id") Integer accountId, Model model){
+        try{
+            Account targetAccount = accountService.retrieve(accountId);
+            model.addAttribute("account", targetAccount);
+            model.addAttribute("status", Status.values());
+        }
+        catch (Exception e){
+
+        }
+        return "accountDetail";
     }
 }

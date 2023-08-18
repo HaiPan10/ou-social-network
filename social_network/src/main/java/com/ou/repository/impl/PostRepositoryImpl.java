@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 
-import com.ou.pojo.ImageInPost;
 import com.ou.pojo.Post;
 import com.ou.pojo.User;
 import com.ou.repository.interfaces.PostRepository;

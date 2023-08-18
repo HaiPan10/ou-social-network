@@ -244,4 +244,9 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.findByEmail(email).get();
     }
 
+    @Override
+    public Integer countAccounts() {
+        return accountRepository.countAccounts();
+    }
+
 }

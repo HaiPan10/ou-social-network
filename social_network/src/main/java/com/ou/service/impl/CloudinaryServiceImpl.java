@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.cloudinary.Cloudinary;
@@ -13,6 +14,7 @@ import com.ou.service.interfaces.CloudinaryService;
 import com.ou.utils.CloudinaryUtils;
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class CloudinaryServiceImpl implements CloudinaryService{
     @Autowired
     private Cloudinary cloudinary;

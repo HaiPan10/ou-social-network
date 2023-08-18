@@ -50,7 +50,4 @@
     var provider = document.getElementById("account-providers-menu");
     provider.className += " active";
 
-    document.getElementById("firstName").addEventListener('change', (e) => {
-        console.log(e.target.value);
-    })
 </script>
