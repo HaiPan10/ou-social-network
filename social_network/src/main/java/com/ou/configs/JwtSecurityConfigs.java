@@ -28,7 +28,8 @@ import com.ou.filter.RestAuthenticationEntryPoint;
         "com.ou.validator",
         "com.ou.api",
         "com.ou.handler",
-        "com.ou.configs"
+        "com.ou.configs",
+        "com.ou.components"
 })
 @Order(1)
 public class JwtSecurityConfigs extends WebSecurityConfigurerAdapter {

@@ -22,7 +22,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
     "com.ou.validator",
     "com.ou.api",
     "com.ou.handler",
-    "com.ou.configs"
+    "com.ou.configs",
+    "com.ou.components"
 })
 public class SpringSecurityConfigs extends WebSecurityConfigurerAdapter {
     @Autowired

@@ -4,6 +4,7 @@ import java.util.Properties;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -47,6 +48,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.ou.components.DateFormatter;
 import com.ou.pojo.Account;
 import com.ou.repository.interfaces.AccountRepository;
 import com.sun.mail.util.MailSSLSocketFactory;
@@ -59,7 +61,8 @@ import com.sun.mail.util.MailSSLSocketFactory;
         "com.ou.service",
         "com.ou.validator",
         "com.ou.api",
-        "com.ou.handler"
+        "com.ou.handler",
+        "com.ou.components"
 })
 @PropertySource("classpath:configs.properties")
 @EnableTransactionManagement
@@ -72,6 +75,9 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
 
     @Autowired
     private ResourceLoader resourceLoader;
+
+    @Autowired
+    private DateFormatter dateFormatter;
 
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
@@ -185,6 +191,7 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
         // create new class and
         // implements the Formatter<T> interface
         // might not necessary
+        registry.addFormatter(dateFormatter);
     }
 
     @Bean
@@ -279,5 +286,10 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
             System.out.println("[DEBUG] - DEFAULT CREDENTIAL");
             throw new IOException("FAIL TO INIT FIREBASE APP");
         }
+    }
+
+    @Bean
+    public SimpleDateFormat getSimpleDate(){
+        return new SimpleDateFormat("yyyy-MM-dd");
     }
 }

@@ -32,7 +32,7 @@
         <label for="lastName">Họ tên lót giảng viên</label>
     </div>
     <div class="form-floating mb-3 mt-3">
-        <form:input id ="dob" class="form-control" type="text" path="user.dob"
+        <form:input id ="dob" type="text" class="form-control" path="user.dob"
             name="dob" value="${account.user.dob}" readonly="true"/>
         <label for="dob">Ngày tháng năm sinh</label>
     </div>
@@ -54,4 +54,8 @@
     var provider = document.getElementById("account-detail");
     provider.className += " active";
 
+    var date = document.getElementById("dob");
+    var dateString = date.value.spilt(" ")[0];
+    Console.log(dateString);
+    date.value = dateString;
 </script>

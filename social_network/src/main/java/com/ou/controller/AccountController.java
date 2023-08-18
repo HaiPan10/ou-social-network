@@ -1,11 +1,10 @@
 package com.ou.controller;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,8 +42,9 @@ public class AccountController {
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+        // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        // binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat,
+        // true));
         binder.setValidator(adminValidator);
     }
 
@@ -71,7 +71,9 @@ public class AccountController {
 
     @GetMapping
     public String accounts(Model model, @RequestParam Map<String, String> params) {
-        List<Account> accounts = accountService.list();
+        List<Account> accounts = accountService.list().stream()
+                .filter(a -> !a.getRoleId().getName().equals("ROLE_ADMIN"))
+                .collect(Collectors.toList());
         model.addAttribute("accounts", accounts);
         Integer pageSize = Integer.parseInt(env.getProperty("PENDING_ACCOUNT_PAGE_SIZE"));
         model.addAttribute("counter", Math.ceil(accountService.countAccounts() * 1.0 / pageSize));
@@ -97,13 +99,13 @@ public class AccountController {
     }
 
     @GetMapping("/provider")
-    public String provideAccounts(Model model, @RequestParam(name="status",required = false) String status) {
+    public String provideAccounts(Model model, @RequestParam(name = "status", required = false) String status) {
         Account account = new Account();
         account.setUser(new User());
         model.addAttribute("account", account);
         String defaultPassword = env.getProperty("DEFAULT_PASSWORD");
         model.addAttribute("defaultPassword", defaultPassword);
-        if(status != null){
+        if (status != null) {
             model.addAttribute("status", status);
         }
         return "provider";
@@ -111,8 +113,8 @@ public class AccountController {
 
     @PostMapping(path = "/provider")
     public String add(@ModelAttribute("account") Account account,
-        @RequestPart(value = "fileInput", required = false) MultipartFile avatar,
-        BindingResult bindingResult) throws Exception {
+            @RequestPart(value = "fileInput", required = false) MultipartFile avatar,
+            BindingResult bindingResult) throws Exception {
         try {
             User user = account.getUser();
             account.setUser(null);
@@ -123,7 +125,7 @@ public class AccountController {
             }
             System.out.printf("[INFO] - Provider email: %s\n", account);
 
-            if(avatar.isEmpty()){
+            if (avatar.isEmpty()) {
                 String defaultAvatar = this.env.getProperty("DEFAULT_AVATAR").toString();
                 user.setAvatar(defaultAvatar);
             }
@@ -131,7 +133,7 @@ public class AccountController {
             user.setCoverAvatar(defaultCover);
             Account createdAccount = accountService.create(account, user);
             System.out.printf("[INFO] - Provided email: %s\n", createdAccount);
-            if(!avatar.isEmpty()) {
+            if (!avatar.isEmpty()) {
                 userService.uploadAvatar(avatar, createdAccount.getId());
             }
             return "redirect:/admin/accounts/provider/?status=success";
@@ -142,13 +144,12 @@ public class AccountController {
     }
 
     @GetMapping("{id}")
-    public String retrieve(@PathVariable(value = "id") Integer accountId, Model model){
-        try{
+    public String retrieve(@PathVariable(value = "id") Integer accountId, Model model) {
+        try {
             Account targetAccount = accountService.retrieve(accountId);
             model.addAttribute("account", targetAccount);
             model.addAttribute("status", Status.values());
-        }
-        catch (Exception e){
+        } catch (Exception e) {
 
         }
         return "accountDetail";

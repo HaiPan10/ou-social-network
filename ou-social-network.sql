@@ -149,29 +149,29 @@ CREATE TABLE `post_reaction` (
     
 )   ENGINE=INNODB;
 
-DROP TABLE IF EXISTS `ou-social-network`.`comment_reaction`;
-CREATE TABLE `comment_reaction` (
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    created_at DATETIME,
-    comment_id INT UNSIGNED NOT NULL,
-    user_id INT UNSIGNED NOT NULL,
-    reaction_id INT UNSIGNED NOT NULL,
+-- DROP TABLE IF EXISTS `ou-social-network`.`comment_reaction`;
+-- CREATE TABLE `comment_reaction` (
+--     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+--     created_at DATETIME,
+--     comment_id INT UNSIGNED NOT NULL,
+--     user_id INT UNSIGNED NOT NULL,
+--     reaction_id INT UNSIGNED NOT NULL,
 
-    PRIMARY KEY (id),
-    INDEX (comment_id),
-    INDEX (user_id),
-    INDEX (reaction_id),
-    FOREIGN KEY (comment_id)
-		REFERENCES comment(id)
-        ON DELETE CASCADE,
-    FOREIGN KEY (user_id)
-		REFERENCES user(id)
-        ON DELETE CASCADE,
-    FOREIGN KEY (reaction_id)
-		REFERENCES reaction(id)
-        ON DELETE CASCADE
+--     PRIMARY KEY (id),
+--     INDEX (comment_id),
+--     INDEX (user_id),
+--     INDEX (reaction_id),
+--     FOREIGN KEY (comment_id)
+-- 		REFERENCES comment(id)
+--         ON DELETE CASCADE,
+--     FOREIGN KEY (user_id)
+-- 		REFERENCES user(id)
+--         ON DELETE CASCADE,
+--     FOREIGN KEY (reaction_id)
+-- 		REFERENCES reaction(id)
+--         ON DELETE CASCADE
     
-)   ENGINE=INNODB;
+-- )   ENGINE=INNODB;
 
 -- INSERT default rows after created
 INSERT INTO role(name) VALUES("ROLE_FORMER_STUDENT");
@@ -187,3 +187,7 @@ VALUES ('admin456@gmail.com',
 INSERT INTO user(id, first_name, last_name, dob, avatar)
 VALUES (1, 'Hai', 'Phan Thanh', '2002-05-18',
 'https://res.cloudinary.com/dxjkpbzmo/image/upload/v1669639320/aukutc1ioxrflkionglc.png');
+
+INSERT INTO reaction(name) VALUES ('Thích');
+INSERT INTO reaction(name) VALUES ('Haha');
+INSERT INTO reaction(name) VALUES ('Tim');
