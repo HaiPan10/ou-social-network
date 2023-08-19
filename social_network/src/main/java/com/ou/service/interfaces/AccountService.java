@@ -26,4 +26,5 @@ public interface AccountService{
     void changePassword(Account account, String authPassword)throws Exception;
     Account loadAccountByEmail(String email);
     Integer countAccounts();
+    void update(Account account) throws Exception;
 }

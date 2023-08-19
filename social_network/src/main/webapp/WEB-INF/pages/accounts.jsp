@@ -44,7 +44,7 @@
                         <c:url value="/admin/accounts/verification/" var="pageAction">
                             <c:param name="page" value="${i}" />
                         </c:url>
-                        <li class="page-item" id="page${i}">
+                        <li class="page-item" id="pageAccounts${i}">
                             <a class="page-link" href="${pageAction}">${i}</a>
                         </li>
                     </c:forEach>
@@ -58,8 +58,8 @@
 <!--/ Basic Bootstrap Table -->
 
 <script>
-    var d = document.getElementById("accounts-admin");
-    d.className += " active";
-    var page = document.getElementById("page${currentPage}");
-    page.className += " active";
+    var accountsAdmin = document.getElementById("accounts-admin");
+    accountsAdmin.className += " active";
+    var pageAccounts = document.getElementById("pageAccounts${currentPage}");
+    pageAccounts.className += " active";
 </script>
