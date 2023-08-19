@@ -8,6 +8,9 @@
         height: calc(100vh);
         overflow: scroll;
         background-color: themed("bg");
+        background-image: url("../../images/rightbar_dark.png");
+        // background-position:center;
+        background-size: cover;
 
         @include mobile{
             display: none;

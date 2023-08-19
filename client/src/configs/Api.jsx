@@ -11,10 +11,10 @@ export const endpoints = {
     "update_cover": "/users/update_cover",
     "update_information": "/users/update_information",
     "upload": "/posts/upload",
-    "edit_post": "/posts",
-    "delete_post": "/posts",
+    "posts": "/posts",
     "comment": "/comments",
-    "change_password": "/accounts/change_password"
+    "change_password": "/accounts/change_password",
+    "post_reactions": "/post_reactions",
 }
 
 export const authAPI = () => axios.create({

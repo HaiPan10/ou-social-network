@@ -363,16 +363,15 @@ export const Profile = () => {
   useEffect(() => {
     const loadProfile = async () => {
       try {
-        let res = await authAPI().get(endpoints['profile'] + `/${id}`)
+        let res = await authAPI().get(endpoints['profile'] + `/${id}` + `/${user.id}`)
         setRole(res.data.role)
         setProfileUser(res.data.user)       
         setPosts(res.data.posts)
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
       } catch (ex) {
         setValidUser(false)
       }
     }
-
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
     loadProfile()
   }, [id, reload])
 

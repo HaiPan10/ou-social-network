@@ -44,12 +44,15 @@ public class Reaction implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "reactionId")
     private List<PostReaction> postReactionList;
 
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "reactionId")
-    private List<CommentReaction> commentReactionList;
-
     public Reaction(Integer id, String name) {
         this.id = id;
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "Reaction [id=" + id + ", name=" + name + "]";
+    }
+
+    
 }

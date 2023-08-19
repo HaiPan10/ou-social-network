@@ -93,7 +93,7 @@ const EditPost = (props) => {
           form.append("content", content)
           form.append("isActiveComment", isActiveComment)
           form.append("isEditImage", isEditImage)
-          let res = await authAPI().post(endpoints['edit_post'], form, {
+          let res = await authAPI().post(endpoints['posts'], form, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }

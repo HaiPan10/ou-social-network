@@ -10,6 +10,21 @@
         color: themed("textColor");
         padding: 0;
         border-bottom: 1px solid themed("border");
+
+        .reaction-icon {
+            
+            &:hover {
+                color: themed("mainHoverColor");
+            }
+        }
+        .selected {
+            color: themed("mainColor");
+        }
+        .reaction_number {
+            &:hover {
+                color: themed("mainColor");
+            }
+        }
         .postContainer {
             padding: 20px 0px;      
 
@@ -125,6 +140,7 @@
                 display: flex;
                 align-items: center;
                 gap: 20px;
+                justify-content: space-between;
 
                 .item {
                     display: flex;

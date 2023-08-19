@@ -35,14 +35,14 @@ public class PostReaction implements Serializable {
     @Column(name = "id")
     private Integer id;
 
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+
     @JsonIgnore
     @JoinColumn(name = "post_id", referencedColumnName = "id")
     @ManyToOne
     private Post postId;
-
-    @Column(name = "created_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
 
     @JoinColumn(name = "reaction_id", referencedColumnName = "id")
     @ManyToOne
@@ -50,5 +50,13 @@ public class PostReaction implements Serializable {
 
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne
-    private User userId;    
+    private User userId;
+
+    @Override
+    public String toString() {
+        return "PostReaction [id=" + id + ", createdAt=" + createdAt + ", reactionId="
+                + reactionId + ", userId=" + userId + "]";
+    }
+    
+    
 }

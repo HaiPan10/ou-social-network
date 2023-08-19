@@ -65,10 +65,6 @@ public class Comment implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User userId;
 
-    @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "commentId")
-    private List<CommentReaction> commentReactionList;
-
     public Comment(Integer id, String content) {
         this.id = id;
         this.content = content;

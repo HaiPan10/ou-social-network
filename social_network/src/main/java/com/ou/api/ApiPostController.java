@@ -51,15 +51,6 @@ public class ApiPostController {
         }
     }
 
-    @GetMapping(path = "{userId}")
-    ResponseEntity<Object> loadPost(@PathVariable Integer userId) throws Exception {
-        try {
-            return ResponseEntity.ok(postService.loadPost(userId));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
-    
     @PostMapping
     ResponseEntity<Object> update(List<MultipartFile> images, @Valid Post post, boolean isEditImage, BindingResult bindingResult) throws Exception {
         webAppValidator.validate(post, bindingResult);
@@ -77,6 +68,15 @@ public class ApiPostController {
     ResponseEntity<Object> delete(@PathVariable Integer postId) {
         try {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(postService.delete(postId));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping(path = "{currentUserId}")
+    ResponseEntity<Object> loadNewFeed(@PathVariable Integer currentUserId) {
+        try {
+            return ResponseEntity.ok(postService.loadNewFeed(currentUserId));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

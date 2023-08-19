@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Map<String, Object> loadProfile(Integer userId) throws Exception {
+    public Map<String, Object> loadProfile(Integer userId, Integer currentUserId) throws Exception {
         Account retrieveAccount = accountService.retrieve(userId);
         if (!(retrieveAccount.getStatus().equals("ACTIVE") || retrieveAccount.getStatus().equals("PASSWORD_CHANGE_REQUIRED"))) {
             throw new Exception("Not activated Account!");
@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService {
         Map<String, Object> jsonObject = new HashMap<>();
         jsonObject.put("user", retrieveAccount.getUser());
         jsonObject.put("role", retrieveAccount.getRoleId());
-        jsonObject.put("posts", postService.loadPost(userId));
+        jsonObject.put("posts", postService.loadPost(userId, currentUserId));
         return jsonObject;
     }
 

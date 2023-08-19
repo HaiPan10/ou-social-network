@@ -106,4 +106,25 @@ public class PostRepositoryImpl implements PostRepository{
             return false;
         }
     }
+
+    @Override
+    public Optional<List<Post>> loadNewFeed() {
+        Session session = sessionFactoryBean.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Post> criteriaQuery = builder.createQuery(Post.class);
+        
+        Root<Post> rPost = criteriaQuery.from(Post.class);
+        List<Predicate> predicates = new ArrayList<>();
+
+        criteriaQuery.where(predicates.toArray(Predicate[]::new));
+        criteriaQuery.orderBy(builder.desc(rPost.get("createdAt")));
+
+        Query query = session.createQuery(criteriaQuery);
+        try {
+            List<Post> posts = query.getResultList();
+            return Optional.of(posts);
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
+    }
 }

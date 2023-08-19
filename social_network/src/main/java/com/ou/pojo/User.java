@@ -86,10 +86,6 @@ public class User implements Serializable {
     private Account account;
 
     @JsonIgnore
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    private Collection<CommentReaction> commentReactionCollection;
-
-    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private UserStudent userStudent;
 

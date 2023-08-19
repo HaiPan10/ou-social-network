@@ -3,6 +3,7 @@ package com.ou.pojo;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -75,7 +76,7 @@ public class Post implements Serializable {
     private List<Comment> commentList;
 
     @Transient
-    private Integer reactionTotal;
+    private Map<Reaction, Long> reactionTotal;
     @Transient
     private Integer commentTotal;
     @Override
@@ -83,5 +84,10 @@ public class Post implements Serializable {
         return "Post [id=" + id + ", content=" + content + ", isActiveComment=" + isActiveComment + ", imageInPostList="
                 + imageInPostList + "]";
     }
-    
+    @Transient
+    private Reaction currentReaction;
+
+    public Post(Integer id){
+        this.id = id;
+    }
 }

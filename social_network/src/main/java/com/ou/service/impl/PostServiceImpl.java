@@ -3,6 +3,7 @@ package com.ou.service.impl;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -51,18 +52,18 @@ public class PostServiceImpl implements PostService {
         if (images != null) {
             newPost.setImageInPostList(imageInPostService.uploadImageInPost(images, newPost));
         }
-        newPost.setReactionTotal(postReactionService.countReaction(newPost.getId()));
+        postReactionService.countReaction(newPost, userId);
         newPost.setCommentTotal(commentService.countComment(newPost.getId()));
         return newPost;
     }
 
     @Override
-    public List<Post> loadPost(Integer userId) throws Exception {
+    public List<Post> loadPost(Integer userId, Integer currentUserId) throws Exception {
         Optional<List<Post>> listPostOptional = postRepository.loadPost(userId);
         if (listPostOptional.isPresent()) {
             List<Post> posts = listPostOptional.get();
             posts.forEach(p -> {
-                p.setReactionTotal(postReactionService.countReaction(p.getId()));
+                postReactionService.countReaction(p, currentUserId);
                 p.setCommentTotal(commentService.countComment(p.getId()));
                 p.getImageInPostList().forEach(img -> img.setContentType(String.format("image/%s", CloudinaryUtils.getImageType(img.getImageUrl()))));
             });
@@ -122,5 +123,20 @@ public class PostServiceImpl implements PostService {
             });
         }
         return true;
-    }    
+    }
+
+    @Override
+    public List<Post> loadNewFeed(Integer currentUserId) {
+        Optional<List<Post>> listPostOptional = postRepository.loadNewFeed();
+        if (listPostOptional.isPresent()) {
+            List<Post> posts = listPostOptional.get();
+            posts.forEach(p -> {
+                postReactionService.countReaction(p, currentUserId);
+                p.setCommentTotal(commentService.countComment(p.getId()));
+                p.getImageInPostList().forEach(img -> img.setContentType(String.format("image/%s", CloudinaryUtils.getImageType(img.getImageUrl()))));
+            });
+            return posts;
+        }
+        return new ArrayList<>();
+    }
 }

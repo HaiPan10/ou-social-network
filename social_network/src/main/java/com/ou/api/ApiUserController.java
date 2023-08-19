@@ -54,10 +54,10 @@ public class ApiUserController {
         }
     }
 
-    @GetMapping("/profile/{userId}")
-    public ResponseEntity<Object> loadProfile(@PathVariable Integer userId) {
+    @GetMapping("/profile/{userId}/{currentUserId}")
+    public ResponseEntity<Object> loadProfile(@PathVariable Integer userId, @PathVariable Integer currentUserId) {
         try {
-            return ResponseEntity.ok().body(userService.loadProfile(userId));
+            return ResponseEntity.ok().body(userService.loadProfile(userId, currentUserId));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
