@@ -249,4 +249,9 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.countAccounts();
     }
 
+    @Override
+    public void update(Account account) throws Exception {
+        accountRepository.updateAccount(account);
+    }
+
 }

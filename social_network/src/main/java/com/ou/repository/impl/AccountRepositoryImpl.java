@@ -142,12 +142,12 @@ public class AccountRepositoryImpl implements AccountRepository{
     }
 
     @Override
-    public void updateAccount(Account account) {
+    public void updateAccount(Account account) throws Exception{
         Session session = sessionFactoryBean.getObject().getCurrentSession();
         try {
             session.saveOrUpdate(account);
         } catch (HibernateException e) {
-            e.printStackTrace();
+            throw new Exception(e.getMessage());
         }
     }
 

@@ -144,25 +144,31 @@ public class AccountController {
     }
 
     @GetMapping("{id}")
-    public String retrieve(@PathVariable(value = "id") Integer accountId, Model model) {
+    public String retrieve(@PathVariable(value = "id") Integer accountId, Model model, @RequestParam Map<String, String> params) {
         try {
             Account targetAccount = accountService.retrieve(accountId);
+            String result = params.get("result");
+            if(result != null){
+                model.addAttribute("result", result);
+            }
             model.addAttribute("account", targetAccount);
-            model.addAttribute("status", Status.values());
         } catch (Exception e) {
 
         }
         return "accountDetail";
     }
 
-    @PostMapping("{id}")
-    public String update(@PathVariable(value = "id") Integer accountId, Model model, @ModelAttribute Account account) {
-        try {
-            System.out.println("[DEBUG] - " + account);
-            return "accountDetail";
-        } catch (Exception e) {
+    // @RequestMapping("update_status/{id}")
+    // public String update(@PathVariable(value = "id") Integer accountId, Model model, @RequestParam Map<String, String> params) {
+    //     String url = String.format("redirect:/admin/accounts/%s?result=", accountId);
+    //     try {
+    //         if(params.get("status") != null){
 
-        }
-        return "accountDetail";
-    }
+    //             return url + "success";
+    //         }
+    //     } catch (Exception e) {
+
+    //     }
+    //     return url + "fail";
+    // }
 }

@@ -71,6 +71,7 @@ public class JwtSecurityConfigs extends WebSecurityConfigurerAdapter {
                         // "/api/email/verify/**",
                         "/api/accounts/verify/**/**")
                         .permitAll()
+                        .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
                         .anyRequest()
                         .authenticated())
                 .exceptionHandling(handling -> handling.accessDeniedHandler(customAccessDeniedHandler()));
