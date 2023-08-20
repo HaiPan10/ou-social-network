@@ -60,7 +60,7 @@ export const LeftBar = (props) => {
               <img />
             </div>
             <Link to="/" className='turnoff-link-style'>
-              <div className="item">
+              <div className="item" onClick={reloadData}>
                 <HomeIcon className='icon' />
                 <span>Trang chủ</span>
               </div>

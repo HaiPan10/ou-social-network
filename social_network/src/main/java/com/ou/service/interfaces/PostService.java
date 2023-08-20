@@ -1,7 +1,9 @@
 package com.ou.service.interfaces;
 
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.pojo.Post;
@@ -12,5 +14,5 @@ public interface PostService {
     boolean update(Post post, List<MultipartFile> images, boolean isEditImage) throws Exception;
     Post retrieve(Integer postId) throws Exception;
     boolean delete(Integer postId) throws Exception;
-    List<Post> loadNewFeed(Integer currentUserId);
+    List<Post> loadNewFeed(Integer currentUserId, @RequestParam Map<String, String> params) throws Exception;
 }

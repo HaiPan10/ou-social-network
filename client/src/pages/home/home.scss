@@ -18,6 +18,35 @@
             @include mobile {
               padding: 10px;
             }
+
+            .caught-up {
+                background-color: themed("bg");
+                color: themed("textColor");
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+
+                button {
+                    width: 40%;
+                    padding: 5px;
+                    background-color: themed("mainColor");
+                    border-radius: 15px;
+                    color: themed("textColor");
+                    border: none;
+                    &:hover {
+                        background-color: themed("mainHoverColor");
+                    }
+                }
+            }
+
+            .bottom-loading {
+                background-color: themed("bg");
+                color: themed("textColor");
+                display: flex;
+                justify-content: center;
+            }
         }
     }
 }

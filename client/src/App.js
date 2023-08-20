@@ -10,6 +10,7 @@ import { load, save } from 'react-cookies';
 import { Layout } from "./components/layout/Layout";
 import { DarkModeContext, DarkModeContextProvider } from "./context/DarkModeContext";
 import { ReloadContextProvider } from "./context/ReloadContext";
+import './index.css'
 
 
 const App = () => {

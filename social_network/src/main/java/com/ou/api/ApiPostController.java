@@ -1,6 +1,7 @@
 package com.ou.api;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -73,10 +75,10 @@ public class ApiPostController {
         }
     }
 
-    @GetMapping(path = "{currentUserId}")
-    ResponseEntity<Object> loadNewFeed(@PathVariable Integer currentUserId) {
+    @GetMapping(path = "/{currentUserId}")
+    ResponseEntity<Object> loadNewFeed(@PathVariable Integer currentUserId, @RequestParam Map<String, String> params) {
         try {
-            return ResponseEntity.ok(postService.loadNewFeed(currentUserId));
+            return ResponseEntity.ok(postService.loadNewFeed(currentUserId, params));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

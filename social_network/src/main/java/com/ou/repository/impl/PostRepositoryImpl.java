@@ -5,22 +5,31 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 import javax.transaction.Transactional;
 
+import org.checkerframework.checker.units.qual.C;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.ou.pojo.Comment;
 import com.ou.pojo.Post;
 import com.ou.pojo.User;
 import com.ou.repository.interfaces.PostRepository;
@@ -30,6 +39,8 @@ import com.ou.repository.interfaces.PostRepository;
 public class PostRepositoryImpl implements PostRepository{
     @Autowired
     private LocalSessionFactoryBean sessionFactoryBean;
+    @Autowired
+    private Environment env;
 
     @Override
     public Post uploadPost(Post post, Integer userId) throws Exception {
@@ -108,7 +119,7 @@ public class PostRepositoryImpl implements PostRepository{
     }
 
     @Override
-    public Optional<List<Post>> loadNewFeed() {
+    public Optional<List<Post>> loadNewFeed(@RequestParam Map<String, String> params) {
         Session session = sessionFactoryBean.getObject().getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Post> criteriaQuery = builder.createQuery(Post.class);
@@ -116,10 +127,42 @@ public class PostRepositoryImpl implements PostRepository{
         Root<Post> rPost = criteriaQuery.from(Post.class);
         List<Predicate> predicates = new ArrayList<>();
 
-        criteriaQuery.where(predicates.toArray(Predicate[]::new));
-        criteriaQuery.orderBy(builder.desc(rPost.get("createdAt")));
+        Subquery<Date> subquery = criteriaQuery.subquery(Date.class);
+        Root<Comment> rComment = subquery.from(Comment.class);
+        List<Predicate> subPredicates = new ArrayList<>();
+        subPredicates.add(builder.equal(rComment.get("postId"), rPost.get("id")));
+        subquery.where(subPredicates.toArray(Predicate[]::new));
+        subquery.select((Expression) builder.max(rComment.get("updatedDate")));
 
+        criteriaQuery.orderBy(
+            builder.desc(
+                builder.coalesce(
+                    subquery,
+                    rPost.get("createdAt")
+                )
+            ),
+            builder.desc(rPost.get("createdAt"))
+        );
+
+        criteriaQuery.where(predicates.toArray(Predicate[]::new));
         Query query = session.createQuery(criteriaQuery);
+
+        int page;
+        if (params != null) {
+            String p = params.get("page");
+            if (p != null && !p.isEmpty()) {
+                page = Integer.parseInt(p);                
+            } else {
+                page = 1;
+            }
+        } else {
+            page = 1;
+        }
+        int pageSize = Integer.parseInt(this.env.getProperty("POST_PAGE_SIZE"));
+
+        query.setMaxResults(pageSize);
+        query.setFirstResult((page - 1) * pageSize);
+
         try {
             List<Post> posts = query.getResultList();
             return Optional.of(posts);

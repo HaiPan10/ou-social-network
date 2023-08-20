@@ -26,7 +26,7 @@ export const Layout = () => {
         if (user !== null) {
             const getStatus = async () => {
                 try {
-                    let res = await authAPI().get(endpoints['status'] + `/${user.id}`)
+                    let res = await authAPI().get(endpoints['status'])
                     setStatus(res.data)
                 } catch (ex) {  
                     setStatus("ERROR")

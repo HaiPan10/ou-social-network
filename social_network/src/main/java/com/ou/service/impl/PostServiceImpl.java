@@ -6,12 +6,14 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.pojo.ImageInPost;
@@ -126,9 +128,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> loadNewFeed(Integer currentUserId) {
-        Optional<List<Post>> listPostOptional = postRepository.loadNewFeed();
-        if (listPostOptional.isPresent()) {
+    public List<Post> loadNewFeed(Integer currentUserId, @RequestParam Map<String, String> params) throws Exception {
+        Optional<List<Post>> listPostOptional = postRepository.loadNewFeed(params);
+        if (listPostOptional.isPresent() && listPostOptional.get().size() != 0) {
             List<Post> posts = listPostOptional.get();
             posts.forEach(p -> {
                 postReactionService.countReaction(p, currentUserId);
@@ -136,7 +138,8 @@ public class PostServiceImpl implements PostService {
                 p.getImageInPostList().forEach(img -> img.setContentType(String.format("image/%s", CloudinaryUtils.getImageType(img.getImageUrl()))));
             });
             return posts;
+        } else {
+            throw new Exception("No more post");
         }
-        return new ArrayList<>();
     }
 }
