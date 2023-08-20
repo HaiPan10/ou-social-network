@@ -28,6 +28,7 @@ export const Home = () => {
         setPosts(res.data)
       } catch (ex) {
         setIsCaughtUp(true)
+        console.clear()
       } finally {
         setIsLoading(false)
       }
@@ -49,6 +50,7 @@ export const Home = () => {
         setPosts(prevPosts => [...prevPosts, ...res.data])
       } catch (ex) {
         setIsCaughtUp(true)
+        console.clear()
       } finally {
         setIsLoading(false)
       }

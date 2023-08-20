@@ -16,6 +16,7 @@ import { Form } from "react-bootstrap";
 import { PostLayout } from "../../components/postLayout/PostLayout";
 import { ReloadContext } from "../../context/ReloadContext";
 import ImageModal from '../../components/imageInPost/ImageModal'
+import { InView } from 'react-intersection-observer';
 
 const UpdateAvatar = (props) => {
   const {darkMode} = useContext(DarkModeContext)
@@ -351,29 +352,72 @@ export const Profile = () => {
   const [editAvatarShow, setEditAvatarShow] = useState(false)
   const [editCoverShow, setEditCoverShow] = useState(false)
   const [editInformationShow, setEditInformationShow] = useState(false)
-  const [posts, setPosts] = useState()
+  const [posts, setPosts] = useState([])
   const { reload } = useContext(ReloadContext)
   const { reloadData } = useContext(ReloadContext)
   const [showAvatarModal, setShowAvatarModal] = useState(false);
   const [showCoverModal, setShowCoverModal] = useState(false);
+  const [page, setPage] = useState(1)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isCaughtUp, setIsCaughtUp] = useState(false)
 
   const toggleAvatarModal = () => setShowAvatarModal(!showAvatarModal);
   const toggleCoverModal = () => setShowCoverModal(!showCoverModal);
 
   useEffect(() => {
     const loadProfile = async () => {
+      setIsLoading(true)
       try {
-        let res = await authAPI().get(endpoints['profile'] + `/${id}` + `/${user.id}`)
+        let res = await authAPI().get(endpoints['profile'] + `/${id}` + `/${user.id}` + `?page=1`)
+        if (res.data.posts.length === 0) {
+          setIsCaughtUp(true)
+        }
+        setIsCaughtUp(false)
+        setIsLoading(false)
         setRole(res.data.role)
         setProfileUser(res.data.user)       
         setPosts(res.data.posts)
-        window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
       } catch (ex) {
         setValidUser(false)
+        console.clear()
+      } finally {
+        setIsLoading(false)
       }
     }
+    setPage(1)
+    setPosts([])
     loadProfile()
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
   }, [id, reload])
+
+  useEffect(() => {
+    const loadProfile = async () => {
+      setIsLoading(true)
+      try {
+        let res = await authAPI().get(endpoints['profile'] + `/${id}` + `/${user.id}` + `?page=${page}`)
+        if (res.data.posts.length === 0) {
+          setIsCaughtUp(true)
+        }
+        setIsLoading(false)
+        setPosts(prevPosts => [...prevPosts, ...res.data.posts])
+      } catch (ex) {
+        setValidUser(false)
+        console.clear()
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    if (page > 1) {
+      loadProfile()
+    }
+  }, [page])
+
+  const handleIntersection = (inView) => {
+    if (inView && !isLoading && !isCaughtUp) {
+      setPage(page + 1);
+    }
+  }
 
   if ((profileUser === null || role === null) && isValidUser === true) {
     return <div className="profile">
@@ -480,6 +524,17 @@ export const Profile = () => {
         {posts.map(post=>(
           <Post post={post} key={post.id} posts={posts} setPosts={setPosts}/>
         ))}
+        <InView onChange={handleIntersection}>
+              {({ inView, ref }) => (
+                <div ref={ref}>
+                  {inView && !isLoading && !isCaughtUp && (
+                    <div className="bottom-loading">
+                      <Loading />
+                    </div>
+                  )}
+                </div>
+              )}
+        </InView >
     </div>
   </div>
   )

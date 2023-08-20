@@ -10,7 +10,7 @@ import com.ou.pojo.Post;
 
 public interface PostService {
     Post uploadPost(String postContent, Integer userId, List<MultipartFile> image, boolean isActiveComment) throws Exception;
-    List<Post> loadPost(Integer userId, Integer currentUserId) throws Exception;
+    List<Post> loadPost(Integer userId, Integer currentUserId, Map<String, String> params) throws Exception;
     boolean update(Post post, List<MultipartFile> images, boolean isEditImage) throws Exception;
     Post retrieve(Integer postId) throws Exception;
     boolean delete(Integer postId) throws Exception;

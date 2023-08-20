@@ -127,6 +127,13 @@
         @include mobile {
           padding: 10px;
         }
+
+        .bottom-loading {
+          background-color: themed("bg");
+          color: themed("textColor");
+          display: flex;
+          justify-content: center;
+      }
     }
 
     .images {

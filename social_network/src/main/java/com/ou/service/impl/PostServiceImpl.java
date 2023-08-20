@@ -60,8 +60,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> loadPost(Integer userId, Integer currentUserId) throws Exception {
-        Optional<List<Post>> listPostOptional = postRepository.loadPost(userId);
+    public List<Post> loadPost(Integer userId, Integer currentUserId, Map<String, String> params) throws Exception {
+        Optional<List<Post>> listPostOptional = postRepository.loadPost(userId, params);
         if (listPostOptional.isPresent()) {
             List<Post> posts = listPostOptional.get();
             posts.forEach(p -> {
@@ -71,7 +71,7 @@ public class PostServiceImpl implements PostService {
             });
             return posts;
         } else {
-            throw new Exception("Lỗi user không hợp lệ!");
+            throw new Exception("User không hợp lệ!");
         }
     }
 

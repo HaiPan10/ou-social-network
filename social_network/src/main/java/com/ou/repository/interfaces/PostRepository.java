@@ -10,7 +10,7 @@ import com.ou.pojo.Post;
 
 public interface PostRepository {
     Post uploadPost(Post post, Integer userId) throws Exception;
-    Optional<List<Post>> loadPost(Integer userId);
+    Optional<List<Post>> loadPost(Integer userId, @RequestParam Map<String, String> params);
     boolean update(Post persistPost, Post post);
     Optional<Post> retrieve(Integer postId);
     boolean delete(Post persistPost);

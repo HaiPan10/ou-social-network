@@ -55,7 +55,7 @@ public class PostRepositoryImpl implements PostRepository{
     }
 
     @Override
-    public Optional<List<Post>> loadPost(Integer userId) {
+    public Optional<List<Post>> loadPost(Integer userId, @RequestParam Map<String, String> params) {
         Session session = sessionFactoryBean.getObject().getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Post> criteriaQuery = builder.createQuery(Post.class);
@@ -68,6 +68,22 @@ public class PostRepositoryImpl implements PostRepository{
         criteriaQuery.orderBy(builder.desc(rPost.get("createdAt")));
 
         Query query = session.createQuery(criteriaQuery);
+        int page;
+        if (params != null) {
+            String p = params.get("page");
+            if (p != null && !p.isEmpty()) {
+                page = Integer.parseInt(p);                
+            } else {
+                page = 1;
+            }
+        } else {
+            page = 1;
+        }
+        int pageSize = Integer.parseInt(this.env.getProperty("POST_PAGE_SIZE"));
+
+        query.setMaxResults(pageSize);
+        query.setFirstResult((page - 1) * pageSize);
+
         try {
             List<Post> posts = query.getResultList();
             return Optional.of(posts);
