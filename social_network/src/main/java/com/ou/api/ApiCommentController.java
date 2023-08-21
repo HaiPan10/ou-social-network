@@ -27,8 +27,8 @@ import com.ou.validator.WebAppValidator;
 
 @RestController
 // @CrossOrigin(origins = "http://localhost:3000")
-// @CrossOrigin(origins = "http://34.101.76.209:80")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://ousocialnetwork.id.vn/")
+// @CrossOrigin(origins = "*")
 @RequestMapping("api/comments")
 public class ApiCommentController {
     @Autowired
