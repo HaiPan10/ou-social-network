@@ -1,5 +1,7 @@
 package com.ou.api;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.ou.configs.JwtService;
 import com.ou.pojo.Comment;
+import com.ou.pojo.User;
 import com.ou.service.interfaces.CommentService;
 import com.ou.utils.ValidationUtils;
 import com.ou.validator.WebAppValidator;
@@ -37,15 +42,19 @@ public class ApiCommentController {
         binder.setValidator(webAppValidator);
     }
 
-    @PostMapping(path = "/{postId}/{userId}")
+    @Autowired
+    private JwtService jwtService;
+
+    @PostMapping(path = "/{postId}")
     public ResponseEntity<Object> create(@RequestBody Comment comment,
-            @PathVariable Integer postId, @PathVariable Integer userId, BindingResult bindingResult) throws Exception {
+            @PathVariable Integer postId, HttpServletRequest httpServletRequest, BindingResult bindingResult) throws Exception {
         try {
             System.out.println("[DEBUG] - START VALIDATION");
             webAppValidator.validate(comment, bindingResult);
             if (bindingResult.hasErrors()) {
                 return ResponseEntity.badRequest().body(ValidationUtils.getInvalidMessage(bindingResult));
             }
+            Integer userId = Integer.parseInt(jwtService.getAccountId(httpServletRequest));
             return ResponseEntity.status(HttpStatus.CREATED).body(commentService.create(comment, postId, userId));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -62,12 +71,14 @@ public class ApiCommentController {
     }
 
     @PatchMapping()
-    ResponseEntity<Object> editComment(@RequestBody Comment comment, BindingResult bindingResult) {
+    ResponseEntity<Object> editComment(@RequestBody Comment comment, HttpServletRequest httpServletRequest, BindingResult bindingResult) {
         try {
             webAppValidator.validate(comment, bindingResult);
             if (bindingResult.hasErrors()) {
                 return ResponseEntity.badRequest().body(ValidationUtils.getInvalidMessage(bindingResult));
             }
+            Integer userId = Integer.parseInt(jwtService.getAccountId(httpServletRequest));
+            comment.setUserId(new User(userId));
             return ResponseEntity.ok(commentService.editComment(comment));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -75,9 +86,10 @@ public class ApiCommentController {
     }
 
     @DeleteMapping(path = "{commentId}")
-    ResponseEntity<Object> delete(@PathVariable Integer commentId) {
+    ResponseEntity<Object> delete(@PathVariable Integer commentId, HttpServletRequest httpServletRequest) {
         try {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(commentService.delete(commentId));
+            Integer userId = Integer.parseInt(jwtService.getAccountId(httpServletRequest));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(commentService.delete(commentId, userId));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

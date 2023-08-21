@@ -72,7 +72,7 @@ const UploadPost = (props) => {
           }
           form.append("postContent", content)
           form.append("isActiveComment", isActiveComment)              
-          let res = await authAPI().post(endpoints['upload'] + `/${user.id}`, form, {
+          let res = await authAPI().post(endpoints['upload'], form, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }

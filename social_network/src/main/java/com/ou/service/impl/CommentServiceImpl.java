@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ou.configs.JwtService;
 import com.ou.pojo.Comment;
 import com.ou.pojo.Post;
 import com.ou.pojo.User;
@@ -24,6 +25,8 @@ public class CommentServiceImpl implements CommentService{
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private JwtService jwtService;
 
     @Override
     public Integer countComment(Integer postId) {
@@ -51,6 +54,9 @@ public class CommentServiceImpl implements CommentService{
     @Override
     public Comment editComment(Comment comment) throws Exception {
         Comment persistComment = retrieve(comment.getId());
+        if (!persistComment.getUserId().getId().equals(comment.getUserId().getId())) {
+            throw new Exception("Not owner");
+        }
         return commentRepository.editComment(persistComment, comment);
     }
 
@@ -65,8 +71,11 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public boolean delete(Integer commentId) throws Exception {
+    public boolean delete(Integer commentId, Integer userId) throws Exception {
         Comment persistComment = retrieve(commentId);
+        if (!persistComment.getUserId().getId().equals(userId) && !persistComment.getPostId().getUserId().getId().equals(userId)) {
+            throw new Exception("Not owner");
+        }
         return commentRepository.delete(persistComment);
     }
 }

@@ -23,7 +23,7 @@ export const Home = () => {
     const loadNewFeeds = async () => {
       setIsLoading(true)
       try {
-        let res = await authAPI().get(endpoints['posts'] + `/${user.id}` + `?page=1`)
+        let res = await authAPI().get(endpoints['posts'] + `?page=1`)
         setIsLoading(false)
         setPosts(res.data)
       } catch (ex) {
@@ -45,7 +45,7 @@ export const Home = () => {
     const loadNewFeeds = async () => {
       setIsLoading(true)
       try {
-        let res = await authAPI().get(endpoints['posts'] + `/${user.id}` + `?page=${page}`)
+        let res = await authAPI().get(endpoints['posts'] + `?page=${page}`)
         setIsLoading(false)
         setPosts(prevPosts => [...prevPosts, ...res.data])
       } catch (ex) {
@@ -74,7 +74,7 @@ export const Home = () => {
         <>
           <PostLayout/>
             {posts.map(post=>(
-              <Post post={post} key={post.id}/>
+              <Post post={post} key={post.id} posts={posts} setPosts={setPosts}/>
           ))}
           {isLoading && <div className="bottom-loading">
             <Loading/>

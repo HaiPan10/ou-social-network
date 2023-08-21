@@ -26,7 +26,6 @@ const ChangePassword = (props) => {
     const [showNewPassword, setShowNewPassword] = useState(false)
     const [showRePassword, setShowRePassword] = useState(false)
     const [account, setAccount] = useState({
-        "email": "",
         "password": "",
         "confirmPassword": ""
     })
@@ -39,7 +38,6 @@ const ChangePassword = (props) => {
         setAuthPassword("")
         setAccount(account => ({...account, ["password"]:""}))
         setAccount(account => ({...account, ["confirmPassword"]:""}))
-        setAccount(account => ({...account, ["email"]:""}))
         setErr()
     }
 
@@ -51,7 +49,8 @@ const ChangePassword = (props) => {
             setDisableButton(true)
             try {
                 let res = await authAPI().post(endpoints['change_password'], {
-                    "account": account,
+                    "password": account.password,
+                    "confirmPassword": account.confirmPassword,
                     "authPassword": authPassword
                 })
                 
@@ -89,13 +88,13 @@ const ChangePassword = (props) => {
               </Modal.Title>
             </Modal.Header>
             <Modal.Body className="post-body">
-                <Input className="email input"
+                {/* <Input className="email input"
                     type={"text"}
                     onChange={(e) => setAccount(account => ({...account, ["email"]:e.target.value}))}
                     value={account.email}
-                    placeholder="Nhập mật email"
+                    placeholder="Nhập lại email của bạn"
                     required
-                />
+                /> */}
 
                 <Input className="oldPassword input"
                     type={showOldPassword ? "text" : "password"}

@@ -14,7 +14,7 @@ export const UploadComment = (props) => {
         const process = async () => {
           try {
             setContent('')          
-            let res = await authAPI().post(endpoints['comment'] + `/${props.post.id}` + `/${user.id}`, {
+            let res = await authAPI().post(endpoints['comment'] + `/${props.post.id}`, {
                 "content": content
             })
             if (res.status === 201) {

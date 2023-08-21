@@ -8,7 +8,7 @@ export const EmailVerification = (props) => {
         evt.preventDefault()
         const process = async () => {
             try {
-                let res = await authAPI().get(endpoints['verify'] + `/${props.accountId}`)
+                let res = await authAPI().get(endpoints['verify'])
                 if (res.status === 200) {
                     console.log("resent email!")
                 }

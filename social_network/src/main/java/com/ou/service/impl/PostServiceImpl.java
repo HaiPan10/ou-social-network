@@ -78,24 +78,21 @@ public class PostServiceImpl implements PostService {
     @Override
     public boolean update(Post post, List<MultipartFile> images, boolean isEditImage) throws Exception {
         Post persistPost = retrieve(post.getId());
-
-        if (isEditImage) {
-            System.out.println("EDIT IMAGE");
+        if (!persistPost.getUserId().getId().equals(post.getUserId().getId())) {
+            throw new Exception("Not owner");
+        }
+        else if (isEditImage) {
             List<ImageInPost> imageInPostList = persistPost.getImageInPostList();
             if (imageInPostList.size() != 0) {
-                System.out.println("DELETE OLD IMAGES");
                 imageInPostService.deleteImageInPost(imageInPostList);
             }
             if (images != null) {
-                System.out.println("UPLOAD NEW IMAGES");
                 persistPost.setImageInPostList(imageInPostService.uploadImageInPost(images, persistPost));
             } else {
-                System.out.println("SET FOR NO IMAGES");
                 imageInPostList.clear();
                 persistPost.setImageInPostList(imageInPostList);
             }
         } else {
-            System.out.println("NO CHANGE FOR IMAGE");
         }
         return postRepository.update(persistPost, post);
     }
@@ -111,8 +108,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public boolean delete(Integer postId) throws Exception {
+    public boolean delete(Integer postId, Integer userId) throws Exception {
         Post persistPost = retrieve(postId);
+        if (!persistPost.getUserId().getId().equals(userId)) {
+            throw new Exception("Not owner");
+        }
         List<String> oldImageUrls = persistPost.getImageInPostList().stream().map(img -> img.getImageUrl()).collect(Collectors.toList());
         System.out.println("GOT PERSIST: " + persistPost);        
         if (postRepository.delete(persistPost)) {

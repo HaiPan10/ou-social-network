@@ -13,6 +13,6 @@ public interface PostService {
     List<Post> loadPost(Integer userId, Integer currentUserId, Map<String, String> params) throws Exception;
     boolean update(Post post, List<MultipartFile> images, boolean isEditImage) throws Exception;
     Post retrieve(Integer postId) throws Exception;
-    boolean delete(Integer postId) throws Exception;
+    boolean delete(Integer postId, Integer userId) throws Exception;
     List<Post> loadNewFeed(Integer currentUserId, @RequestParam Map<String, String> params) throws Exception;
 }

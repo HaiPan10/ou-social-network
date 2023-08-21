@@ -13,6 +13,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -143,14 +144,15 @@ public class ApiAccountController {
     public ResponseEntity<Object> changePassword(@RequestBody Map<String, Object> params,
         BindingResult bindingResult){
         try {
-            System.out.println("[DEBUG] - Register");
-            mapValidator.validate(params, bindingResult);
-            if (bindingResult.hasErrors()) {
+            String password = mapper.convertValue(params.get("password"), String.class);
+            String authPassword = mapper.convertValue(params.get("authPassword"), String.class);
+            String confirmPassword = mapper.convertValue(params.get("confirmPassword"), String.class);
+            //mapValidator.validate(params, bindingResult);
+            if (bindingResult.hasErrors() && !password.equals(confirmPassword)) {
                 return ResponseEntity.badRequest().body(ValidationUtils.getInvalidMessage(bindingResult));
             }
-            Account account = mapper.convertValue(params.get("account"), Account.class);
-            String authPassword = mapper.convertValue(params.get("authPassword"), String.class);
-            accountService.changePassword(account, authPassword);
+            accountService.changePassword(password, authPassword);
+            
             return ResponseEntity.ok().body("Change Password Successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

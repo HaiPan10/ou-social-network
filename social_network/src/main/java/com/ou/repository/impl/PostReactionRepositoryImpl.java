@@ -80,6 +80,7 @@ public class PostReactionRepositoryImpl implements PostReactionRepository {
             } else {
                 throw new Exception("User is unavailable!");
             }
+            postReaction.setCreatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
             postReaction.setReactionId(persistReaction);
             s.save(postReaction);
             return postReaction;

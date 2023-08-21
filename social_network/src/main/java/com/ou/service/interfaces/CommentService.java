@@ -10,5 +10,5 @@ public interface CommentService {
     List<Comment> loadComment(Integer postId);
     Comment editComment(Comment comment) throws Exception;
     Comment retrieve(Integer commentId) throws Exception;
-    boolean delete(Integer commentId) throws Exception;
+    boolean delete(Integer commentId, Integer userId) throws Exception;
 }

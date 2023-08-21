@@ -129,7 +129,7 @@ export const Post = ({post, posts, setPosts}) => {
       evt.preventDefault()
       const postReaction = async () => {
         try {
-          let res = await authAPI().post(endpoints['post_reactions'] + `/${post.id}` + `/${user.id}`, {
+          let res = await authAPI().post(endpoints['post_reactions'] + `/${post.id}`, {
             "id": reaction_id
           })
           if (res.status === 201) {
@@ -141,7 +141,7 @@ export const Post = ({post, posts, setPosts}) => {
 
       const putReaction = async () => {
         try {
-          let res = await authAPI().put(endpoints['post_reactions'] + `/${post.id}` + `/${user.id}`, {
+          let res = await authAPI().put(endpoints['post_reactions'] + `/${post.id}`, {
             "id": reaction_id
           })
           if (res.status === 200) {
@@ -170,7 +170,7 @@ export const Post = ({post, posts, setPosts}) => {
       evt.preventDefault()
       const process = async () => {
         try {
-          let res = await authAPI().delete(endpoints['post_reactions'] + `/${post.id}` + `/${user.id}`)
+          let res = await authAPI().delete(endpoints['post_reactions'] + `/${post.id}`)
           if (res.status === 204) {
             setReloadReaction(!reloadReaction)
           }

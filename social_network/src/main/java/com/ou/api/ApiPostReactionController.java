@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ou.configs.JwtService;
 import com.ou.pojo.Reaction;
 import com.ou.service.interfaces.PostReactionService;
 
@@ -29,6 +30,9 @@ public class ApiPostReactionController {
     @Autowired 
     private PostReactionService postReactionService;
 
+    @Autowired
+    private JwtService jwtService;
+
     @GetMapping(path = "{postId}/{reactionId}")
     public ResponseEntity<Object> getReactionUsers(@PathVariable Integer postId, @PathVariable Integer reactionId) throws Exception {
         try {
@@ -38,22 +42,24 @@ public class ApiPostReactionController {
         }
     } 
     
-    @RequestMapping(path = "{postId}/{userId}", method = {RequestMethod.POST, RequestMethod.PUT})
-    public ResponseEntity<Object> reaction(@PathVariable Integer postId, @PathVariable Integer userId, @RequestBody Reaction reaction, HttpServletRequest request) throws Exception {
+    @RequestMapping(path = "{postId}", method = {RequestMethod.POST, RequestMethod.PUT})
+    public ResponseEntity<Object> reaction(@PathVariable Integer postId, HttpServletRequest httpServletRequest, @RequestBody Reaction reaction) throws Exception {
         try {
             HttpStatus responseStatus = HttpStatus.OK;
-            if (request.getMethod().equals("POST")) {
+            if (httpServletRequest.getMethod().equals("POST")) {
                 responseStatus = HttpStatus.CREATED;
             }
+            Integer userId = Integer.parseInt(jwtService.getAccountId(httpServletRequest));
             return ResponseEntity.status(responseStatus).body(postReactionService.reaction(postId, userId, reaction));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @DeleteMapping(path = "{postId}/{userId}")
-    ResponseEntity<Object> delete(@PathVariable Integer postId, @PathVariable Integer userId) {
+    @DeleteMapping(path = "{postId}")
+    ResponseEntity<Object> delete(@PathVariable Integer postId, HttpServletRequest httpServletRequest) {
         try {
+            Integer userId = Integer.parseInt(jwtService.getAccountId(httpServletRequest));
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(postReactionService.delete(postId, userId));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

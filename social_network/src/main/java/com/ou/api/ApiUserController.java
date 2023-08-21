@@ -3,6 +3,8 @@ package com.ou.api;
 import java.io.IOException;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ou.configs.JwtService;
 import com.ou.pojo.User;
 import com.ou.service.interfaces.UserService;
 
@@ -27,38 +30,43 @@ import com.ou.service.interfaces.UserService;
 public class ApiUserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private JwtService jwtService;
 
-    @PostMapping(value = "/update_avatar/{userId}")
-    public ResponseEntity<Object> updateAvatar(MultipartFile uploadAvatar, @PathVariable Integer userId) throws Exception{
+    @PostMapping(value = "/update_avatar")
+    public ResponseEntity<Object> updateAvatar(MultipartFile uploadAvatar, HttpServletRequest httpServletRequest) throws Exception{
         try {
+            Integer userId = Integer.parseInt(jwtService.getAccountId(httpServletRequest));
             return ResponseEntity.ok().body(userService.uploadAvatar(uploadAvatar, userId));
         } catch (IOException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @PostMapping(value = "/update_cover/{userId}")
-    public ResponseEntity<Object> updateCover(MultipartFile uploadCover, @PathVariable Integer userId) throws Exception{
+    @PostMapping(value = "/update_cover")
+    public ResponseEntity<Object> updateCover(MultipartFile uploadCover, HttpServletRequest httpServletRequest) throws Exception{
         try {
+            Integer userId = Integer.parseInt(jwtService.getAccountId(httpServletRequest));
             return ResponseEntity.ok().body(userService.uploadCover(uploadCover, userId));
         } catch (IOException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @PatchMapping(value = "update_information/{userId}")
-    public ResponseEntity<Object> updateInformation(@RequestBody User user, @PathVariable Integer userId){
+    @PatchMapping(value = "/update_information")
+    public ResponseEntity<Object> updateInformation(@RequestBody User user, HttpServletRequest httpServletRequest){
         try {
-            System.out.println(user.getDob());
+            Integer userId = Integer.parseInt(jwtService.getAccountId(httpServletRequest));
             return ResponseEntity.ok().body(userService.updateUser(user, userId));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @GetMapping("/profile/{userId}/{currentUserId}")
-    public ResponseEntity<Object> loadProfile(@PathVariable Integer userId, @PathVariable Integer currentUserId, @RequestParam Map<String, String> params) {
+    @GetMapping("/profile/{userId}")
+    public ResponseEntity<Object> loadProfile(@PathVariable Integer userId, HttpServletRequest httpServletRequest, @RequestParam Map<String, String> params) {
         try {
+            Integer currentUserId = Integer.parseInt(jwtService.getAccountId(httpServletRequest));
             return ResponseEntity.ok().body(userService.loadProfile(userId, currentUserId, params));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

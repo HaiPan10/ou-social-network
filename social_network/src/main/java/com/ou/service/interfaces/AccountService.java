@@ -23,7 +23,7 @@ public interface AccountService{
     AuthResponse login(AuthRequest account) throws AccountNotFoundException, Exception;
     String getStatus(Integer accountId);
     Account create(Account account, User user) throws Exception;
-    void changePassword(Account account, String authPassword)throws Exception;
+    void changePassword(String changedPassword, String authPassword)throws Exception;
     Account loadAccountByEmail(String email);
     Integer countAccounts();
     void update(Account account) throws Exception;

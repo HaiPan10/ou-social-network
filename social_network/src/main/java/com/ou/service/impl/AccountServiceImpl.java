@@ -214,19 +214,20 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void changePassword(Account account, String authPassword) throws Exception {
+    public void changePassword(String changedPassword, String authPassword) throws Exception {
         try {
-            Optional<Account> optionalAccount = accountRepository.findByEmail(account.getEmail());
-            if(!optionalAccount.isPresent()){
-                throw new Exception("Email không tồn tại");
-            };
+            String email = SecurityContextHolder.getContext().getAuthentication().getName();
+            // Optional<Account> optionalAccount = accountRepository.findByEmail(account.getEmail());
+            // if(!optionalAccount.isPresent()){
+            //     throw new Exception("Email không tồn tại");
+            // };
             Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                    account.getEmail(), authPassword)
+                    email, authPassword)
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            Account authAccount = optionalAccount.get();
-            String encoded = bCryptPasswordEncoder.encode(account.getPassword());
+            Account authAccount = accountRepository.findByEmail(email).get();
+            String encoded = bCryptPasswordEncoder.encode(changedPassword);
             authAccount.setPassword(encoded);
             authAccount.setConfirmPassword(encoded);
             if(authAccount.getStatus().equals(Status.PASSWORD_CHANGE_REQUIRED.toString())){
@@ -235,7 +236,7 @@ public class AccountServiceImpl implements AccountService {
             accountRepository.updateAccount(authAccount);
         } 
         catch(AuthenticationException exception){
-            throw new Exception("Email hoặc mật khẩu không đúng.");
+            throw new Exception("Mật khẩu không đúng.");
         }
     }
 

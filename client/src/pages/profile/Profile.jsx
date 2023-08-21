@@ -45,7 +45,7 @@ const UpdateAvatar = (props) => {
           let form = new FormData()
           if (avatar.current.files.length > 0)
               form.append("uploadAvatar", avatar.current.files[0])
-          let res = await authAPI().post(endpoints['update_avatar'] + `/${props.profileUser.id}`, form, {
+          let res = await authAPI().post(endpoints['update_avatar'], form, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
@@ -130,7 +130,7 @@ const UpdateCover = (props) => {
           let form = new FormData()
           if (cover.current.files.length > 0)
               form.append("uploadCover", cover.current.files[0])
-          let res = await authAPI().post(endpoints['update_cover'] + `/${props.profileUser.id}`, form, {
+          let res = await authAPI().post(endpoints['update_cover'], form, {
             headers: {
               'Content-Type': 'multipart/form-data'
             }
@@ -207,7 +207,7 @@ const UpdateInformation = (props) => {
     setDisableButton(true)
     const process = async () => {
       try {
-        let res = await authAPI().patch(endpoints['update_information'] + `/${props.profileUser.id}`, {
+        let res = await authAPI().patch(endpoints['update_information'], {
           "dob": updateUser.dob
         })
         if (res.status === 200) {
@@ -368,7 +368,7 @@ export const Profile = () => {
     const loadProfile = async () => {
       setIsLoading(true)
       try {
-        let res = await authAPI().get(endpoints['profile'] + `/${id}` + `/${user.id}` + `?page=1`)
+        let res = await authAPI().get(endpoints['profile'] + `/${id}` + `?page=1`)
         if (res.data.posts.length === 0) {
           setIsCaughtUp(true)
         }
@@ -394,7 +394,7 @@ export const Profile = () => {
     const loadProfile = async () => {
       setIsLoading(true)
       try {
-        let res = await authAPI().get(endpoints['profile'] + `/${id}` + `/${user.id}` + `?page=${page}`)
+        let res = await authAPI().get(endpoints['profile'] + `/${id}` + `?page=${page}`)
         if (res.data.posts.length === 0) {
           setIsCaughtUp(true)
         }
