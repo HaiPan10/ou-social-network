@@ -8,7 +8,7 @@ import com.ou.pojo.Account;
 
 public interface AccountRepository {
     Optional<Account> retrieve(Integer id);
-    List<Account> list();
+    List<Account> list(Map<String, String> params);
     Account create(Account account);
     Optional<Account> findByEmail(String email);
     List<Account> getPendingAccounts(Map<String, String> params);

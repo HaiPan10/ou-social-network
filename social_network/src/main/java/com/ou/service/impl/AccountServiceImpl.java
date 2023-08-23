@@ -79,8 +79,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<Account> list() {
-        return accountRepository.list();
+    public List<Account> list(Map<String, String> params) {
+        return accountRepository.list(params);
     }
 
     @Override

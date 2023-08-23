@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.pojo.Account;
-import com.ou.pojo.Status;
 import com.ou.pojo.User;
 import com.ou.service.interfaces.AccountService;
 import com.ou.service.interfaces.UserService;
@@ -71,9 +70,7 @@ public class AccountController {
 
     @GetMapping
     public String accounts(Model model, @RequestParam Map<String, String> params) {
-        List<Account> accounts = accountService.list().stream()
-                .filter(a -> !a.getRoleId().getName().equals("ROLE_ADMIN"))
-                .collect(Collectors.toList());
+        List<Account> accounts = accountService.list(params);
         model.addAttribute("accounts", accounts);
         Integer pageSize = Integer.parseInt(env.getProperty("PENDING_ACCOUNT_PAGE_SIZE"));
         model.addAttribute("counter", Math.ceil(accountService.countAccounts() * 1.0 / pageSize));

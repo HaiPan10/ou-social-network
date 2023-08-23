@@ -41,7 +41,7 @@
                 <nav aria-label="Page navigation">
                   <ul class="pagination justify-content-center">
                     <c:forEach begin="1" end="${counter}" var="i">
-                        <c:url value="/admin/accounts/verification/" var="pageAction">
+                        <c:url value="/admin/accounts" var="pageAction">
                             <c:param name="page" value="${i}" />
                         </c:url>
                         <li class="page-item" id="pageAccounts${i}">

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ou.pojo.Account;
+import com.ou.pojo.Status;
 import com.ou.repository.interfaces.AccountRepository;
 
 @Repository
@@ -42,14 +43,36 @@ public class AccountRepositoryImpl implements AccountRepository{
     }
 
     @Override
-    public List<Account> list() {
+    public List<Account> list(Map<String, String> params) {
         Session session = sessionFactoryBean.getObject().getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Account> criteriaQuery = builder.createQuery(Account.class);
         Root<Account> root = criteriaQuery.from(Account.class);
+    
         criteriaQuery.select(root);
 
+        List<Predicate> predicates = new ArrayList<>();
+        // role id = 3 is admin role
+        predicates.add(builder.notEqual(root.get("roleId"), 3));
+        criteriaQuery.where(predicates.toArray(Predicate[]::new));
+        
+
         Query query = session.createQuery(criteriaQuery);
+        int page;
+        if (params != null) {
+            String p = params.get("page");
+            if (p != null && !p.isEmpty()) {
+                page = Integer.parseInt(p);                
+            } else {
+                page = 1;
+            }
+        } else {
+            page = 1;
+        }
+        int pageSize = Integer.parseInt(this.env.getProperty("PENDING_ACCOUNT_PAGE_SIZE"));
+
+        query.setMaxResults(pageSize);
+        query.setFirstResult((page - 1) * pageSize);
         return query.getResultList();
     }
 
