@@ -213,10 +213,10 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        // String clientHostname = environment.getProperty("CLIENT_HOSTNAME");
+        String clientHostname = environment.getProperty("CLIENT_HOSTNAME");
         CorsConfiguration configuration = new CorsConfiguration();
-        // configuration.setAllowedOrigins(Arrays.asList(clientHostname));
-        configuration.setAllowedOrigins(Arrays.asList("http://ousocialnetwork.id.vn/"));
+        configuration.setAllowedOrigins(Arrays.asList(clientHostname));
+        // configuration.setAllowedOrigins(Arrays.asList("http://ousocialnetwork.id.vn"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Auth-Token"));
         configuration.setExposedHeaders(Arrays.asList("X-Auth-Token"));

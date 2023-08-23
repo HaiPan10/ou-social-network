@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +23,7 @@ import com.ou.service.interfaces.UserService;
 
 @RestController
 // @CrossOrigin(origins = "http://localhost:3000")
-@CrossOrigin(origins = "http://ousocialnetwork.id.vn/")
+// @CrossOrigin(origins = "http://ousocialnetwork.id.vn/")
 // @CrossOrigin(origins = "*")
 @RequestMapping("/api/users")
 public class ApiUserController {
