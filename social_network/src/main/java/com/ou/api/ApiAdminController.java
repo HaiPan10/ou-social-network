@@ -23,10 +23,8 @@ public class ApiAdminController {
     public ResponseEntity<?> update(@RequestBody Map<String, String> request){
         try {
             Account account = accountService.retrieve(Integer.parseInt(request.get("id")));
-            if(!account.getStatus().equals(request.get("status")))
-            {
-                account.setStatus(request.get("status"));
-                accountService.update(account);
+            if(!account.getStatus().equals(request.get("status"))){
+                accountService.verifyAccount(account, request.get("status"));
             }
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } catch (Exception e) {

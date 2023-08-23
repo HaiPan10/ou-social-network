@@ -132,10 +132,29 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public boolean verifyAccount(Account account, String status) {
         try {
-            if(status.equals(Status.ACTIVE.toString())){
-                mailService.sendAcceptedMail(account);
-            } else if(status.equals(Status.REJECT.toString())){
-                mailService.sendRejectMail(account);
+            // if(status.equals(Status.ACTIVE.toString())){
+            //     mailService.sendAcceptedMail(account);
+            // } else if(status.equals(Status.REJECT.toString())){
+            //     mailService.sendRejectMail(account);
+            // }
+            switch(status) {
+                case "ACTIVE":
+                    if(account.getStatus().equals(Status.AUTHENTICATION_PENDING.toString())){
+                        mailService.sendAcceptedMail(account);
+                    } else if(account.getStatus().equals(Status.LOCKED.toString())){
+                        mailService.sendUnlockMail(account);
+                    }
+                    break;
+                case "REJECT":
+                    mailService.sendRejectMail(account);
+                    break;
+                case "LOCKED":
+                    mailService.sendLockMail(account);
+                    break;
+                case "PASSWORD_CHANGE_REQUIRED":
+                    mailService.sendResetPasswordRequire(account);
+                    scheduleService.changePasswordRequiredSchedule(account.getEmail());
+                    break;
             }
         } catch (Exception e) {
             System.out.println("[ERROR] - System fail to send mail to client");
@@ -248,11 +267,6 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Integer countAccounts() {
         return accountRepository.countAccounts();
-    }
-
-    @Override
-    public void update(Account account) throws Exception {
-        accountRepository.updateAccount(account);
     }
 
 }

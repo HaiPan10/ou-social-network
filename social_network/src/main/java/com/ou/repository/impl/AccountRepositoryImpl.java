@@ -21,7 +21,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ou.pojo.Account;
-import com.ou.pojo.Status;
 import com.ou.repository.interfaces.AccountRepository;
 
 @Repository

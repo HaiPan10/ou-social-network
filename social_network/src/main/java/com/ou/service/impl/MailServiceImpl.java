@@ -92,7 +92,7 @@ public class MailServiceImpl implements MailService {
             throw new Exception("Tài khoản không tồn tại!");
         } else {
             String mailBody = String.format("Kính gửi thầy/cô %s,<br>"
-                    + "<p>Tài khoản mạng mạng xã hội cựu sinh viên trường đại học Mở TP.HCM của thầy/cô đã được kích hoạt</p>"
+                    + "<p>Tài khoản mạng xã hội cựu sinh viên trường đại học Mở TP.HCM của thầy/cô đã được kích hoạt</p>"
                     + "Thông tin tài khoản bao gồm:<br>"
                     + "Email: %s<br>"
                     + "Password: ou@123<br>"
@@ -113,7 +113,7 @@ public class MailServiceImpl implements MailService {
             throw new Exception("Trạng thái không hợp lệ!");
         } else {
             String mailBody = String.format("Xin chào %s,<br>"
-                    + "Cảm ơn bạn đã đăng kí tài khoản mạng xã hội cựu sinh viên trường đại học Mở TP.HCM<br>"
+                    + "Cảm ơn bạn đã đăng kí tài khoản mạng xã hội cựu sinh viên trường đại học Mở TP.HCM.<br>"
                     + "Tài khoản của bạn đã được kích hoạt thành công.<br>"
                     + "Hãy nhấn vào đường link bên dưới để truy cập mạng xã hội.<br>"
                     + "<h3><a href=\"%s\">OU SOCIAL NETWORK</a></h3>"
@@ -134,12 +134,64 @@ public class MailServiceImpl implements MailService {
             throw new Exception("Trạng thái không hợp lệ!");
         } else {
             String mailBody = String.format("Xin chào %s,<br>"
-                    + "Cảm ơn bạn đã đăng kí tài khoản mạng xã hội cựu sinh viên trường đại học Mở TP.HCM<br>"
+                    + "Cảm ơn bạn đã đăng kí tài khoản mạng xã hội cựu sinh viên trường đại học Mở TP.HCM.<br>"
                     + "Tài khoản của bạn không hợp lệ vui lòng liên hệ quản trị viên để cung cấp thêm thông tin.<br>"
                     + "Chúng tôi xin cảm ơn,<br>"
                     + "OU Social Network",
                     account.getUser().getFirstName());
             sendEmail(account.getEmail(), "Trạng thái kích hoạt tài khoản", mailBody);
+        }
+    }
+
+    @Override
+    public void sendLockMail(Account account) throws Exception {
+        if (account == null) {
+            throw new Exception("Tài khoản không tồn tại!");
+        } else {
+            String mailBody = String.format("Chào %s,<br>"
+                    + "<p>Tài khoản mạng mạng xã hội cựu sinh viên trường đại học Mở TP.HCM của bạn đã bị khóa bởi quản trị viên.</p>"
+                    + "Xin vui lòng liên hệ quản trị viên để thêm thông tin chi tiết.<br>"
+                    + "Chúng tôi xin cảm ơn sự đóng góp của bạn cho mạng xã hội cựu sinh viên,<br>"
+                    + "OU Social Network",
+                    String.format("%s %s", account.getUser().getLastName(), account.getUser().getFirstName()));
+            sendEmail(account.getEmail(), "Tài khoản bị khóa", mailBody);
+        }
+    }
+
+    @Override
+    public void sendUnlockMail(Account account) throws Exception {
+        if (account == null) {
+            throw new Exception("Tài khoản không tồn tại!");
+        } else {
+            String mailBody = String.format("Chào %s,<br>"
+                    + "<p>Tài khoản mạng mạng xã hội cựu sinh viên trường đại học Mở TP.HCM của bạn đã được gỡ khóa.</p>"
+                    + "Hãy nhấn vào đường link để truy cập trang web: %s.<br>"
+                    + "Chúng tôi xin cảm ơn sự đóng góp của bạn cho mạng xã hội cựu sinh viên,<br>"
+                    + "OU Social Network",
+                    String.format("%s %s", account.getUser().getLastName(), account.getUser().getFirstName()),
+                    env.getProperty("CLIENT_HOSTNAME"));
+            sendEmail(account.getEmail(), "Tài khoản được gỡ khóa", mailBody);
+        }
+    }
+
+    @Override
+    public void sendResetPasswordRequire(Account account) throws Exception {
+        if (account == null) {
+            throw new Exception("Tài khoản không tồn tại!");
+        } else {
+            String mailBody = String.format("Chào %s,<br>"
+                    + "<p>Tài khoản mạng mạng xã hội cựu sinh viên trường đại học Mở TP.HCM của bạn đã được đặt lại mật khẩu mặc định.</p>"
+                    + "Xin vui lòng đổi mật khẩu của bạn trong vòng 24 tiếng nếu không sẽ tiếp tục bị khóa.<br>"
+                    + "Thông tin chi tiết tài khoản: <br>"
+                    + "Email: %s<br>"
+                    + "Password: ou@123<br>"
+                    + "Hãy nhấn vào đường link để truy cập trang web: %s.<br>"
+                    + "Chúng tôi xin cảm ơn sự quan tâm của bạn đối với mạng xã hội cho cựu sinh viên,<br>"
+                    + "OU Social Network",
+                    String.format("%s %s", account.getUser().getLastName(), account.getUser().getFirstName()),
+                    account.getEmail(),
+                    env.getProperty("CLIENT_HOSTNAME"));
+            sendEmail(account.getEmail(), "Đặt lại mật khẩu mặc định", mailBody);
         }
     }
 }

@@ -2,8 +2,6 @@ package com.ou.controller;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
@@ -154,18 +152,4 @@ public class AccountController {
         }
         return "accountDetail";
     }
-
-    // @RequestMapping("update_status/{id}")
-    // public String update(@PathVariable(value = "id") Integer accountId, Model model, @RequestParam Map<String, String> params) {
-    //     String url = String.format("redirect:/admin/accounts/%s?result=", accountId);
-    //     try {
-    //         if(params.get("status") != null){
-
-    //             return url + "success";
-    //         }
-    //     } catch (Exception e) {
-
-    //     }
-    //     return url + "fail";
-    // }
 }
