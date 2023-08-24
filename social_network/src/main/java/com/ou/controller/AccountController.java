@@ -2,8 +2,6 @@ package com.ou.controller;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.pojo.Account;
-import com.ou.pojo.Status;
 import com.ou.pojo.User;
 import com.ou.service.interfaces.AccountService;
 import com.ou.service.interfaces.UserService;
@@ -71,9 +68,7 @@ public class AccountController {
 
     @GetMapping
     public String accounts(Model model, @RequestParam Map<String, String> params) {
-        List<Account> accounts = accountService.list().stream()
-                .filter(a -> !a.getRoleId().getName().equals("ROLE_ADMIN"))
-                .collect(Collectors.toList());
+        List<Account> accounts = accountService.list(params);
         model.addAttribute("accounts", accounts);
         Integer pageSize = Integer.parseInt(env.getProperty("PENDING_ACCOUNT_PAGE_SIZE"));
         model.addAttribute("counter", Math.ceil(accountService.countAccounts() * 1.0 / pageSize));
@@ -157,18 +152,4 @@ public class AccountController {
         }
         return "accountDetail";
     }
-
-    // @RequestMapping("update_status/{id}")
-    // public String update(@PathVariable(value = "id") Integer accountId, Model model, @RequestParam Map<String, String> params) {
-    //     String url = String.format("redirect:/admin/accounts/%s?result=", accountId);
-    //     try {
-    //         if(params.get("status") != null){
-
-    //             return url + "success";
-    //         }
-    //     } catch (Exception e) {
-
-    //     }
-    //     return url + "fail";
-    // }
 }
