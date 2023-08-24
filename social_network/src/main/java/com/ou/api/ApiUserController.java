@@ -24,8 +24,8 @@ import com.ou.service.interfaces.UserService;
 
 @RestController
 // @CrossOrigin(origins = "http://localhost:3000")
-@CrossOrigin(origins = "http://ousocialnetwork.id.vn/")
-// @CrossOrigin(origins = "*")
+// @CrossOrigin(origins = "http://ousocialnetwork.id.vn/")
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/users")
 public class ApiUserController {
     @Autowired

@@ -23,8 +23,8 @@ import com.ou.service.interfaces.PostReactionService;
 
 @RestController
 // @CrossOrigin(origins = "http://localhost:3000")
-@CrossOrigin(origins = "http://ousocialnetwork.id.vn/")
-// @CrossOrigin(origins = "*")
+// @CrossOrigin(origins = "http://ousocialnetwork.id.vn/")
+@CrossOrigin(origins = "*")
 @RequestMapping("api/post_reactions")
 public class ApiPostReactionController {
     @Autowired 
