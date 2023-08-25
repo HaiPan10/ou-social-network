@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ou.pojo.Account;
 import com.ou.pojo.User;
@@ -45,7 +46,7 @@ public class AccountController {
         binder.setValidator(adminValidator);
     }
 
-    @GetMapping("/verification/")
+    @GetMapping("/verification")
     public String accountsVerification(Model model, @RequestParam Map<String, String> params) {
         List<Account> pendingAccounts = accountService.getPendingAccounts(params);
         model.addAttribute("pendingAccounts", pendingAccounts);
@@ -66,12 +67,12 @@ public class AccountController {
         return "accountsVerification";
     }
 
-    @GetMapping
+    @GetMapping()
     public String accounts(Model model, @RequestParam Map<String, String> params) {
-        List<Account> accounts = accountService.list(params);
+        List<Account> accounts = accountService.search(params);
         model.addAttribute("accounts", accounts);
         Integer pageSize = Integer.parseInt(env.getProperty("PENDING_ACCOUNT_PAGE_SIZE"));
-        model.addAttribute("counter", Math.ceil(accountService.countAccounts() * 1.0 / pageSize));
+        model.addAttribute("counter", Math.ceil(accountService.countAccounts(params) * 1.0 / pageSize));
         int page;
         if (params != null) {
             String p = params.get("page");
@@ -80,6 +81,11 @@ public class AccountController {
             } else {
                 page = 1;
             }
+            String kw = params.get("kw");
+            if(kw != null){
+                model.addAttribute("kw", kw);
+            }
+
         } else {
             page = 1;
         }
@@ -139,13 +145,9 @@ public class AccountController {
     }
 
     @GetMapping("{id}")
-    public String retrieve(@PathVariable(value = "id") Integer accountId, Model model, @RequestParam Map<String, String> params) {
+    public String retrieve(@PathVariable(value = "id") Integer accountId, Model model) {
         try {
             Account targetAccount = accountService.retrieve(accountId);
-            String result = params.get("result");
-            if(result != null){
-                model.addAttribute("result", result);
-            }
             model.addAttribute("account", targetAccount);
         } catch (Exception e) {
 

@@ -9,7 +9,7 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
         <put-attribute name="title" value="" />
         <put-attribute name="aside-menu"
                        value="/WEB-INF/layout/asideMenu.jsp" />
-        <put-attribute name="navigagion-bar"
+        <put-attribute name="navigation-bar"
                        value="/WEB-INF/layout/navigationBar.jsp" />
         <put-attribute name="content" value="" />
         <put-attribute name="footer"
