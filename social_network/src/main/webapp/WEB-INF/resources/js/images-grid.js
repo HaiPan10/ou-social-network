@@ -1,8 +1,6 @@
 
 (function($) {
-    console.log("LOADDED JS")
     $.fn.imagesGrid = function(options) {
-        console.log("CALLED imagesGrid")
 
         var args = arguments;
 

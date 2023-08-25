@@ -122,6 +122,7 @@
             "id": "${account.id}",
             "status": status
         }
+        console.log(url)
         let reponse = await fetch(url, {
             method: "PATCH",
             headers: {
