@@ -40,11 +40,20 @@
             <li class="menu-item" id="accounts-admin">
                 <c:url value="/admin/accounts" var="accountsAction" />
                 <a href="${accountsAction}" class="menu-link">
-                    <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
+                    <i class="menu-icon tf-icons bx bx-dock-top"></i>
                     <div>Quản lý tài khoản</div>
                 </a>
             </li>
-            
+            <li class="menu-header small text-uppercase">
+                <span class="menu-header-text">Bài đăng</span>
+            </li>
+            <li class="menu-item" id="posts-admin">
+                <c:url value="/admin/posts" var="postManagement" />
+                <a href="${postManagement}" class="menu-link">
+                    <i class="menu-icon tf-icons bx bxs-dock-right"></i>
+                    <div>Quản lý bài đăng</div>
+                </a>
+            </li>
             <!-- <li class="menu-item">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>

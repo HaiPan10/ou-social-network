@@ -26,6 +26,7 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.ou.pojo.Account;
 import com.ou.pojo.Comment;
 import com.ou.pojo.Post;
 import com.ou.pojo.User;
@@ -182,5 +183,45 @@ public class PostRepositoryImpl implements PostRepository{
         } catch (NoResultException e) {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public List<Post> list(Map<String, String> params) {
+        Session session = sessionFactoryBean.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Post> criteriaQuery = builder.createQuery(Post.class);
+        Root<Post> root = criteriaQuery.from(Post.class);
+    
+        criteriaQuery.select(root);
+
+        List<Predicate> predicates = new ArrayList<>();
+        criteriaQuery.where(predicates.toArray(Predicate[]::new));
+        
+
+        Query query = session.createQuery(criteriaQuery);
+        int page;
+        if (params != null) {
+            String p = params.get("page");
+            if (p != null && !p.isEmpty()) {
+                page = Integer.parseInt(p);                
+            } else {
+                page = 1;
+            }
+        } else {
+            page = 1;
+        }
+        int pageSize = Integer.parseInt(this.env.getProperty("POST_PAGE_SIZE"));
+
+        query.setMaxResults(pageSize);
+        query.setFirstResult((page - 1) * pageSize);
+        return query.getResultList();
+    }
+
+    @Override
+    public Integer countPosts() {
+        Session session = sessionFactoryBean.getObject().getCurrentSession();
+        Query query = session.createQuery("SELECT Count(*) FROM Post");
+
+        return Integer.parseInt(query.getSingleResult().toString());
     }
 }
