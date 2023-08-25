@@ -13,7 +13,7 @@ import com.ou.pojo.UserStudent;
 
 public interface AccountService{
     Account retrieve(Integer id) throws Exception;
-    List<Account> list(Map<String, String> params);
+    List<Account> search(Map<String, String> params);
     Account create(Account account) throws Exception;
     AuthResponse create(Account account, User user, UserStudent userStudent) throws Exception;
     List<Account> getPendingAccounts(Map<String, String> params);
@@ -25,5 +25,5 @@ public interface AccountService{
     Account create(Account account, User user) throws Exception;
     void changePassword(String changedPassword, String authPassword)throws Exception;
     Account loadAccountByEmail(String email);
-    Integer countAccounts();
+    Integer countAccounts(Map<String, String> params);
 }

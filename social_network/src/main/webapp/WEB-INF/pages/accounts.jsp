@@ -43,6 +43,9 @@
                     <c:forEach begin="1" end="${counter}" var="i">
                         <c:url value="/admin/accounts" var="pageAction">
                             <c:param name="page" value="${i}" />
+                            <c:if test="${not empty kw}">
+                                <c:param name="kw" value="${kw}" />
+                            </c:if>
                         </c:url>
                         <li class="page-item" id="pageAccounts${i}">
                             <a class="page-link" href="${pageAction}">${i}</a>
@@ -61,5 +64,7 @@
     var accountsAdmin = document.getElementById("accounts-admin");
     accountsAdmin.className += " active";
     var pageAccounts = document.getElementById("pageAccounts${currentPage}");
-    pageAccounts.className += " active";
+    if(pageAccounts != null){
+        pageAccounts.className += " active";
+    }
 </script>

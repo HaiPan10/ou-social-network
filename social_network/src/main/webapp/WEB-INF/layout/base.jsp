@@ -37,7 +37,7 @@
             <div class="layout-container">
                 <tiles:insertAttribute name="aside-menu" />
                 <div class="layout-page">
-                    <tiles:insertAttribute name="navigagion-bar" />
+                    <tiles:insertAttribute name="navigation-bar" />
                     <div class="content-wrapper">
                         <div class="container-xxl flex-grow-1 container-p-y">
                             <tiles:insertAttribute name="content" />

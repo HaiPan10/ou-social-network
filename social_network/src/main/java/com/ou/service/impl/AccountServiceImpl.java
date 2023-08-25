@@ -79,7 +79,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public List<Account> list(Map<String, String> params) {
+    public List<Account> search(Map<String, String> params) {
         return accountRepository.list(params);
     }
 
@@ -265,8 +265,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Integer countAccounts() {
-        return accountRepository.countAccounts();
+    public Integer countAccounts(Map<String, String> params) {
+        return accountRepository.countAccounts(params);
     }
 
 }

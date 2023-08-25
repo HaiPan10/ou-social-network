@@ -53,10 +53,7 @@ public class AccountRepositoryImpl implements AccountRepository{
         List<Predicate> predicates = new ArrayList<>();
         // role id = 3 is admin role
         predicates.add(builder.notEqual(root.get("roleId"), 3));
-        criteriaQuery.where(predicates.toArray(Predicate[]::new));
-        
 
-        Query query = session.createQuery(criteriaQuery);
         int page;
         if (params != null) {
             String p = params.get("page");
@@ -65,10 +62,20 @@ public class AccountRepositoryImpl implements AccountRepository{
             } else {
                 page = 1;
             }
+
+            String kw = params.get("kw");
+            if(kw != null){
+                predicates.add(builder.like(root.get("email"), String.format("%%%s%%", kw)));
+            }
+
         } else {
             page = 1;
         }
         int pageSize = Integer.parseInt(this.env.getProperty("PENDING_ACCOUNT_PAGE_SIZE"));
+
+        criteriaQuery.where(predicates.toArray(Predicate[]::new));
+
+        Query query = session.createQuery(criteriaQuery);
 
         query.setMaxResults(pageSize);
         query.setFirstResult((page - 1) * pageSize);
@@ -174,10 +181,27 @@ public class AccountRepositoryImpl implements AccountRepository{
     }
 
     @Override
-    public Integer countAccounts() {
+    public Integer countAccounts(Map<String, String> params) {
         Session session = sessionFactoryBean.getObject().getCurrentSession();
-        Query query = session.createQuery("SELECT Count(*) FROM Account");
+        // Query query = session.createQuery("SELECT Count(*) FROM Account");
+
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = builder.createQuery(Long.class);
+        Root<Account> root = criteriaQuery.from(Account.class);
+        criteriaQuery.select(builder.count(root));
+
+        List<Predicate> predicates = new ArrayList<>();
+        if(params != null){
+            String kw = params.get("kw");
+            if(kw != null){
+                predicates.add(builder.like(root.get("email"), String.format("%%%s%%", kw)));
+            }
+        }
+
+        criteriaQuery.where(predicates.toArray(Predicate[]::new));
+        Query query = session.createQuery(criteriaQuery);
 
         return Integer.parseInt(query.getSingleResult().toString());
+
     }
 }

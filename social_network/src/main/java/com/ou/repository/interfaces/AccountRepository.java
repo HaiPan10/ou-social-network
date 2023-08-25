@@ -16,5 +16,5 @@ public interface AccountRepository {
     boolean verifyAccount(Account account, String status);
     String getStatus(Integer accountId);
     void updateAccount(Account account) throws Exception; 
-    Integer countAccounts();
+    Integer countAccounts(Map<String, String> params);
 }
