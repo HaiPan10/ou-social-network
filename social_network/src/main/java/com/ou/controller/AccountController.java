@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ou.pojo.Account;
+import com.ou.pojo.Status;
 import com.ou.pojo.User;
 import com.ou.service.interfaces.AccountService;
 import com.ou.service.interfaces.UserService;
@@ -86,9 +87,15 @@ public class AccountController {
                 model.addAttribute("kw", kw);
             }
 
+            String filterStatus = params.get("status");
+            if(filterStatus != null){
+                model.addAttribute("filterStatus", filterStatus);
+            }
+
         } else {
             page = 1;
         }
+        model.addAttribute("status", Status.values());
         model.addAttribute("currentPage", page);
         return "accounts";
     }

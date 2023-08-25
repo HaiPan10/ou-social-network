@@ -80,7 +80,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public List<Account> search(Map<String, String> params) {
-        return accountRepository.list(params);
+        return accountRepository.search(params);
     }
 
     @Override

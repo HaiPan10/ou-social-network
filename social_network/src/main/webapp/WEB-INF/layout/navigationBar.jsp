@@ -16,6 +16,9 @@
                     <button class="btn bg-transparent" type="submit"><i class="bx bx-search fs-4 lh-0"></i></button>
                     <input name="kw" type="text" class="form-control border-0 shadow-none" placeholder="Search..."
                         aria-label="Search..." value="${not empty kw ? kw : ''}"/>
+                    <c:if test="${filterStatus != null}">
+                        <input hidden name="status" type="text" value="${filterStatus}" />
+                    </c:if>
                 </div>
             </form>
         </div>
