@@ -142,4 +142,14 @@ public class PostServiceImpl implements PostService {
             throw new Exception("No more post");
         }
     }
+
+    @Override
+    public List<Post> list(Map<String, String> params) {
+        return postRepository.list(params);
+    }
+
+    @Override
+    public Integer countPosts() {
+        return postRepository.countPosts();
+    }
 }

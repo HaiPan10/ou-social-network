@@ -23,13 +23,15 @@
 
         <link href="<c:url value="/resources/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />" class="template-customizer-theme-css" rel="stylesheet">
         <link href="<c:url value="/resources/vendor/libs/apex-charts/apex-charts.css" />" rel="stylesheet">
-        <!-- Page CSS -->        
-        <tiles:insertAttribute name="pageCss" />
+        
+        <!-- Jquery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <!-- Page Import -->        
+        <tiles:insertAttribute name="pageImport" />
 
         <script src="<c:url value='/resources/vendor/js/helpers.js'></c:url>"></script>
         <script src="<c:url value='/resources/js/config.js'></c:url>"></script>
-        <!-- Jquery -->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     </head>
     <body>
