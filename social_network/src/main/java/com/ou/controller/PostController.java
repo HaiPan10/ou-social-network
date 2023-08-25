@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ou.pojo.Account;
 import com.ou.pojo.Post;
+import com.ou.pojo.User;
 import com.ou.service.interfaces.PostService;
 
 @Controller
@@ -55,5 +56,10 @@ public class PostController {
 
         }
         return "postDetail";
+    }
+
+    @GetMapping("/upload")
+    public String uploadPost(Model model) {
+        return "uploadPost";
     }
 }
