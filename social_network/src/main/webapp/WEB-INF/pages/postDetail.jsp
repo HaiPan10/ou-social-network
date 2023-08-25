@@ -38,15 +38,6 @@
                                     '${i.imageUrl}'${!loop.last ? ',' : ''}
                                 </c:forEach>
                             ];
-                            // var images = [
-                            //     'https://unsplash.it/1300/800?image=875',
-                            //     'https://unsplash.it/1300/800?image=874',
-                            //     'https://unsplash.it/1300/800?image=872',
-                            //     'https://unsplash.it/1300/800?image=868',
-                            //     'https://unsplash.it/1300/800?image=839',
-                            //     'https://unsplash.it/1300/800?image=838'
-                            // ];
-                        
                             $(document).ready(function() {
                                 $.noConflict();
                                 $('#gallery').imagesGrid({
@@ -57,14 +48,30 @@
                     </div>
 
                     <div class="btn-container">
-                        <button class="btn-delete">Xóa</button>
+                        <c:url value="/admin/posts/delete/${post.id}" var="deleteAction"/>
+                        <button onclick="deletePost(`${deleteAction}`)" class="btn-delete">Xóa</button>                     
                     </div>
-                </div>                      
+                </div>
             </div>
         </div>
     </div>
     
 </div>
+
+<script>
+    function deletePost(path) {
+    if (confirm("Bạn chắc chắn xóa không?") === true) {
+        fetch(path, {
+            method: "delete"
+        }).then(res => {
+            if (res.status === 204)
+                location.reload();
+            else
+                alert("Something wrong!!!");
+        });
+    }
+}
+</script>
 <!-- <div>${post.id}</div><br>
 <div>${post.content}</div><br>
 <div>${post.createdAt}</div><br>

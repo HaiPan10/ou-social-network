@@ -110,7 +110,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public boolean delete(Integer postId, Integer userId) throws Exception {
         Post persistPost = retrieve(postId);
-        if (!persistPost.getUserId().getId().equals(userId)) {
+        if (!persistPost.getUserId().getId().equals(userId) || userId != 1) {
             throw new Exception("Not owner");
         }
         List<String> oldImageUrls = persistPost.getImageInPostList().stream().map(img -> img.getImageUrl()).collect(Collectors.toList());
