@@ -83,6 +83,7 @@
   overflow: hidden;
   vertical-align: middle;
   height: 100%;
+  width: 100%;
 }
 .imgs-grid .imgs-grid-image .image-wrap img {
   position: relative;
