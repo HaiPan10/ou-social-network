@@ -49,7 +49,8 @@
 
                     <div class="btn-container">
                         <c:url value="/admin/posts/delete/${post.id}" var="deleteAction"/>
-                        <button onclick="deletePost(`${deleteAction}`)" class="btn-delete">Xóa</button>                     
+                        <c:url value="/admin/posts" var="redirectAction"/>
+                        <button onclick="deletePost(`${deleteAction}`, `${redirectAction}`)" class="btn-delete">Xóa</button>
                     </div>
                 </div>
             </div>
@@ -59,13 +60,15 @@
 </div>
 
 <script>
-    function deletePost(path) {
+    function deletePost(path, redirectPath) {
     if (confirm("Bạn chắc chắn xóa không?") === true) {
         fetch(path, {
-            method: "delete"
+            method: "DELETE"
         }).then(res => {
-            if (res.status === 204)
-                location.reload();
+            if (res.status === 204) {
+                console.log("REDIRECTING TO " + redirectPath);
+                window.location.replace(redirectPath);
+            }
             else
                 alert("Something wrong!!!");
         });
