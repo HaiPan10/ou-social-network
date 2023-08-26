@@ -186,7 +186,7 @@ VALUES ('admin456@gmail.com',
 
 INSERT INTO user(id, first_name, last_name, dob, avatar)
 VALUES (1, 'TP.HCM', 'Trường Đại học Mở', '1993-07-26',
-'https://res.cloudinary.com/dxjkpbzmo/image/upload/v1669639320/aukutc1ioxrflkionglc.png');
+'https://ou.edu.vn/wp-content/uploads/2019/01/OpenUniversity.png');
 
 INSERT INTO reaction(name) VALUES ('Thích');
 INSERT INTO reaction(name) VALUES ('Haha');
