@@ -27,7 +27,6 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.ou.pojo.Account;
 import com.ou.pojo.Comment;
 import com.ou.pojo.Post;
 import com.ou.pojo.User;
@@ -35,7 +34,7 @@ import com.ou.repository.interfaces.PostRepository;
 
 @Repository
 @Transactional
-public class PostRepositoryImpl implements PostRepository{
+public class PostRepositoryImpl implements PostRepository {
     @Autowired
     private LocalSessionFactoryBean sessionFactoryBean;
     @Autowired
@@ -58,7 +57,7 @@ public class PostRepositoryImpl implements PostRepository{
         Session session = sessionFactoryBean.getObject().getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Post> criteriaQuery = builder.createQuery(Post.class);
-        
+
         Root<Post> rPost = criteriaQuery.from(Post.class);
         List<Predicate> predicates = new ArrayList<>();
 
@@ -71,7 +70,7 @@ public class PostRepositoryImpl implements PostRepository{
         if (params != null) {
             String p = params.get("page");
             if (p != null && !p.isEmpty()) {
-                page = Integer.parseInt(p);                
+                page = Integer.parseInt(p);
             } else {
                 page = 1;
             }
@@ -138,7 +137,7 @@ public class PostRepositoryImpl implements PostRepository{
         Session session = sessionFactoryBean.getObject().getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Post> criteriaQuery = builder.createQuery(Post.class);
-        
+
         Root<Post> rPost = criteriaQuery.from(Post.class);
         List<Predicate> predicates = new ArrayList<>();
 
@@ -150,14 +149,11 @@ public class PostRepositoryImpl implements PostRepository{
         subquery.select((Expression) builder.max(rComment.get("updatedDate")));
 
         criteriaQuery.orderBy(
-            builder.desc(
-                builder.coalesce(
-                    subquery,
-                    rPost.get("createdAt")
-                )
-            ),
-            builder.desc(rPost.get("createdAt"))
-        );
+                builder.desc(
+                        builder.coalesce(
+                                subquery,
+                                rPost.get("createdAt"))),
+                builder.desc(rPost.get("createdAt")));
 
         criteriaQuery.where(predicates.toArray(Predicate[]::new));
         Query query = session.createQuery(criteriaQuery);
@@ -166,7 +162,7 @@ public class PostRepositoryImpl implements PostRepository{
         if (params != null) {
             String p = params.get("page");
             if (p != null && !p.isEmpty()) {
-                page = Integer.parseInt(p);                
+                page = Integer.parseInt(p);
             } else {
                 page = 1;
             }
@@ -192,7 +188,7 @@ public class PostRepositoryImpl implements PostRepository{
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Post> criteriaQuery = builder.createQuery(Post.class);
         Root<Post> root = criteriaQuery.from(Post.class);
-    
+
         criteriaQuery.select(root);
 
         List<Predicate> predicates = new ArrayList<>();
@@ -204,7 +200,7 @@ public class PostRepositoryImpl implements PostRepository{
         if (params != null) {
             String p = params.get("page");
             if (p != null && !p.isEmpty()) {
-                page = Integer.parseInt(p);                
+                page = Integer.parseInt(p);
             } else {
                 page = 1;
             }
@@ -219,9 +215,36 @@ public class PostRepositoryImpl implements PostRepository{
     }
 
     @Override
-    public Integer countPosts() {
+    public Integer countPosts(Map<String, String> params) {
         Session session = sessionFactoryBean.getObject().getCurrentSession();
-        Query query = session.createQuery("SELECT Count(*) FROM Post");
+        // Query query = session.createQuery("SELECT Count(*) FROM Post");
+
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = builder.createQuery(Long.class);
+        Root<Post> root = criteriaQuery.from(Post.class);
+        criteriaQuery.select(builder.count(root));
+        Join<Post, User> join = root.join("userId");
+
+        Predicate finalPredicate = null;
+
+        if (params != null) {
+
+            String kw = params.get("kw");
+            if (kw == null || kw.isEmpty()) {
+                kw = "_";
+            } else {
+                kw = kw.trim();
+            }
+
+            Expression<String> expression = builder.function("CONCAT", String.class, join.get("id"),
+                    join.get("lastName"), builder.literal(" "), join.get("firstName"));
+
+            finalPredicate = builder.like(builder.lower(expression), String.format("%%%s%%", kw.toLowerCase()));
+
+        }
+
+        criteriaQuery.where(finalPredicate);
+        Query query = session.createQuery(criteriaQuery);
 
         return Integer.parseInt(query.getSingleResult().toString());
     }
@@ -233,17 +256,17 @@ public class PostRepositoryImpl implements PostRepository{
         CriteriaQuery<Post> criteriaQuery = builder.createQuery(Post.class);
         Root<Post> root = criteriaQuery.from(Post.class);
         Join<Post, User> join = root.join("userId");
-    
+
         criteriaQuery.select(root);
 
-        List<Predicate> predicates = new ArrayList<>();
+        // List<Predicate> predicates = new ArrayList<>();
         Predicate finalPredicate = null;
-        
+
         int page;
         if (params != null) {
             String p = params.get("page");
             if (p != null && !p.isEmpty()) {
-                page = Integer.parseInt(p);                
+                page = Integer.parseInt(p);
             } else {
                 page = 1;
             }
@@ -254,12 +277,11 @@ public class PostRepositoryImpl implements PostRepository{
             } else {
                 kw = kw.trim();
             }
-            Expression<String> fullNameExpression = builder.concat(join.get("lastName"), " ");
-            fullNameExpression = builder.concat(fullNameExpression, join.get("firstName"));
 
-            predicates.add(builder.like(builder.lower(fullNameExpression), String.format("%%%s%%", kw.toLowerCase())));
-            // Option.
-            finalPredicate = builder.or(predicates.toArray(Predicate[]::new));
+            Expression<String> expression = builder.function("CONCAT", String.class, join.get("id"),
+                    join.get("lastName"), builder.literal(" "), join.get("firstName"));
+
+            finalPredicate = builder.like(builder.lower(expression), String.format("%%%s%%", kw.toLowerCase()));
 
         } else {
             page = 1;

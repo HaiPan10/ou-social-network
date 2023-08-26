@@ -154,8 +154,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Integer countPosts() {
-        return postRepository.countPosts();
+    public Integer countPosts(Map<String, String> params) {
+        return postRepository.countPosts(params);
     }
 
     @Override

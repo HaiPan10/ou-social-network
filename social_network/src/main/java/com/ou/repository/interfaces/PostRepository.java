@@ -16,6 +16,6 @@ public interface PostRepository {
     boolean delete(Post persistPost);
     Optional<List<Post>> loadNewFeed(@RequestParam Map<String, String> params);
     List<Post> list(Map<String, String> params);
-    Integer countPosts();
+    Integer countPosts(Map<String, String> params);
     List<Post> search(Map<String, String> params);
 }

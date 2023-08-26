@@ -31,10 +31,10 @@ public class PostController {
 
     @GetMapping
     public String posts(Model model, @RequestParam Map<String, String> params) {
-        List<Post> posts = postService.list(params);
+        List<Post> posts = postService.search(params);
         model.addAttribute("posts", posts);
         Integer pageSize = Integer.parseInt(env.getProperty("POST_PAGE_SIZE"));
-        model.addAttribute("counter", Math.ceil(postService.countPosts() * 1.0 / pageSize));
+        model.addAttribute("counter", Math.ceil(postService.countPosts(params) * 1.0 / pageSize));
         int page;
         if (params != null) {
             String p = params.get("page");
@@ -43,6 +43,12 @@ public class PostController {
             } else {
                 page = 1;
             }
+
+            String kw = params.get("kw");
+            if(kw != null){
+                model.addAttribute("kw", kw);
+            }
+
         } else {
             page = 1;
         }

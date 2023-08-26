@@ -43,6 +43,9 @@
                     <c:forEach begin="1" end="${counter}" var="i">
                         <c:url value="/admin/posts" var="pageAction">
                             <c:param name="page" value="${i}" />
+                            <c:if test="${not empty kw}">
+                                <c:param name="kw" value="${kw}" />
+                            </c:if>
                         </c:url>
                         <li class="page-item" id="pagePosts${i}">
                             <a class="page-link" href="${pageAction}">${i}</a>
