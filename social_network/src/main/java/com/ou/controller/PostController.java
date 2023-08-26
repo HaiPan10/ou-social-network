@@ -7,15 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.ou.pojo.Account;
 import com.ou.pojo.Post;
-import com.ou.pojo.User;
 import com.ou.service.interfaces.PostService;
 
 @Controller
@@ -61,5 +62,13 @@ public class PostController {
     @GetMapping("/upload")
     public String uploadPost(Model model) {
         return "uploadPost";
+    }
+
+    @PostMapping("/upload")
+    public String add(@ModelAttribute("post") Post post, 
+    @RequestPart(value = "fileInput", required = false) List<MultipartFile> images) throws Exception {
+        // postService.uploadPost(post.getContent(), 1, images, post.getIsActiveComment());
+        System.out.println(post.toString());
+        return "redirect:/admin/posts/upload";
     }
 }
