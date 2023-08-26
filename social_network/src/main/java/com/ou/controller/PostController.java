@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -60,15 +62,24 @@ public class PostController {
     }
 
     @GetMapping("/upload")
-    public String uploadPost(Model model) {
+    public String uploadPost(Model model, @RequestParam(name = "status", required = false) String status) {
+        Post post = new Post();
+        model.addAttribute("post", post);
+        if (status != null) {
+            model.addAttribute("status", status);
+        }
         return "uploadPost";
     }
 
     @PostMapping("/upload")
     public String add(@ModelAttribute("post") Post post, 
-    @RequestPart(value = "fileInput", required = false) List<MultipartFile> images) throws Exception {
-        // postService.uploadPost(post.getContent(), 1, images, post.getIsActiveComment());
-        System.out.println(post.toString());
-        return "redirect:/admin/posts/upload";
+    @RequestPart(value = "images", required = false) List<MultipartFile> images, BindingResult bindingResult) throws Exception {
+        try {
+            postService.uploadPost(post.getContent(), 1, images, post.getIsActiveComment());
+            return "redirect:/admin/posts/upload/?status=success";
+        } catch (Exception e) {
+            bindingResult.addError(new ObjectError("exceptionError", e.getMessage()));
+            return "uploadPost";
+        }
     }
 }
