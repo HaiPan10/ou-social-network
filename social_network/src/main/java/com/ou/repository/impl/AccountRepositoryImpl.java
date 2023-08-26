@@ -9,6 +9,8 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -21,11 +23,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ou.pojo.Account;
+import com.ou.pojo.User;
 import com.ou.repository.interfaces.AccountRepository;
 
 @Repository
 @Transactional
-public class AccountRepositoryImpl implements AccountRepository{
+public class AccountRepositoryImpl implements AccountRepository {
     @Autowired
     private LocalSessionFactoryBean sessionFactoryBean;
     @Autowired
@@ -42,30 +45,45 @@ public class AccountRepositoryImpl implements AccountRepository{
     }
 
     @Override
-    public List<Account> list(Map<String, String> params) {
+    public List<Account> search(Map<String, String> params) {
         Session session = sessionFactoryBean.getObject().getCurrentSession();
+        System.out.println("[DEBUG] - START FILTER");
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Account> criteriaQuery = builder.createQuery(Account.class);
         Root<Account> root = criteriaQuery.from(Account.class);
-    
         criteriaQuery.select(root);
+        Join<Account, User> join = root.join("user");
 
         List<Predicate> predicates = new ArrayList<>();
-        // role id = 3 is admin role
-        predicates.add(builder.notEqual(root.get("roleId"), 3));
+        Predicate finalPredicate = null;
 
         int page;
         if (params != null) {
             String p = params.get("page");
             if (p != null && !p.isEmpty()) {
-                page = Integer.parseInt(p);                
+                page = Integer.parseInt(p);
             } else {
                 page = 1;
             }
 
             String kw = params.get("kw");
-            if(kw != null){
-                predicates.add(builder.like(root.get("email"), String.format("%%%s%%", kw)));
+            if (kw == null || kw.isEmpty()) {
+                kw = "_";
+            } else {
+                kw = kw.trim();
+            }
+            Expression<String> fullNameExpression = builder.concat(join.get("lastName"), " ");
+            fullNameExpression = builder.concat(fullNameExpression, join.get("firstName"));
+
+            predicates.add(builder.like(root.get("email"), String.format("%%%s%%", kw)));
+            predicates.add(builder.like(join.get("firstName"), String.format("%%%s%%", kw)));
+            predicates.add(builder.like(join.get("lastName"), String.format("%%%s%%", kw)));
+            predicates.add(builder.like(builder.lower(fullNameExpression), String.format("%%%s%%", kw.toLowerCase())));
+            finalPredicate = builder.or(predicates.toArray(Predicate[]::new));
+
+            String status = params.get("status");
+            if (status != null) {
+                finalPredicate = builder.and(finalPredicate, builder.equal(root.get("status"), status));
             }
 
         } else {
@@ -73,7 +91,7 @@ public class AccountRepositoryImpl implements AccountRepository{
         }
         int pageSize = Integer.parseInt(this.env.getProperty("PENDING_ACCOUNT_PAGE_SIZE"));
 
-        criteriaQuery.where(predicates.toArray(Predicate[]::new));
+        criteriaQuery.where(finalPredicate);
 
         Query query = session.createQuery(criteriaQuery);
 
@@ -127,7 +145,7 @@ public class AccountRepositoryImpl implements AccountRepository{
         if (params != null) {
             String p = params.get("page");
             if (p != null && !p.isEmpty()) {
-                page = Integer.parseInt(p);                
+                page = Integer.parseInt(p);
             } else {
                 page = 1;
             }
@@ -171,7 +189,7 @@ public class AccountRepositoryImpl implements AccountRepository{
     }
 
     @Override
-    public void updateAccount(Account account) throws Exception{
+    public void updateAccount(Account account) throws Exception {
         Session session = sessionFactoryBean.getObject().getCurrentSession();
         try {
             session.saveOrUpdate(account);
@@ -189,16 +207,32 @@ public class AccountRepositoryImpl implements AccountRepository{
         CriteriaQuery<Long> criteriaQuery = builder.createQuery(Long.class);
         Root<Account> root = criteriaQuery.from(Account.class);
         criteriaQuery.select(builder.count(root));
+        Join<Account, User> join = root.join("user");
 
         List<Predicate> predicates = new ArrayList<>();
-        if(params != null){
+        Predicate finalPredicate = null;
+
+        if (params != null) {
             String kw = params.get("kw");
-            if(kw != null){
-                predicates.add(builder.like(root.get("email"), String.format("%%%s%%", kw)));
+            if (kw == null || kw.isEmpty()) {
+                kw = "_";
+            }
+            Expression<String> fullNameExpression = builder.concat(join.get("lastName"), " ");
+            fullNameExpression = builder.concat(fullNameExpression, join.get("firstName"));
+
+            predicates.add(builder.like(root.get("email"), String.format("%%%s%%", kw)));
+            predicates.add(builder.like(join.get("firstName"), String.format("%%%s%%", kw)));
+            predicates.add(builder.like(join.get("lastName"), String.format("%%%s%%", kw)));
+            predicates.add(builder.like(builder.lower(fullNameExpression), String.format("%%%s%%", kw.toLowerCase())));
+            finalPredicate = builder.or(predicates.toArray(Predicate[]::new));
+
+            String status = params.get("status");
+            if (status != null) {
+                finalPredicate = builder.and(finalPredicate, builder.equal(root.get("status"), status));
             }
         }
 
-        criteriaQuery.where(predicates.toArray(Predicate[]::new));
+        criteriaQuery.where(finalPredicate);
         Query query = session.createQuery(criteriaQuery);
 
         return Integer.parseInt(query.getSingleResult().toString());
