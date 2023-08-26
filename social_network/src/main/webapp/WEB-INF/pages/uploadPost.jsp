@@ -45,7 +45,7 @@
             <div class="mb-3">
                 <label class="form-label">Hình ảnh đăng kèm</label>
                 <div class="mb-3">
-                <input id="imageInput" class="form-control" type="file" accept="image/png, image/jpeg" multiple />
+                    <input id="imageInput" class="form-control" type="file" accept="image/png, image/jpeg" multiple />
                 </div>
             </div>
             <button type="submit" class="btn btn-primary">Đăng bài</button>

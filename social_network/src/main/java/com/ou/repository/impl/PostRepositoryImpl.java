@@ -13,6 +13,7 @@ import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
@@ -223,5 +224,53 @@ public class PostRepositoryImpl implements PostRepository{
         Query query = session.createQuery("SELECT Count(*) FROM Post");
 
         return Integer.parseInt(query.getSingleResult().toString());
+    }
+
+    @Override
+    public List<Post> search(Map<String, String> params) {
+        Session session = sessionFactoryBean.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Post> criteriaQuery = builder.createQuery(Post.class);
+        Root<Post> root = criteriaQuery.from(Post.class);
+        Join<Post, User> join = root.join("userId");
+    
+        criteriaQuery.select(root);
+
+        List<Predicate> predicates = new ArrayList<>();
+        Predicate finalPredicate = null;
+        
+        int page;
+        if (params != null) {
+            String p = params.get("page");
+            if (p != null && !p.isEmpty()) {
+                page = Integer.parseInt(p);                
+            } else {
+                page = 1;
+            }
+
+            String kw = params.get("kw");
+            if (kw == null || kw.isEmpty()) {
+                kw = "_";
+            } else {
+                kw = kw.trim();
+            }
+            Expression<String> fullNameExpression = builder.concat(join.get("lastName"), " ");
+            fullNameExpression = builder.concat(fullNameExpression, join.get("firstName"));
+
+            predicates.add(builder.like(builder.lower(fullNameExpression), String.format("%%%s%%", kw.toLowerCase())));
+            // Option.
+            finalPredicate = builder.or(predicates.toArray(Predicate[]::new));
+
+        } else {
+            page = 1;
+        }
+        int pageSize = Integer.parseInt(this.env.getProperty("POST_PAGE_SIZE"));
+
+        criteriaQuery.where(finalPredicate);
+        Query query = session.createQuery(criteriaQuery);
+
+        query.setMaxResults(pageSize);
+        query.setFirstResult((page - 1) * pageSize);
+        return query.getResultList();
     }
 }

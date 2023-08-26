@@ -3,7 +3,6 @@ package com.ou.service.impl;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -151,5 +150,10 @@ public class PostServiceImpl implements PostService {
     @Override
     public Integer countPosts() {
         return postRepository.countPosts();
+    }
+
+    @Override
+    public List<Post> search(Map<String, String> params) {
+        return postRepository.search(params);
     }
 }
