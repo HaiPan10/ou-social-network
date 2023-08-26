@@ -54,7 +54,7 @@ public class AccountRepositoryImpl implements AccountRepository {
         criteriaQuery.select(root);
         Join<Account, User> join = root.join("user");
 
-        List<Predicate> predicates = new ArrayList<>();
+        // List<Predicate> predicates = new ArrayList<>();
         Predicate finalPredicate = null;
 
         int page;
@@ -72,14 +72,11 @@ public class AccountRepositoryImpl implements AccountRepository {
             } else {
                 kw = kw.trim();
             }
-            Expression<String> fullNameExpression = builder.concat(join.get("lastName"), " ");
-            fullNameExpression = builder.concat(fullNameExpression, join.get("firstName"));
 
-            predicates.add(builder.like(root.get("email"), String.format("%%%s%%", kw)));
-            predicates.add(builder.like(join.get("firstName"), String.format("%%%s%%", kw)));
-            predicates.add(builder.like(join.get("lastName"), String.format("%%%s%%", kw)));
-            predicates.add(builder.like(builder.lower(fullNameExpression), String.format("%%%s%%", kw.toLowerCase())));
-            finalPredicate = builder.or(predicates.toArray(Predicate[]::new));
+            Expression<String> expression = builder.function("CONCAT", String.class, root.get("id"), root.get("email"),
+                    join.get("lastName"), builder.literal(" "), join.get("firstName"));
+
+            finalPredicate = builder.like(builder.lower(expression), String.format("%%%s%%", kw.toLowerCase()));
 
             String status = params.get("status");
             if (status != null) {
@@ -209,7 +206,7 @@ public class AccountRepositoryImpl implements AccountRepository {
         criteriaQuery.select(builder.count(root));
         Join<Account, User> join = root.join("user");
 
-        List<Predicate> predicates = new ArrayList<>();
+        // List<Predicate> predicates = new ArrayList<>();
         Predicate finalPredicate = null;
 
         if (params != null) {
@@ -217,14 +214,11 @@ public class AccountRepositoryImpl implements AccountRepository {
             if (kw == null || kw.isEmpty()) {
                 kw = "_";
             }
-            Expression<String> fullNameExpression = builder.concat(join.get("lastName"), " ");
-            fullNameExpression = builder.concat(fullNameExpression, join.get("firstName"));
 
-            predicates.add(builder.like(root.get("email"), String.format("%%%s%%", kw)));
-            predicates.add(builder.like(join.get("firstName"), String.format("%%%s%%", kw)));
-            predicates.add(builder.like(join.get("lastName"), String.format("%%%s%%", kw)));
-            predicates.add(builder.like(builder.lower(fullNameExpression), String.format("%%%s%%", kw.toLowerCase())));
-            finalPredicate = builder.or(predicates.toArray(Predicate[]::new));
+            Expression<String> expression = builder.function("CONCAT", String.class, root.get("id"), root.get("email"),
+                    join.get("lastName"), builder.literal(" "), join.get("firstName"));
+
+            finalPredicate = builder.like(builder.lower(expression), String.format("%%%s%%", kw.toLowerCase()));
 
             String status = params.get("status");
             if (status != null) {

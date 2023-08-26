@@ -16,6 +16,6 @@ public interface PostService {
     Post retrieve(Integer postId) throws Exception;
     boolean delete(Integer postId, Integer userId) throws Exception;
     List<Post> loadNewFeed(Integer currentUserId, @RequestParam Map<String, String> params) throws Exception;
-    Integer countPosts();
+    Integer countPosts(Map<String, String> params);
     List<Post> search(Map<String, String> params);
 }

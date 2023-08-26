@@ -11,6 +11,7 @@
     <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
         <!-- Search -->
         <div class="navbar-nav align-items-center">
+            <button onclick="clearFilter()" class="btn btn-outline-secondary">Clear Filter</button>
             <form method="get">
                 <div class="nav-item d-flex align-items-center">
                     <button class="btn bg-transparent" type="submit"><i class="bx bx-search fs-4 lh-0"></i></button>
@@ -65,3 +66,11 @@
         </ul>
     </div>
 </nav>
+
+<script>
+    function clearFilter(){
+        var currentUrl = window.location.href;
+        var requestUrl = currentUrl.split("?")[0];
+        window.location = requestUrl;
+    }
+</script>
