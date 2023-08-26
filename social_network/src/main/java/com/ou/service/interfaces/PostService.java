@@ -17,4 +17,5 @@ public interface PostService {
     boolean delete(Integer postId, Integer userId) throws Exception;
     List<Post> loadNewFeed(Integer currentUserId, @RequestParam Map<String, String> params) throws Exception;
     Integer countPosts();
+    List<Post> search(Map<String, String> params);
 }

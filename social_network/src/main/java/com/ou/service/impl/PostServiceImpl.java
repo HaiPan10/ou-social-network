@@ -3,7 +3,6 @@ package com.ou.service.impl;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +42,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post uploadPost(String postContent, Integer userId, List<MultipartFile> images, boolean isActiveComment) throws Exception {
         Post newPost = new Post();
-        if (postContent.length() == 0 && images == null) {
+        if (postContent.length() == 0 && (images == null || images.size() <= 0)) {
             throw new Exception("Empty post!");
         }
         newPost.setContent(postContent);
@@ -51,7 +50,13 @@ public class PostServiceImpl implements PostService {
         newPost.setUpdatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
         newPost.setIsActiveComment(isActiveComment);
         postRepository.uploadPost(newPost, userId);
-        if (images != null) {
+        System.out.println("[DEBUG] - Size: " + images.size());
+        images.forEach(i -> {
+            System.out.println("[DEBUG] - Image getContentType: " + i.getContentType());
+            System.out.println("[DEBUG] - Image getName: " + i.getName());
+            System.out.println("[DEBUG] - Image isEmpty: " + i.isEmpty());
+        });
+        if (images != null && images.size() > 0) {
             newPost.setImageInPostList(imageInPostService.uploadImageInPost(images, newPost));
         }
         postReactionService.countReaction(newPost, userId);
@@ -151,5 +156,10 @@ public class PostServiceImpl implements PostService {
     @Override
     public Integer countPosts() {
         return postRepository.countPosts();
+    }
+
+    @Override
+    public List<Post> search(Map<String, String> params) {
+        return postRepository.search(params);
     }
 }

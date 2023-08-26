@@ -17,4 +17,5 @@ public interface PostRepository {
     Optional<List<Post>> loadNewFeed(@RequestParam Map<String, String> params);
     List<Post> list(Map<String, String> params);
     Integer countPosts();
+    List<Post> search(Map<String, String> params);
 }
