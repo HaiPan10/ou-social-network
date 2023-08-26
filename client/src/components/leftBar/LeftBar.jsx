@@ -75,6 +75,12 @@ export const LeftBar = (props) => {
               <AddCircleOutlineIcon className='icon' />
               <span>Đăng bài</span>
             </div>
+            <Link to={`/profile/1`} className='turnoff-link-style' >
+              <div className="user item" onClick={reloadData}>
+                <img src="https://ou.edu.vn/wp-content/uploads/2019/01/OpenUniversity.png" alt="" />
+                <span>Trang quản trị viên</span>
+              </div>
+            </Link>
             <UploadPost show={uploadPostShow} onHide={() => setUploadPostShow(false)} setUploadPostShow={setUploadPostShow} />
           </div>
           <div className='menu-bottom'>

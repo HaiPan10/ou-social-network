@@ -481,7 +481,7 @@ export const Profile = () => {
               </>
             ) : (
               <>
-                <img src={profileUser.avatar} alt="" className="profilePic" />
+                <img src={profileUser.avatar} alt="" className="profilePic" onClick={toggleAvatarModal}/>
                 {showAvatarModal && (
                   <ImageModal
                       images={[profileUser.avatar]}
@@ -504,7 +504,7 @@ export const Profile = () => {
           <div className="center">
           </div>
           {profileUser.id !== user.id ? 
-            <div className="right">
+            role.id !== 3 && <div className="right">
               <button className="softColor"><MessageIcon/> Nhắn tin</button>
             </div> :
             <div className="right">

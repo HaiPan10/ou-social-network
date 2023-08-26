@@ -20,6 +20,11 @@
                                 <div> ${post.createdAt} </div>
                             </div>
                         </div>
+                        <div>
+                            <c:url value="/admin/posts/delete/${post.id}" var="deleteAction"/>
+                            <c:url value="/admin/posts" var="redirectAction"/>
+                            <button onclick="deletePost(`${deleteAction}`, `${redirectAction}`)" class="btn-delete"><i class='bx bx-trash' style="color: red; width: 100%;"></i></button>
+                        </div>
                     </div>
         
                     <div class="lg:p-4 p-2.5 pt-0 pb-0 dark:border-gray-700">
@@ -46,12 +51,12 @@
                             })
                         </script>
                     </div>
-
+<!-- 
                     <div class="btn-container">
                         <c:url value="/admin/posts/delete/${post.id}" var="deleteAction"/>
                         <c:url value="/admin/posts" var="redirectAction"/>
                         <button onclick="deletePost(`${deleteAction}`, `${redirectAction}`)" class="btn-delete">Xóa</button>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
