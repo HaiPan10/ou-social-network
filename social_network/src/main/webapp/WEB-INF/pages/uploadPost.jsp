@@ -4,7 +4,12 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Bài đăng /</span> Đăng bài</h4>
-
+<c:if test="${status != null}">
+    <div class="alert alert-success">
+        ${status}
+    </div>
+</c:if>
+<c:url value="/admin/posts/upload" var="upload" />
 <div class="row">
     <div class="col-xl">
         <div class="card mb-4">
@@ -23,33 +28,38 @@
                 <li><div class="dropdown-item" data-value="upload_invitation_post">Bài đăng thư mời thông báo</div></li>
             </ul>
             </div>
-            <form id="upload_default_post" style="display: block;">
-            <div class="mb-3 pt-5">
-                <label class="form-label">Nội dung bài đăng mặc định</label>
-                <div class="input-group input-group-merge">
-                <span class="input-group-text"
-                    ><i class="bx bxs-book-content"></i
-                ></span>
-                <textarea
-                    class="form-control"
-                    maxlength="250"
-                ></textarea>
-                </div>
-            </div>
-            <div class="form-check form-switch mb-2">
-                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" />
-                <label class="form-check-label" for="flexSwitchCheckDefault"
-                >Cho phép bình luận</label
-                >
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Hình ảnh đăng kèm</label>
+            <form:form action="${upload}" modelAttribute="post" method="post" enctype="multipart/form-data" id="upload_default_post" style="display: block;">
                 <div class="mb-3">
-                    <input id="imageInput" class="form-control" type="file" accept="image/png, image/jpeg" multiple />
+                    <form:errors path="*" cssClass="text-danger" element="div"/>
                 </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Đăng bài</button>
-            </form>
+                <div class="mb-3 pt-5">
+                    <label class="form-label">Nội dung bài đăng mặc định</label>
+                    <div class="input-group input-group-merge">
+                    <span class="input-group-text"
+                        ><i class="bx bxs-book-content"></i
+                    ></span>
+                    <form:textarea
+                        class="form-control"
+                        maxlength="250"
+                        name="content"
+                        path="content"
+                    ></form:textarea>
+                    </div>
+                </div>
+                <div class="form-check form-switch mb-2">
+                    <form:checkbox value="true" class="form-check-input" id="flexSwitchCheckDefault" name="isActiveComment" path="isActiveComment" checked="true"/>
+                    <label class="form-check-label" for="flexSwitchCheckDefault"
+                    >Cho phép bình luận</label
+                    >
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Hình ảnh đăng kèm</label>
+                    <div class="mb-3">
+                        <input id="imageInput" class="form-control" type="file" name="images" accept="image/png, image/jpeg" multiple />
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Đăng bài</button>
+            </form:form>
 
             <form id="upload_survey_post" style="display: none;">
             <div class="mb-3 pt-5">

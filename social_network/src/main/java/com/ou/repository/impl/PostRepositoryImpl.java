@@ -197,7 +197,7 @@ public class PostRepositoryImpl implements PostRepository{
 
         List<Predicate> predicates = new ArrayList<>();
         criteriaQuery.where(predicates.toArray(Predicate[]::new));
-        
+        criteriaQuery.orderBy(builder.desc(root.get("createdAt")));
 
         Query query = session.createQuery(criteriaQuery);
         int page;

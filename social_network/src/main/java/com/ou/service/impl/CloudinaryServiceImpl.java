@@ -21,6 +21,7 @@ public class CloudinaryServiceImpl implements CloudinaryService{
 
     @Override
     public String uploadImage(MultipartFile image) throws IOException {
+        System.out.println("[DEBUG] - CURRENTLY IN UPLOADIMAGE");
         return cloudinary.uploader().upload(image.getBytes(), ObjectUtils.asMap("resource_type", "auto"))
         .get("secure_url").toString();
     }

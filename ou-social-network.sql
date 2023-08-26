@@ -185,7 +185,7 @@ VALUES ('admin456@gmail.com',
 '$2a$10$3YohAzphxM8cU1uvEkikleeAf4xPlPZrQ0eqx5iPgc0bcUT48j/SC', now(), '3');
 
 INSERT INTO user(id, first_name, last_name, dob, avatar)
-VALUES (1, 'Hai', 'Phan Thanh', '2002-05-18',
+VALUES (1, 'TP.HCM', 'Trường Đại học Mở', '1993-07-26',
 'https://res.cloudinary.com/dxjkpbzmo/image/upload/v1669639320/aukutc1ioxrflkionglc.png');
 
 INSERT INTO reaction(name) VALUES ('Thích');
