@@ -9635,13 +9635,11 @@ html.dark,
 }
 
 .btn-delete {
-  background-color: #696cff;
-  margin-right: 20px;
-  margin-top: 5px;
   padding: 10px;
-  border-radius: 10px;
-  color: white;
-  margin-bottom: 5px;
+}
+
+.btn-delete i:hover {
+  color: #FFC0CB;
 }
 
 .img-container {

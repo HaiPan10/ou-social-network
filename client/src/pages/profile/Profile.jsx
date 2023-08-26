@@ -26,8 +26,11 @@ const UpdateAvatar = (props) => {
   const [user, userDispatch] = useContext(AuthContext)
 
   const handleAvatarChange = (event) => {
-    const selectedFile = event.target.files[0]
-    setSelectedAvatar(URL.createObjectURL(selectedFile))
+    if (event.target.files[0]) {
+      setSelectedAvatar(URL.createObjectURL(event.target.files[0]))
+    } else {
+      setSelectedAvatar(null)
+    }
   };
 
   const close = () => {
@@ -44,7 +47,7 @@ const UpdateAvatar = (props) => {
         if (selectedAvatar !== null) {
           let form = new FormData()
           if (avatar.current.files.length > 0)
-              form.append("uploadAvatar", avatar.current.files[0])
+            form.append("uploadAvatar", avatar.current.files[0])
           let res = await authAPI().post(endpoints['update_avatar'], form, {
             headers: {
               'Content-Type': 'multipart/form-data'
@@ -62,7 +65,7 @@ const UpdateAvatar = (props) => {
           setDisableButton(false)
         }
       } catch (ex) {
-        
+        setDisableButton(false)
       }
     }
     process()
@@ -111,8 +114,11 @@ const UpdateCover = (props) => {
   const [user, userDispatch] = useContext(AuthContext)
 
   const handleCoverChange = (event) => {
-    const selectedFile = event.target.files[0]
-    setSelectedCover(URL.createObjectURL(selectedFile))
+    if (event.target.files[0]) {
+      setSelectedCover(URL.createObjectURL(event.target.files[0]))
+    } else {
+      setSelectedCover(null)
+    }
   };
 
   const close = () => {
@@ -144,7 +150,7 @@ const UpdateCover = (props) => {
             })
           }
         } catch (ex) {
-          
+          setDisableButton(false)
         }
       } else {
         setDisableButton(false)
@@ -475,7 +481,7 @@ export const Profile = () => {
               </>
             ) : (
               <>
-                <img src={profileUser.avatar} alt="" className="profilePic" />
+                <img src={profileUser.avatar} alt="" className="profilePic" onClick={toggleAvatarModal}/>
                 {showAvatarModal && (
                   <ImageModal
                       images={[profileUser.avatar]}
@@ -498,7 +504,7 @@ export const Profile = () => {
           <div className="center">
           </div>
           {profileUser.id !== user.id ? 
-            <div className="right">
+            role.id !== 3 && <div className="right">
               <button className="softColor"><MessageIcon/> Nhắn tin</button>
             </div> :
             <div className="right">

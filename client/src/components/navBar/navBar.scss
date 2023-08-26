@@ -74,12 +74,7 @@
             .dropdown {
                 cursor: pointer;
                 position: relative;
-                display: inline-block;
-
-                &:hover {
-                    .dropdown-content {display: block;}
-                }
-                
+                display: inline-block;                
                 .user {
                     display: flex;
                     align-items: center;
@@ -98,7 +93,7 @@
                 }
     
                 .dropdown-content {
-                    display: none;
+                    display: block;
                     align-items: flex-end;
                     width: 200px;
                     position: absolute;
