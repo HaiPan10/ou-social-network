@@ -173,6 +173,121 @@ CREATE TABLE `post_reaction` (
     
 -- )   ENGINE=INNODB;
 
+DROP TABLE IF EXISTS `ou-social-network`.`post_survey`;
+CREATE TABLE `post_survey` (
+    id INT UNSIGNED NOT NULL,
+    start_at DATETIME,
+    survey_title VARCHAR(100),
+    survey_status ENUM('OPEN', 'CLOSED') DEFAULT ('OPEN'),
+
+    PRIMARY KEY (id),
+    FOREIGN KEY (id)
+		REFERENCES post(id)
+        ON DELETE CASCADE
+    
+)   ENGINE=INNODB;
+
+DROP TABLE IF EXISTS `ou-social-network`.`question_type`;
+CREATE TABLE `question_type` (
+    id INT UNSIGNED NOT NULL,
+    type VARCHAR(100) NOT NULL,
+
+    PRIMARY KEY (id)
+    
+)   ENGINE=INNODB;
+
+DROP TABLE IF EXISTS `ou-social-network`.`question`;
+CREATE TABLE `question` (
+    id INT UNSIGNED NOT NULL,
+    survey_id INT UNSIGNED NOT NULL,
+    question_type_id INT UNSIGNED NOT NULL,
+    question_text VARCHAR(2000),
+    is_mandatory BIT,
+    question_order INT,
+
+    PRIMARY KEY (id),
+    INDEX(survey_id),
+    INDEX(question_type_id),
+    FOREIGN KEY (survey_id)
+		REFERENCES post_survey(id)
+        ON DELETE CASCADE,
+	FOREIGN KEY(question_type_id)
+		REFERENCES question_type(id)
+        ON DELETE CASCADE
+    
+)   ENGINE=INNODB;
+
+DROP TABLE IF EXISTS `ou-social-network`.`question_option`;
+CREATE TABLE `question_option` (
+    id INT UNSIGNED NOT NULL,
+    question_id INT UNSIGNED NOT NULL,
+    value VARCHAR(100) NOT NULL,
+    question_order INT,
+
+    PRIMARY KEY (id),
+    INDEX(question_id),
+    FOREIGN KEY (question_id)
+		REFERENCES question(id)
+        ON DELETE CASCADE
+    
+)   ENGINE=INNODB;
+
+DROP TABLE IF EXISTS `ou-social-network`.`response`;
+CREATE TABLE `response` (
+    id INT UNSIGNED NOT NULL,
+    survey_id INT UNSIGNED NOT NULL,
+    user_id INT UNSIGNED NOT NULL,
+    created_at DATETIME,
+
+    PRIMARY KEY (id),
+    INDEX(survey_id),
+    INDEX(user_id),
+    FOREIGN KEY (survey_id)
+		REFERENCES post_survey(id)
+        ON DELETE CASCADE,
+	FOREIGN KEY (user_id)
+		REFERENCES user(id)
+        ON DELETE CASCADE
+    
+)   ENGINE=INNODB;
+
+DROP TABLE IF EXISTS `ou-social-network`.`answer`;
+CREATE TABLE `answer` (
+    id INT UNSIGNED NOT NULL,
+    question_id INT UNSIGNED NOT NULL,
+    response_id INT UNSIGNED NOT NULL,
+    value VARCHAR(1000),
+
+    PRIMARY KEY (id),
+    INDEX(question_id),
+    INDEX(response_id),
+    FOREIGN KEY (question_id)
+		REFERENCES question(id)
+        ON DELETE CASCADE,
+	FOREIGN KEY (response_id)
+		REFERENCES response(id)
+        ON DELETE CASCADE
+    
+)   ENGINE=INNODB;
+
+DROP TABLE IF EXISTS `ou-social-network`.`answer_option`;
+CREATE TABLE `answer_option` (
+    id INT UNSIGNED NOT NULL,
+    answer_id INT UNSIGNED NOT NULL,
+    question_option_id INT UNSIGNED NOT NULL,
+
+    PRIMARY KEY (id),
+    INDEX(answer_id),
+    INDEX(question_option_id),
+    FOREIGN KEY (answer_id)
+		REFERENCES answer(id)
+        ON DELETE CASCADE,
+	FOREIGN KEY (question_option_id)
+		REFERENCES question_option(id)
+        ON DELETE CASCADE
+    
+)   ENGINE=INNODB;
+
 -- INSERT default rows after created
 INSERT INTO role(name) VALUES("ROLE_FORMER_STUDENT");
 INSERT INTO role(name) VALUES("ROLE_TEACHER");
