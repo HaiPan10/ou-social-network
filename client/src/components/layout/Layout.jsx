@@ -15,12 +15,14 @@ import './layout.scss'
 import { DarkModeContext } from '../../context/DarkModeContext';
 import 'react-image-lightbox/style.css';
 import { ReloadContext } from "../../context/ReloadContext";
+import { SearchContext } from '../../context/SearchContext';
 
 export const Layout = () => {
     const [user, dispatch] = useContext(AuthContext)
     const [status, setStatus] = useState()
     const {darkMode} = useContext(DarkModeContext)
     const { reload } = useContext(ReloadContext)
+    const { showSearch } = useContext(SearchContext)
     
     useEffect(() => {
         if (user !== null) {
@@ -50,7 +52,7 @@ export const Layout = () => {
                 <NavBar />
                 <div style={{ display: "flex" }}>
                     <LeftBar status={status}/>
-                    <div style={{flex: 6}}><Outlet /></div>
+                    <div style={{flex: showSearch ? "5" : "6", position: "relative"}}><Outlet/></div>
                     <RightBar />
                 </div>
             </div>

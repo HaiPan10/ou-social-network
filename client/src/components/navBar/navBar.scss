@@ -1,5 +1,77 @@
 @import "../../style.scss";
 
+.search-nav-result{
+    @include themify($themes) {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 20px;
+        max-height: 50vh;
+        border-bottom: 1px solid themed("border");
+        position: fixed;
+        top: 50px;
+        width: 100%;
+        background-color: themed("bg");
+        color: themed("textColor");
+        z-index: 999;
+        display: none;
+        overflow: auto;
+
+        @include mobile {
+            display: flex;
+        }
+
+        .loading {
+            text-align: center;
+            align-self: center;
+            width: 100%;
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 10px;
+            padding: 10px;
+            align-self: flex-start;
+
+            .turnoff-link-style {
+                text-decoration: none;
+                color: themed("textColor");
+
+                .search-row {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    gap: 10px;
+                    width: 100%;
+                    border-radius: 5px;
+                    padding: 10px;
+                    cursor: pointer;
+
+                    &:hover {
+                        background-color: themed("bgSoft");
+                    }
+
+                    .avatar {
+                        border-radius: 50%;
+                        img {
+                            width: 50px;
+                            height: 50px;
+                            object-fit: cover;
+                            border-radius: 50%;
+                        }
+                    }
+
+                    .name {
+                            
+                    }
+                }
+            }
+        }
+    }
+}
+
 .navBar {
     @include themify($themes) {
         align-items: center;
@@ -13,7 +85,7 @@
         color: themed("textColor");
         z-index: 999;
         display: none;
-        
+
         @include mobile {
             display: flex;
         }
@@ -27,13 +99,17 @@
                 gap: 10px;
             }
 
+            .logo-link {
+                width: 20%;
+            }
+
             .logo {
                 width: 5%;
                 display: flex;
                 align-items: center;
 
                 @include mobile{
-                    width: 30%;
+                    width: 100%;
                 }
 
                 img {
@@ -44,23 +120,30 @@
                 }
             }
 
-            .search {
+            .search-nav {
+                width: 80%;
                 display: flex;
                 align-items: center;
                 gap: 10px;
-                border: 1px solid themed("border");
+                // border: 1px solid themed("border");
                 border-radius: 5px;
                 padding: 5px;
 
                 input {
                     border: none;
-                    width: 500px;
-                    background-color: transparent;
+                    // width: 500px;
+                    // background-color: transparent;
                     color: themed("textColor");
+                    background-color: themed("bg");
 
-                    @include mobile{
-                        display: none;
-                    }
+                    // @include mobile{
+                    //     display: none;
+                    // }
+                }
+
+                input::placeholder {
+                    color: themed("bgSoft");
+                    opacity: 1;
                 }
             }
         }
