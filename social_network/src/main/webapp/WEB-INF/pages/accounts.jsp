@@ -1,21 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
-<!-- <form method="GET">
-    <select class="form-select" name="status" onchange="this.form.submit()">
-        <c:forEach items="${status}" var="s">
-            <c:choose>
-                <c:when test="${filterStatus != null && s.toString() eq filterStatus}">
-                    <option selected value="${s}">${s}</option>
-                </c:when>
-                <c:otherwise>
-                    <option value="${s}">${s}</option>
-                </c:otherwise>
-            </c:choose>
-        </c:forEach>
-    </select>
-</form> -->
-
 <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" id="dropdownButton">
     Lọc theo tình trạng
 </button>
