@@ -39,6 +39,8 @@ export const Layout = () => {
         } else {
             setStatus("LOGIN")
         }
+
+
     }, [reload])
 
     if (user === null) {
