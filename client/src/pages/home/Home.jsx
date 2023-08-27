@@ -9,6 +9,7 @@ import { ReloadContext } from "../../context/ReloadContext"
 import Loading from "../../components/Loading"
 import KeyboardCapslockIcon from '@mui/icons-material/KeyboardCapslock';
 import { InView } from 'react-intersection-observer';
+import { SearchContext } from "../../context/SearchContext"
 
 export const Home = () => {
   const [posts, setPosts] = useState([])
@@ -18,6 +19,7 @@ export const Home = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [isCaughtUp, setIsCaughtUp] = useState(false)
   const { reloadData } = useContext(ReloadContext)
+  const { showSearch } = useContext(SearchContext)
 
   useEffect(() => {
     const loadNewFeeds = async () => {
@@ -69,11 +71,11 @@ export const Home = () => {
 
   return (
     <div className="home">
-      <div className="posts">
+      <div className="posts" style={{paddingLeft: showSearch ? "21.5px" : ""}}>
         {posts === null ? <Loading/> : 
         <>
           <PostLayout/>
-            {posts.map(post=>(
+            {posts.length !== 0 && posts.map(post=>(
               <Post post={post} key={post.id} posts={posts} setPosts={setPosts}/>
           ))}
           {isLoading && <div className="bottom-loading">
@@ -86,7 +88,7 @@ export const Home = () => {
             <div className="caught-up-content">Bạn đã xem hết nội dung hôm nay rồi!</div>
             <button><KeyboardCapslockIcon/> Đi tới trang đầu</button>
           </div>}
-          <InView onChange={handleIntersection}>
+          {posts.length !== 0 && <InView onChange={handleIntersection}>
               {({ inView, ref }) => (
                 <div ref={ref}>
                   {inView && !isLoading && !isCaughtUp && (
@@ -96,7 +98,7 @@ export const Home = () => {
                   )}
                 </div>
               )}
-          </InView >
+          </InView >}
         </>
         }
       </div>

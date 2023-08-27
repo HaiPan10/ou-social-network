@@ -15,6 +15,7 @@ export const endpoints = {
     "comment": "/comments",
     "change_password": "/accounts/change_password",
     "post_reactions": "/post_reactions",
+    "search": "/accounts/search?kw="
 }
 
 export const authAPI = () => axios.create({

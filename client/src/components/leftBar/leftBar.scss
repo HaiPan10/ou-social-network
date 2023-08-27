@@ -2,7 +2,7 @@
 
 .leftBar {
     @include themify($themes) {
-        flex: 2;
+        flex: 6;
         position: sticky;
         top: 0px;
         height: calc(100vh);
@@ -10,9 +10,14 @@
         background-color: themed("bg");
         color: themed("textColor");
         border-right: 1px solid themed("border");
+        display: flex;
 
         @include mobile{
             display: none;
+        }
+
+        .active {
+            background-color: themed("bgSoft");
         }
 
         &::-webkit-scrollbar {
@@ -206,17 +211,17 @@
                         justify-content: center;
                         cursor: default;
                         
-                        &:hover {
-                            background-color: themed("bg");
-                        }
+                        // &:hover {
+                        //     background-color: themed("bg");
+                        // }
         
                         @include mobile{
                             width: 30%;
                         }
         
                         img {
-                            width: 40%;
-                            height: 100%;
+                            width: 80px;
+                            height: 40px;
                             padding-right: 10px;
                             content: themed("logo");
                         }

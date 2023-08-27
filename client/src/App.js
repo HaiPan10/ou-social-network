@@ -11,6 +11,7 @@ import { Layout } from "./components/layout/Layout";
 import { DarkModeContext, DarkModeContextProvider } from "./context/DarkModeContext";
 import { ReloadContextProvider } from "./context/ReloadContext";
 import './index.css'
+import { SearchContextProvider } from "./context/SearchContext";
 
 
 const App = () => {
@@ -21,7 +22,9 @@ const App = () => {
       element: (
         <DarkModeContextProvider>
           <ReloadContextProvider>
-            <Layout/>
+            <SearchContextProvider>
+              <Layout/>
+            </SearchContextProvider>
           </ReloadContextProvider>
         </DarkModeContextProvider>
       ),

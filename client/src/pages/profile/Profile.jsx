@@ -17,6 +17,7 @@ import { PostLayout } from "../../components/postLayout/PostLayout";
 import { ReloadContext } from "../../context/ReloadContext";
 import ImageModal from '../../components/imageInPost/ImageModal'
 import { InView } from 'react-intersection-observer';
+import { SearchContext } from "../../context/SearchContext";
 
 const UpdateAvatar = (props) => {
   const {darkMode} = useContext(DarkModeContext)
@@ -366,6 +367,7 @@ export const Profile = () => {
   const [page, setPage] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
   const [isCaughtUp, setIsCaughtUp] = useState(false)
+  const { showSearch } = useContext(SearchContext)
 
   const toggleAvatarModal = () => setShowAvatarModal(!showAvatarModal);
   const toggleCoverModal = () => setShowCoverModal(!showCoverModal);
@@ -525,12 +527,12 @@ export const Profile = () => {
           />
         </div>      
       </div>
-      <div className="posts">
+      <div className="posts" style={{paddingLeft: showSearch ? "21.5px" : ""}}>
         {profileUser.id === user.id ? <PostLayout/> : <></>}        
-        {posts.map(post=>(
+        {posts.length !== 0 && posts.map(post=>(
           <Post post={post} key={post.id} posts={posts} setPosts={setPosts}/>
         ))}
-        <InView onChange={handleIntersection}>
+        {posts.length !== 0 && <InView onChange={handleIntersection}>
               {({ inView, ref }) => (
                 <div ref={ref}>
                   {inView && !isLoading && !isCaughtUp && (
@@ -540,7 +542,7 @@ export const Profile = () => {
                   )}
                 </div>
               )}
-        </InView >
+        </InView >}
     </div>
   </div>
   )
