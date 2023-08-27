@@ -1,5 +1,7 @@
 package com.ou.configs;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -57,7 +59,7 @@ public class SpringSecurityConfigs extends WebSecurityConfigurerAdapter {
                 .failureUrl("/"));
         http.logout(logout -> logout.logoutSuccessUrl("/"));
         http.authorizeRequests(requests ->
-                requests.antMatchers("/**/admin/**")
+                requests.antMatchers("/admin/**")
                         .access("hasAnyRole('ROLE_ADMIN')")
                         .antMatchers("/",
                                     "/resources/**",
@@ -68,7 +70,9 @@ public class SpringSecurityConfigs extends WebSecurityConfigurerAdapter {
         http.exceptionHandling(handling ->
             handling.accessDeniedHandler((requests, reponse, ex) -> {
                 System.out.printf("[EXCEPTION] - %s\n", ex.getMessage());
-                reponse.sendRedirect(requests.getContextPath() + "/logout");
+                //reponse.sendRedirect(requests.getContextPath() + "/logout");
+                reponse.sendError(HttpServletResponse.SC_FORBIDDEN);
+                reponse.getWriter().write("Forbidden!!!");
         }));
     }
 }
