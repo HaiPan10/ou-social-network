@@ -47,4 +47,9 @@ public class ApiAdminController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    // @PostMapping(path = "posts/upload")
+    // ResponseEntity<Object> uploadPost(@RequestBody Post postSurvey){
+    //     return ResponseEntity.ok().body(postSurvey);
+    // }
 }

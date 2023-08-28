@@ -51,6 +51,9 @@ public class Response implements Serializable {
     @JoinColumn(name = "survey_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private PostSurvey surveyId;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private User userId;
 
     @Override
     public String toString() {

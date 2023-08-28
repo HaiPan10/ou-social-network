@@ -6,7 +6,6 @@ package com.ou.pojo;
 
 import java.io.Serializable;
 import java.util.Collection;
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,32 +26,30 @@ import lombok.Setter;
  * @author PHONG
  */
 @Entity
-@Table(name = "group")
-@Getter
+@Table(name = "invitation_group")
 @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Group implements Serializable {
+public class InvitationGroup implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
     @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
     @Column(name = "group_name")
     private String groupName;
     @OneToMany(mappedBy = "groupId")
-    private Collection<PostInvitation> postInvitations;
+    private Collection<PostInvitation> postInvitationCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "groupId")
-    private Collection<GroupUser> groupUsers;
+    private Collection<GroupUser> groupUserCollection;
 
     @Override
     public String toString() {
-        return "com.ou.pojo.Group1[ id=" + id + " ]";
+        return "com.ou.pojo.InvitationGroup[ id=" + id + " ]";
     }
     
 }

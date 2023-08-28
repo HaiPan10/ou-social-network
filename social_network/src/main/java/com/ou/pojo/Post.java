@@ -91,8 +91,8 @@ public class Post implements Serializable {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "post")
     private PostSurvey postSurvey;
 
-    // @OneToOne(cascade = CascadeType.ALL, mappedBy = "post")
-    // private PostInvitation postInvitation;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "post")
+    private PostInvitation postInvitation;
 
     public Post(Integer id){
         this.id = id;

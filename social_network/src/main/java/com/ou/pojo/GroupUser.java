@@ -13,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,8 +24,8 @@ import lombok.Setter;
  */
 @Entity
 @Table(name = "group_user")
-@Getter
 @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class GroupUser implements Serializable {
@@ -34,12 +33,14 @@ public class GroupUser implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
     @Column(name = "id")
     private Integer id;
     @JoinColumn(name = "group_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    private Group groupId;
+    private InvitationGroup groupId;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private User userId;
 
     @Override
     public String toString() {

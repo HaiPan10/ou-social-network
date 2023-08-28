@@ -23,6 +23,7 @@
     <class>com.ou.pojo.Response</class>
     <class>com.ou.pojo.PostSurvey</class>
     <class>com.ou.pojo.AnswerOption</class>
+    <class>com.ou.pojo.InvitationGroup</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://34.101.138.124:3306/ou-social-network?zeroDateTimeBehavior=CONVERT_TO_NULL"/>

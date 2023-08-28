@@ -10,8 +10,6 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -22,7 +20,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -44,7 +41,6 @@ public class PostInvitation implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull
     @Column(name = "id")
     private Integer id;
@@ -55,10 +51,10 @@ public class PostInvitation implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date startAt;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "postInvitationId")
-    private Collection<PostInvitationUser> postInvitationUser;
+    private Collection<PostInvitationUser> postInvitationUserCollection;
     @JoinColumn(name = "group_id", referencedColumnName = "id")
     @ManyToOne
-    private Group groupId;
+    private InvitationGroup groupId;
     @JsonIgnore
     @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
     @OneToOne(optional = false)
