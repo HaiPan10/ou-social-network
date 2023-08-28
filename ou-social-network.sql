@@ -189,7 +189,7 @@ CREATE TABLE `post_survey` (
 
 DROP TABLE IF EXISTS `ou-social-network`.`question_type`;
 CREATE TABLE `question_type` (
-    id INT UNSIGNED NOT NULL,
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     type VARCHAR(100) NOT NULL,
 
     PRIMARY KEY (id)
@@ -198,7 +198,7 @@ CREATE TABLE `question_type` (
 
 DROP TABLE IF EXISTS `ou-social-network`.`question`;
 CREATE TABLE `question` (
-    id INT UNSIGNED NOT NULL,
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     survey_id INT UNSIGNED NOT NULL,
     question_type_id INT UNSIGNED NOT NULL,
     question_text VARCHAR(2000),
@@ -219,7 +219,7 @@ CREATE TABLE `question` (
 
 DROP TABLE IF EXISTS `ou-social-network`.`question_option`;
 CREATE TABLE `question_option` (
-    id INT UNSIGNED NOT NULL,
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     question_id INT UNSIGNED NOT NULL,
     value VARCHAR(100) NOT NULL,
     question_order INT,
@@ -234,7 +234,7 @@ CREATE TABLE `question_option` (
 
 DROP TABLE IF EXISTS `ou-social-network`.`response`;
 CREATE TABLE `response` (
-    id INT UNSIGNED NOT NULL,
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     survey_id INT UNSIGNED NOT NULL,
     user_id INT UNSIGNED NOT NULL,
     created_at DATETIME,
@@ -253,7 +253,7 @@ CREATE TABLE `response` (
 
 DROP TABLE IF EXISTS `ou-social-network`.`answer`;
 CREATE TABLE `answer` (
-    id INT UNSIGNED NOT NULL,
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     question_id INT UNSIGNED NOT NULL,
     response_id INT UNSIGNED NOT NULL,
     value VARCHAR(1000),
@@ -272,7 +272,7 @@ CREATE TABLE `answer` (
 
 DROP TABLE IF EXISTS `ou-social-network`.`answer_option`;
 CREATE TABLE `answer_option` (
-    id INT UNSIGNED NOT NULL,
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     answer_id INT UNSIGNED NOT NULL,
     question_option_id INT UNSIGNED NOT NULL,
 
@@ -290,7 +290,7 @@ CREATE TABLE `answer_option` (
 
 DROP TABLE IF EXISTS `ou-social-network`.`group`;
 CREATE TABLE `group` (
-    id INT UNSIGNED NOT NULL,
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     group_name VARCHAR(100) NOT NULL,
 
     PRIMARY KEY (id)
@@ -299,7 +299,7 @@ CREATE TABLE `group` (
 
 DROP TABLE IF EXISTS `ou-social-network`.`group_user`;
 CREATE TABLE `group_user` (
-    id INT UNSIGNED NOT NULL,
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     group_id INT UNSIGNED NOT NULL,
     user_id INT UNSIGNED NOT NULL,
 
@@ -317,7 +317,7 @@ CREATE TABLE `group_user` (
 
 DROP TABLE IF EXISTS `ou-social-network`.`post_invitation`;
 CREATE TABLE `post_invitation` (
-    id INT UNSIGNED NOT NULL,
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     group_id INT UNSIGNED,
     event_name VARCHAR(250),
     start_at DATETIME,
@@ -335,7 +335,7 @@ CREATE TABLE `post_invitation` (
 
 DROP TABLE IF EXISTS `ou-social-network`.`post_invitation_user`;
 CREATE TABLE `post_invitation_user` (
-    id INT UNSIGNED NOT NULL,
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     user_id INT UNSIGNED NOT NULL,
     post_invitation_id INT UNSIGNED NOT NULL,
 
@@ -370,3 +370,8 @@ VALUES (1, 'TP.HCM', 'Trường Đại học Mở', '1993-07-26',
 INSERT INTO reaction(name) VALUES ('Thích');
 INSERT INTO reaction(name) VALUES ('Haha');
 INSERT INTO reaction(name) VALUES ('Tim');
+
+-- Questions type
+INSERT INTO question_type(type) VALUES ('Multiple choice question');
+INSERT INTO question_type(type) VALUES ('Input text question');
+INSERT INTO question_type(type) VALUES ('Checkbox question');
