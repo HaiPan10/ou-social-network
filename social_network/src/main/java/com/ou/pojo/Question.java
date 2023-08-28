@@ -49,9 +49,9 @@ public class Question implements Serializable {
     @Column(name = "question_order")
     private Integer questionOrder;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "questionId")
-    private Collection<QuestionOption> questionOptionCollection;
+    private Collection<QuestionOption> questionOptions;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "questionId")
-    private Collection<Answer> answerCollection;
+    private Collection<Answer> answers;
     @JoinColumn(name = "survey_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private PostSurvey surveyId;

@@ -52,7 +52,7 @@ public class PostInvitation implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date startAt;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "postInvitationId")
-    private Collection<PostInvitationUser> postInvitationUserCollection;
+    private Collection<PostInvitationUser> postInvitationUser;
     @JoinColumn(name = "group_id", referencedColumnName = "id")
     @ManyToOne
     private Group groupId;

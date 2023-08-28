@@ -44,7 +44,7 @@ public class QuestionType implements Serializable {
     @Column(name = "type")
     private String type;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "questionTypeId")
-    private Collection<Question> questionCollection;
+    private Collection<Question> questions;
 
     @Override
     public String toString() {

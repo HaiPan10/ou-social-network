@@ -49,9 +49,9 @@ public class PostSurvey implements Serializable {
     @Column(name = "survey_status")
     private String surveyStatus;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "surveyId")
-    private Collection<Question> questionCollection;
+    private Collection<Question> questions;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "surveyId")
-    private Collection<Response> responseCollection;
+    private Collection<Response> responses;
 
     @Override
     public String toString() {

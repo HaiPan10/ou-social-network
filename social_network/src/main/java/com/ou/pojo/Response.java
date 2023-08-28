@@ -47,7 +47,7 @@ public class Response implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "responseId")
-    private Collection<Answer> answerCollection;
+    private Collection<Answer> answers;
     @JoinColumn(name = "survey_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private PostSurvey surveyId;

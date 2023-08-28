@@ -51,7 +51,7 @@ public class QuestionOption implements Serializable {
     @ManyToOne(optional = false)
     private Question questionId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "questionOptionId")
-    private Collection<AnswerOption> answerOptionCollection;
+    private Collection<AnswerOption> answerOptions;
 
     @Override
     public String toString() {

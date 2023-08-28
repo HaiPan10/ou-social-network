@@ -46,9 +46,9 @@ public class Group implements Serializable {
     @Column(name = "group_name")
     private String groupName;
     @OneToMany(mappedBy = "groupId")
-    private Collection<PostInvitation> postInvitationCollection;
+    private Collection<PostInvitation> postInvitations;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "groupId")
-    private Collection<GroupUser> groupUserCollection;
+    private Collection<GroupUser> groupUsers;
 
     @Override
     public String toString() {
