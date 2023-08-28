@@ -288,6 +288,69 @@ CREATE TABLE `answer_option` (
     
 )   ENGINE=INNODB;
 
+DROP TABLE IF EXISTS `ou-social-network`.`group`;
+CREATE TABLE `group` (
+    id INT UNSIGNED NOT NULL,
+    group_name VARCHAR(100) NOT NULL,
+
+    PRIMARY KEY (id)
+    
+)   ENGINE=INNODB;
+
+DROP TABLE IF EXISTS `ou-social-network`.`group_user`;
+CREATE TABLE `group_user` (
+    id INT UNSIGNED NOT NULL,
+    group_id INT UNSIGNED NOT NULL,
+    user_id INT UNSIGNED NOT NULL,
+
+    PRIMARY KEY (id),
+    INDEX(group_id),
+    INDEX(user_id),
+    FOREIGN KEY (group_id)
+		REFERENCES `group`(id)
+        ON DELETE CASCADE,
+	FOREIGN KEY (user_id)
+		REFERENCES user(id)
+        ON DELETE CASCADE
+    
+)   ENGINE=INNODB;
+
+DROP TABLE IF EXISTS `ou-social-network`.`post_invitation`;
+CREATE TABLE `post_invitation` (
+    id INT UNSIGNED NOT NULL,
+    group_id INT UNSIGNED,
+    event_name VARCHAR(250),
+    start_at DATETIME,
+
+    PRIMARY KEY (id),
+    INDEX(group_id),
+    FOREIGN KEY (group_id)
+		REFERENCES `group`(id)
+        ON DELETE CASCADE,
+	FOREIGN KEY (id)
+		REFERENCES post(id)
+        ON DELETE CASCADE
+    
+)   ENGINE=INNODB;
+
+DROP TABLE IF EXISTS `ou-social-network`.`post_invitation_user`;
+CREATE TABLE `post_invitation_user` (
+    id INT UNSIGNED NOT NULL,
+    user_id INT UNSIGNED NOT NULL,
+    post_invitation_id INT UNSIGNED NOT NULL,
+
+    PRIMARY KEY (id),
+    INDEX(user_id),
+    INDEX(post_invitation_id),
+    FOREIGN KEY (post_invitation_id)
+		REFERENCES post_invitation(id)
+        ON DELETE CASCADE,
+	FOREIGN KEY (user_id)
+		REFERENCES user(id)
+        ON DELETE CASCADE
+    
+)   ENGINE=INNODB;
+
 -- INSERT default rows after created
 INSERT INTO role(name) VALUES("ROLE_FORMER_STUDENT");
 INSERT INTO role(name) VALUES("ROLE_TEACHER");
