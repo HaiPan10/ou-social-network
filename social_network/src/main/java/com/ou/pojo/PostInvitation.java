@@ -55,7 +55,7 @@ public class PostInvitation implements Serializable {
     private Collection<PostInvitationUser> postInvitationUserCollection;
     @JoinColumn(name = "group_id", referencedColumnName = "id")
     @ManyToOne
-    private Group1 groupId;
+    private Group groupId;
 
     public PostInvitation() {
     }
@@ -97,11 +97,11 @@ public class PostInvitation implements Serializable {
         this.postInvitationUserCollection = postInvitationUserCollection;
     }
 
-    public Group1 getGroupId() {
+    public Group getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(Group1 groupId) {
+    public void setGroupId(Group groupId) {
         this.groupId = groupId;
     }
 

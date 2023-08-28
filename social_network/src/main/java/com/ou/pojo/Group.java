@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Group1.findAll", query = "SELECT g FROM Group1 g"),
     @NamedQuery(name = "Group1.findById", query = "SELECT g FROM Group1 g WHERE g.id = :id"),
     @NamedQuery(name = "Group1.findByGroupName", query = "SELECT g FROM Group1 g WHERE g.groupName = :groupName")})
-public class Group1 implements Serializable {
+public class Group implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -49,14 +49,14 @@ public class Group1 implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "groupId")
     private Collection<GroupUser> groupUserCollection;
 
-    public Group1() {
+    public Group() {
     }
 
-    public Group1(Integer id) {
+    public Group(Integer id) {
         this.id = id;
     }
 
-    public Group1(Integer id, String groupName) {
+    public Group(Integer id, String groupName) {
         this.id = id;
         this.groupName = groupName;
     }
@@ -105,10 +105,10 @@ public class Group1 implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Group1)) {
+        if (!(object instanceof Group)) {
             return false;
         }
-        Group1 other = (Group1) object;
+        Group other = (Group) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
