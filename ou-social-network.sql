@@ -317,7 +317,7 @@ CREATE TABLE `group_user` (
 
 DROP TABLE IF EXISTS `ou-social-network`.`post_invitation`;
 CREATE TABLE `post_invitation` (
-    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    id INT UNSIGNED NOT NULL,
     group_id INT UNSIGNED,
     event_name VARCHAR(250),
     start_at DATETIME,
