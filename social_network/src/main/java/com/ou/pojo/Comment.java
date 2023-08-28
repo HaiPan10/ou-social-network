@@ -48,7 +48,7 @@ public class Comment implements Serializable {
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
     private Date createdDate;
 
-     @Column(name = "updated_at")
+    @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
     private Date updatedDate;
