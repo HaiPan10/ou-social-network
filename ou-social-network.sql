@@ -370,3 +370,8 @@ VALUES (1, 'TP.HCM', 'Trường Đại học Mở', '1993-07-26',
 INSERT INTO reaction(name) VALUES ('Thích');
 INSERT INTO reaction(name) VALUES ('Haha');
 INSERT INTO reaction(name) VALUES ('Tim');
+
+-- Questions type
+INSERT INTO question_type(type) VALUES ('Multiple choice question');
+INSERT INTO question_type(type) VALUES ('Input text question');
+INSERT INTO question_type(type) VALUES ('Checkbox question');
