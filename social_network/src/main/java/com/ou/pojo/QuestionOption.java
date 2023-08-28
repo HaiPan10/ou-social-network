@@ -52,10 +52,12 @@ public class QuestionOption implements Serializable {
     private Question questionId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "questionOptionId")
     private Collection<AnswerOption> answerOptions;
-
     @Override
     public String toString() {
-        return "com.ou.pojo.QuestionOption[ id=" + id + " ]";
+        return "QuestionOption [value=" + value + ", questionOrder=" + questionOrder + ", questionId=" + questionId
+                + "]";
     }
+
+    
     
 }

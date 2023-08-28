@@ -27,7 +27,7 @@ public class PostReactionServiceImpl implements PostReactionService {
             returnPost.setCurrentReaction(reactionOptional.get().getReactionId());
         }
         returnPost.setReactionTotal(postReactions.stream()
-        .collect(Collectors.groupingBy(PostReaction::getReactionId, Collectors.counting())));
+        .collect(Collectors.groupingBy(postReaction -> postReaction.getReactionId().getId(), Collectors.counting())));
     }
 
     @Override

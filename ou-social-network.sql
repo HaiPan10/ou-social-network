@@ -288,8 +288,8 @@ CREATE TABLE `answer_option` (
     
 )   ENGINE=INNODB;
 
-DROP TABLE IF EXISTS `ou-social-network`.`group`;
-CREATE TABLE `group` (
+DROP TABLE IF EXISTS `ou-social-network`.`invitation_group`;
+CREATE TABLE `invitation_group` (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     group_name VARCHAR(100) NOT NULL,
 
@@ -307,7 +307,7 @@ CREATE TABLE `group_user` (
     INDEX(group_id),
     INDEX(user_id),
     FOREIGN KEY (group_id)
-		REFERENCES `group`(id)
+		REFERENCES `invitation_group`(id)
         ON DELETE CASCADE,
 	FOREIGN KEY (user_id)
 		REFERENCES user(id)
@@ -325,7 +325,7 @@ CREATE TABLE `post_invitation` (
     PRIMARY KEY (id),
     INDEX(group_id),
     FOREIGN KEY (group_id)
-		REFERENCES `group`(id)
+		REFERENCES `invitation_group`(id)
         ON DELETE CASCADE,
 	FOREIGN KEY (id)
 		REFERENCES post(id)

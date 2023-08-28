@@ -16,12 +16,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.configs.JwtService;
+import com.ou.pojo.Account;
+import com.ou.pojo.FakePost;
 import com.ou.pojo.Post;
 import com.ou.pojo.User;
 import com.ou.service.interfaces.PostService;
@@ -37,13 +40,13 @@ public class ApiPostController {
     @Autowired 
     private PostService postService;
 
-    @Autowired
-    private WebAppValidator webAppValidator;
+    // @Autowired
+    // private WebAppValidator webAppValidator;
 
-    @InitBinder()
-    public void initBinderWeb(WebDataBinder binder) {
-        binder.setValidator(webAppValidator);
-    }
+    // @InitBinder()
+    // public void initBinderWeb(WebDataBinder binder) {
+    //     binder.setValidator(webAppValidator);
+    // }
     @Autowired
     private JwtService jwtService;
 
@@ -61,7 +64,7 @@ public class ApiPostController {
     @PostMapping
     ResponseEntity<Object> update(List<MultipartFile> images, @Valid Post post, boolean isEditImage,
      BindingResult bindingResult, HttpServletRequest httpServletRequest) throws Exception {
-        webAppValidator.validate(post, bindingResult);
+        // webAppValidator.validate(post, bindingResult);
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body(ValidationUtils.getInvalidMessage(bindingResult));
         }

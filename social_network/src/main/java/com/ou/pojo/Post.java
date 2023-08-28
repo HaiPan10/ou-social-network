@@ -77,7 +77,7 @@ public class Post implements Serializable {
     private List<Comment> commentList;
 
     @Transient
-    private Map<Reaction, Long> reactionTotal;
+    private Map<Integer, Long> reactionTotal;
     @Transient
     private Integer commentTotal;
     @Override

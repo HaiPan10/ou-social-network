@@ -58,10 +58,12 @@ public class Question implements Serializable {
     @JoinColumn(name = "question_type_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private QuestionType questionTypeId;
-
     @Override
     public String toString() {
-        return "com.ou.pojo.Question[ id=" + id + " ]";
+        return "Question [questionText=" + questionText + ", isMandatory=" + isMandatory + ", questionOrder="
+                + questionOrder + ", questionOptions=" + questionOptions + ", questionTypeId=" + questionTypeId + "]";
     }
+
+    
     
 }

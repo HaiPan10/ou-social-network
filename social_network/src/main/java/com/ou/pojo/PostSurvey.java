@@ -61,10 +61,12 @@ public class PostSurvey implements Serializable {
     @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private Post post;
-
     @Override
     public String toString() {
-        return "com.ou.pojo.PostSurvey[ id=" + id + " ]";
+        return "PostSurvey [surveyTitle=" + surveyTitle + ", surveyStatus=" + surveyStatus + ", questions=" + questions
+                + "]";
     }
+
+    
     
 }

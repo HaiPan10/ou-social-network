@@ -98,12 +98,14 @@ export const Post = ({post, posts, setPosts}) => {
     }
 
     const getReactionTotal = (reactionId) => {
-      for (const reaction in post.reactionTotal) {
-        if (parseInt(reaction.match(/id=(\d+)/)[1]) === reactionId) {
-          return post.reactionTotal[reaction]
-        }
-      }
-      return 0
+      // for (const reaction in post.reactionTotal) {
+      //   if (parseInt(reaction.match(/id=(\d+)/)[1]) === reactionId) {
+      //     return post.reactionTotal[reaction]
+      //   }
+      // }
+      // return 0
+      const total = post.reactionTotal[reactionId];
+      return total !== undefined ? total : 0;
     }
 
     const [like, setLike] = useState(getReactionTotal(1))

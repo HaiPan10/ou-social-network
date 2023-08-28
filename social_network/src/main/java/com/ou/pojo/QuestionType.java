@@ -48,7 +48,8 @@ public class QuestionType implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ou.pojo.QuestionType[ id=" + id + " ]";
+        return "QuestionType [type=" + type;
     }
+
     
 }
