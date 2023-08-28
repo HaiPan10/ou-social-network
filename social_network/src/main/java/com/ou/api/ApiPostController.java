@@ -24,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.configs.JwtService;
 import com.ou.pojo.Account;
-import com.ou.pojo.FakePost;
 import com.ou.pojo.Post;
 import com.ou.pojo.User;
 import com.ou.service.interfaces.PostService;
