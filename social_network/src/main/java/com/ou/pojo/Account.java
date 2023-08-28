@@ -21,6 +21,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.Basic;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,22 +43,24 @@ import lombok.ToString;
 @Table(name = "account")
 public class Account implements Serializable{
 
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
+    @Column(name = "email")
+    private String email;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 300)
+    @Column(name = "password")
+    private String password;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
-    @NotBlank(message = "{account.email.notBlank}")
-    @Email(message = "{account.email.invalid}")
-    @Size(min = 1, message = "{account.email.invalidSize}")
-    @Column(name = "email")
-    private String email;
-
-    @NotBlank(message = "{account.password.notBlank}")
-    @Size(min = 1, message = "{account.password.invalidSize}")
-    @Column(name = "password")
-    private String password;
 
     @Transient
     private String confirmPassword;
@@ -84,6 +88,22 @@ public class Account implements Serializable{
     public Account(Integer id, String email, String password) {
         this.id = id;
         this.email = email;
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
         this.password = password;
     }
 }

@@ -20,6 +20,11 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ou.newpojo.GroupUser;
+import com.ou.newpojo.PostInvitationUser;
+import com.ou.newpojo.Response;
+import javax.persistence.Basic;
+import javax.xml.bind.annotation.XmlTransient;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,22 +40,28 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "user")
 public class User implements Serializable {
+
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
+    @Column(name = "first_name")
+    private String firstName;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 45)
+    @Column(name = "last_name")
+    private String lastName;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    private Collection<Response> responseCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    private Collection<PostInvitationUser> postInvitationUserCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    private Collection<GroupUser> groupUserCollection;
     @Id
     // @NotNull
     @Column(name = "id")
     private Integer id;
 
-    @NotBlank(message = "{user.firstName.notBlank}")
-    @NotNull
-    @Size(min = 1, max = 45, message = "{user.firstName.invalidSize}")
-    @Column(name = "first_name")
-    private String firstName;
-
-    @NotBlank(message = "{user.lastName.notBlank}")
-    @NotNull
-    @Size(min = 1, max = 45, message = "{user.lastName.invalidSize}")
-    @Column(name = "last_name")
-    private String lastName;
 
     @Column(name = "dob")
     @Temporal(TemporalType.TIMESTAMP)
@@ -97,6 +108,49 @@ public class User implements Serializable {
 
     public User(Integer id) {
         this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    @XmlTransient
+    public Collection<Response> getResponseCollection() {
+        return responseCollection;
+    }
+
+    public void setResponseCollection(Collection<Response> responseCollection) {
+        this.responseCollection = responseCollection;
+    }
+
+    @XmlTransient
+    public Collection<PostInvitationUser> getPostInvitationUserCollection() {
+        return postInvitationUserCollection;
+    }
+
+    public void setPostInvitationUserCollection(Collection<PostInvitationUser> postInvitationUserCollection) {
+        this.postInvitationUserCollection = postInvitationUserCollection;
+    }
+
+    @XmlTransient
+    public Collection<GroupUser> getGroupUserCollection() {
+        return groupUserCollection;
+    }
+
+    public void setGroupUserCollection(Collection<GroupUser> groupUserCollection) {
+        this.groupUserCollection = groupUserCollection;
     }
 
     

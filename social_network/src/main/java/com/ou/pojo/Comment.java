@@ -18,6 +18,7 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.JoinColumns;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,6 +34,17 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "comment")
 public class Comment implements Serializable {
+
+    @JoinColumns({
+        @JoinColumn(name = "post_id", referencedColumnName = "id"),
+        @JoinColumn(name = "post_id", referencedColumnName = "id")})
+    @ManyToOne(optional = false)
+    private Post post;
+    @JoinColumns({
+        @JoinColumn(name = "user_id", referencedColumnName = "id"),
+        @JoinColumn(name = "user_id", referencedColumnName = "id")})
+    @ManyToOne(optional = false)
+    private User user;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -66,4 +78,20 @@ public class Comment implements Serializable {
         this.id = id;
         this.content = content;
     }    
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

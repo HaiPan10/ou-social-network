@@ -23,6 +23,9 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ou.newpojo.PostInvitation;
+import com.ou.newpojo.PostSurvey;
+import javax.persistence.OneToOne;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,6 +41,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "post")
 public class Post implements Serializable {
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "post")
+    private PostInvitation postInvitation;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "post")
+    private PostSurvey postSurvey;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -89,5 +97,21 @@ public class Post implements Serializable {
 
     public Post(Integer id){
         this.id = id;
+    }
+
+    public PostInvitation getPostInvitation() {
+        return postInvitation;
+    }
+
+    public void setPostInvitation(PostInvitation postInvitation) {
+        this.postInvitation = postInvitation;
+    }
+
+    public PostSurvey getPostSurvey() {
+        return postSurvey;
+    }
+
+    public void setPostSurvey(PostSurvey postSurvey) {
+        this.postSurvey = postSurvey;
     }
 }

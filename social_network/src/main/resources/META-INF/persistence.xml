@@ -12,6 +12,17 @@
     <class>com.ou.pojo.Account</class>
     <class>com.ou.pojo.ImageInPost</class>
     <class>com.ou.pojo.UserStudent</class>
+    <class>com.ou.newpojo.PostSurvey</class>
+    <class>com.ou.newpojo.QuestionType</class>
+    <class>com.ou.newpojo.Question</class>
+    <class>com.ou.newpojo.AnswerOption</class>
+    <class>com.ou.newpojo.Answer</class>
+    <class>com.ou.newpojo.Group1</class>
+    <class>com.ou.newpojo.GroupUser</class>
+    <class>com.ou.newpojo.QuestionOption</class>
+    <class>com.ou.newpojo.Response</class>
+    <class>com.ou.newpojo.PostInvitationUser</class>
+    <class>com.ou.newpojo.PostInvitation</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://34.101.138.124:3306/ou-social-network?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
