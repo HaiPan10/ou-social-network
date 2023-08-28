@@ -1,12 +1,17 @@
 package com.ou.api;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ou.pojo.Post;
 import com.ou.service.interfaces.CloudinaryService;
 
 @RestController
@@ -30,4 +35,9 @@ public class TestController {
     // public ResponseEntity<Object> deleteImage() throws IOException {
     //     return ResponseEntity.ok().body(uploadFileService.deleteImage());
     // }
+
+    @PostMapping("posts")
+    public ResponseEntity<?> upload(@RequestBody Map<String, Object> post){
+        return ResponseEntity.ok().body(post);
+    }
 }
