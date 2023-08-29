@@ -37,7 +37,7 @@ public class TestController {
     // }
 
     @PostMapping("posts")
-    public ResponseEntity<?> uploadSurvey(@RequestBody Post post){
+    public ResponseEntity<?> uploadSurvey(@RequestBody Post post) {
         return ResponseEntity.ok().body(post);
     }
 }

@@ -66,7 +66,4 @@ public class PostSurvey implements Serializable {
         return "PostSurvey [surveyTitle=" + surveyTitle + ", surveyStatus=" + surveyStatus + ", questions=" + questions
                 + "]";
     }
-
-    
-    
 }

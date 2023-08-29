@@ -80,11 +80,13 @@ public class Post implements Serializable {
     private Map<Integer, Long> reactionTotal;
     @Transient
     private Integer commentTotal;
+    
     @Override
     public String toString() {
         return "Post [id=" + id + ", content=" + content + ", isActiveComment=" + isActiveComment + ", imageInPostList="
-                + imageInPostList + "]";
+                + imageInPostList + ", postSurvey=" + postSurvey + ", postInvitation=" + postInvitation + "]";
     }
+
     @Transient
     private Reaction currentReaction;
 
