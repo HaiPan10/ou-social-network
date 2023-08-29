@@ -10,6 +10,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -52,7 +53,7 @@ public class Question implements Serializable {
     private Boolean isMandatory;
     @Column(name = "question_order")
     private Integer questionOrder;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "questionId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "questionId", fetch = FetchType.EAGER)
     private List<QuestionOption> questionOptions;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "questionId")
     private List<Answer> answers;

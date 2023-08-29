@@ -54,4 +54,13 @@ public class TestController {
     public ResponseEntity<?> list() {
         return ResponseEntity.ok().body(accountService.list());
     }
+
+    @GetMapping(path = "accounts/{id}")
+    public ResponseEntity<?> list(Integer id) {
+        try {
+            return ResponseEntity.ok().body(postService.retrieve(id));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }
