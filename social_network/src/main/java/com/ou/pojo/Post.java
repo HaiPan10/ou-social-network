@@ -28,6 +28,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
@@ -38,6 +39,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Table(name = "post")
+@ToString
 public class Post implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -80,11 +82,11 @@ public class Post implements Serializable {
     private Map<Integer, Long> reactionTotal;
     @Transient
     private Integer commentTotal;
-    @Override
-    public String toString() {
-        return "Post [id=" + id + ", content=" + content + ", isActiveComment=" + isActiveComment + ", imageInPostList="
-                + imageInPostList + "]";
-    }
+    // @Override
+    // public String toString() {
+    //     return "Post [id=" + id + ", content=" + content + ", isActiveComment=" + isActiveComment + ", imageInPostList="
+    //             + imageInPostList + "]";
+    // }
     @Transient
     private Reaction currentReaction;
 

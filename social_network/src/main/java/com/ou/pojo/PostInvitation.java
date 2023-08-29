@@ -18,7 +18,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -41,7 +40,6 @@ public class PostInvitation implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @NotNull
     @Column(name = "id")
     private Integer id;
     @Size(max = 250)

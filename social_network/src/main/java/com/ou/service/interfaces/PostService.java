@@ -18,4 +18,5 @@ public interface PostService {
     List<Post> loadNewFeed(Integer currentUserId, @RequestParam Map<String, String> params) throws Exception;
     Integer countPosts(Map<String, String> params);
     List<Post> search(Map<String, String> params);
+    Post uploadPostSurvey(Post post, Integer userId) throws Exception;
 }

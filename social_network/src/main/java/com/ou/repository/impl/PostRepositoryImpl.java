@@ -33,7 +33,7 @@ import com.ou.pojo.User;
 import com.ou.repository.interfaces.PostRepository;
 
 @Repository
-@Transactional
+@Transactional(rollbackOn = Exception.class)
 public class PostRepositoryImpl implements PostRepository {
     @Autowired
     private LocalSessionFactoryBean sessionFactoryBean;

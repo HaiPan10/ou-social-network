@@ -13,7 +13,7 @@
     <class>com.ou.pojo.ImageInPost</class>
     <class>com.ou.pojo.UserStudent</class>
     <class>com.ou.pojo.Answer</class>
-    <class>com.ou.pojo.Group1</class>
+    <class>com.ou.pojo.InvitationGroup</class>
     <class>com.ou.pojo.QuestionType</class>
     <class>com.ou.pojo.Question</class>
     <class>com.ou.pojo.PostInvitation</class>

@@ -5,8 +5,9 @@
 package com.ou.pojo;
 
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,6 +27,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
@@ -37,6 +39,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class PostSurvey implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -54,18 +57,18 @@ public class PostSurvey implements Serializable {
     @Column(name = "survey_status")
     private String surveyStatus;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "surveyId")
-    private Collection<Question> questions;
+    private List<Question> questions;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "surveyId")
-    private Collection<Response> responses;
+    private List<Response> responses;
     @JsonIgnore
     @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private Post post;
-    @Override
-    public String toString() {
-        return "PostSurvey [surveyTitle=" + surveyTitle + ", surveyStatus=" + surveyStatus + ", questions=" + questions
-                + "]";
-    }
+    // @Override
+    // public String toString() {
+    //     return "PostSurvey [surveyTitle=" + surveyTitle + ", surveyStatus=" + surveyStatus + ", questions=" + questions
+    //             + "]";
+    // }
 
     
     
