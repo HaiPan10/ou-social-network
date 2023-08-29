@@ -269,4 +269,9 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.countAccounts(params);
     }
 
+    @Override
+    public List<Object[]> list() {
+        return accountRepository.list();
+    }
+
 }

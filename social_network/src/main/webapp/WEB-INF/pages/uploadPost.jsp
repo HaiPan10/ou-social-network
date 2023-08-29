@@ -355,7 +355,7 @@
             let data = await response.json();
             console.log(data);
 
-            if(reponse.ok){
+            if(response.ok){
 
             } else {
                 alert("Lỗi");

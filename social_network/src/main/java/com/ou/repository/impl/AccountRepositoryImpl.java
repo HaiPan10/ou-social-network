@@ -232,4 +232,18 @@ public class AccountRepositoryImpl implements AccountRepository {
         return Integer.parseInt(query.getSingleResult().toString());
 
     }
+
+    @Override
+    public List<Object[]> list() {
+        Session session = sessionFactoryBean.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Object[]> criteriaQuery = builder.createQuery(Object[].class);
+        Root<Account> root = criteriaQuery.from(Account.class);
+        Join<Account, User> join = root.join("user");
+
+        criteriaQuery.multiselect(root.get("id"), root.get("email"), builder.function("concat", String.class,
+                join.get("lastName"), builder.literal(" "), join.get("firstName")), join.get("avatar"));
+        Query query = session.createQuery(criteriaQuery);
+        return query.getResultList();
+    }
 }

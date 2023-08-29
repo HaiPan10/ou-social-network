@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ou.service.interfaces.AccountService;
 import com.ou.service.interfaces.CloudinaryService;
 import com.ou.service.interfaces.PostService;
 
@@ -19,6 +20,8 @@ public class TestController {
     CloudinaryService uploadFileService;
     @Autowired
     private PostService postService;
+    @Autowired
+    private AccountService accountService;
 
     @GetMapping("beans")
     public ResponseEntity<String> retrives() {
@@ -46,4 +49,9 @@ public class TestController {
     //         return ResponseEntity.badRequest().body(e.getMessage());
     //     }
     // }
+
+    @GetMapping(path = "accounts")
+    public ResponseEntity<?> list() {
+        return ResponseEntity.ok().body(accountService.list());
+    }
 }
