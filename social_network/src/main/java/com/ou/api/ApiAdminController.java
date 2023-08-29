@@ -46,8 +46,8 @@ public class ApiAdminController {
         }
     }
 
-    // @PostMapping(path = "posts/upload")
-    // ResponseEntity<Object> uploadPost(@RequestBody Post postSurvey){
-    //     return ResponseEntity.ok().body(postSurvey);
-    // }
+    @PostMapping("posts/upload_survey")
+    public ResponseEntity<?> uploadSurvey(@RequestBody Post post) {
+        return ResponseEntity.ok().body(post);
+    }
 }
