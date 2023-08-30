@@ -241,6 +241,11 @@ public class AccountRepositoryImpl implements AccountRepository {
         Root<Account> root = criteriaQuery.from(Account.class);
         Join<Account, User> join = root.join("user");
 
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(builder.equal(root.get("status"), "ACTIVE"));
+        predicates.add(builder.equal(root.get("status"), "PASSWORD_CHANGE_REQUIRED"));
+        criteriaQuery.where(builder.or(predicates.toArray(Predicate[]::new)));
+
         criteriaQuery.multiselect(root.get("id"), root.get("email"), builder.function("concat", String.class,
                 join.get("lastName"), builder.literal(" "), join.get("firstName")), join.get("avatar"));
         Query query = session.createQuery(criteriaQuery);

@@ -67,9 +67,7 @@
                     <span class="input-group-text"
                         ><i class="bx bx-heading"></i
                     ></span>
-                    <input
-                        type="text" class="form-control" maxlength="100" name="surveyTitle" required
-                    ></input>
+                    <input type="text" class="form-control" maxlength="100" name="surveyTitle" required></input>
                     </div>
                 </div>
                 <div class="mb-3">
@@ -78,11 +76,7 @@
                     <span class="input-group-text"
                         ><i class="bx bx-bar-chart-alt-2"></i
                     ></span>
-                    <textarea name="content"
-                        class="form-control"
-                        maxlength="250"
-                        required
-                    ></textarea>
+                    <textarea name="content" class="form-control" maxlength="250"></textarea>
                     </div>
                 </div>
                 <div class="form-check form-switch mb-2">
@@ -117,9 +111,7 @@
                   <label class="form-label">Tên sự kiện</label>
                   <div class="input-group input-group-merge">
                     <span class="input-group-text"><i class='bx bx-calendar-event'></i></span>
-                    <input
-                      type="text" class="form-control" maxlength="100" name="surveyTitle" required
-                    ></input>
+                    <input type="text" class="form-control" maxlength="100" name="eventName" required></input>
                   </div>
                 </div>
                 <div class="mb-3">
@@ -128,13 +120,13 @@
                     <span class="input-group-text"
                       ><i class="bx bx-envelope"></i
                     ></span>
-                    <textarea
-                      class="form-control"
-                      maxlength="250"
-                    ></textarea>
+                    <textarea class="form-control" maxlength="250" name="content"></textarea>
                   </div>                          
                 </div>
-                <input class="form-check-input" type="hidden"/>
+                <div class="mb-3">
+                    <label class="col-md-2 col-form-label">Ngày diễn ra</label>
+                    <input class="form-control" type="datetime-local" required name="startAt"/>
+                  </div>
                 <div class="mb-3">
                   <label class="form-label">Người nhận thư mời</label>
                   <div class="input-group input-group-merge">
@@ -153,58 +145,48 @@
                     </div>
                   </div>
                 </div>
-                <div class="mb-3">
-                  <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" id="dropDownParticipant">
-                  </button>
-                  <ul class="dropdown-menu" id="dropDownParticipantMenu" style="cursor: pointer;">
-                    <li><div class="dropdown-item" data-value="everyone">Mọi người</div></li>
-                    <li><div class="dropdown-item" data-value="personal">Cá nhân</div></li>
-                    <li><div class="dropdown-item" data-value="group">Nhóm</div></li>
-                    <li><div class="dropdown-item" data-value="new_group">Tự chỉ định</div></li>
-                  </ul>
+                <div class="mb-3 d-flex" style="gap: 10px;">
+                    <div>
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" id="dropDownParticipant">
+                        </button>
+                        <ul class="dropdown-menu" id="dropDownParticipantMenu" style="cursor: pointer;">
+                          <li><div class="dropdown-item" data-value="everyone">Mọi người</div></li>
+                          <li><div class="dropdown-item" data-value="personal">Cá nhân</div></li>
+                          <li><div class="dropdown-item" data-value="group">Nhóm</div></li>
+                          <li><div class="dropdown-item" data-value="new_group">Tự chỉ định</div></li>
+                        </ul>
+                    </div>
 
-                  <div id="personalDropDown" class="dropdown" style="display: none;">
-                    <button type="button" id="personalDropDownBtn" class="btn btn-outline-secondary dropdown-toggle">Chọn người nhận</button>
-                    <div id="personalDropDownMenu" class="dropdown-content">
-                      <input type="text" placeholder="Tìm kiếm.." id="personalInput" onkeyup="autoComplete()">
-                      <div class="user-row" id="user_1">
-                        <div class="user-column">
-                          <img src="../assets/img/avatars/1.png" alt="">
+                    <div id="personalDropDown" class="dropdown" style="display: none;">
+                        <button type="button" id="personalDropDownBtn" class="btn btn-outline-secondary dropdown-toggle">Chọn người nhận</button>
+                        <div id="personalDropDownMenu" class="dropdown-content">
+                        <input type="text" placeholder="Tìm kiếm.." id="personalInput" onkeyup="autoComplete()">
+                        <c:forEach items="${accountList}" var="a">
+                            <div class="user-row" id="user_${a[0]}">
+                                <div class="user-column">
+                                <img src="${a[3]}" alt="">
+                                </div>
+                                <div class="user-column">
+                                <div class="fullName">${a[2]}</div>
+                                <div class="mail">${a[1]}</div>
+                                </div>
+                            </div>
+                        </c:forEach>
                         </div>
-                        <div class="user-column">
-                          <div class="fullName">Nguyễn Văn A</div>
-                          <div class="mail">VanThuKhoa@gmail.com</div>
-                        </div>
-                      </div>
-                      <div class="user-row" id="user_2">
-                        <div class="user-column">
-                          <img src="../assets/img/avatars/1.png" alt="">
-                        </div>
-                        <div class="user-column">
-                          <div class="fullName">Nguyễn Văn B</div>
-                          <div class="mail">bNguyen_@gmail.com</div>
-                        </div>
-                      </div>
-                      <div class="user-row" id="user_3">
-                        <div class="user-column">
-                          <img src="../assets/img/avatars/1.png" alt="">
-                        </div>
-                        <div class="user-column">
-                          <div class="fullName">Lại Bình C</div>
-                          <div class="mail">pla0809@gmail.com</div>
-                        </div>
-                      </div>
-                      <div class="user-row" id="user_4">
-                        <div class="user-column">
-                          <img src="../assets/img/avatars/1.png" alt="">
-                        </div>
-                        <div class="user-column">
-                          <div class="fullName">Phan Thanh D</div>
-                          <div class="mail">dThanh@gmail.com</div>
-                        </div>
+                    </div>
+                </div>
+                <div class="mb-3" id="save-group-btn" style="display: none;">
+                    <div class="form-check form-switch mb-2">
+                      <input class="form-check-input" id="save-group" type="checkbox"/>
+                      <label class="form-check-label">Lưu nhóm</label>
+                    </div>
+                    <div id="group-name-input" style="display: none;">
+                      <label class="form-label">Tên nhóm</label>
+                      <div class="input-group input-group-merge">
+                        <span class="input-group-text"><i class='bx bxs-group'></i></span>
+                        <input type="text" class="form-control" maxlength="100" name="groupName"></input>
                       </div>
                     </div>
-                  </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Đăng bài</button>
               </form>
@@ -445,28 +427,17 @@
         }
 
         $("#dropDownParticipant").text("Mọi người");
-        $("#dropDownParticipant").click(function () {
-            if ($("#dropDownParticipantMenu").css("display") === "none") {
-            if ($("#dropDownParticipant").text() === "Cá nhân" || $("#dropDownParticipant").text() === "Tự chỉ định") {
-                $("#personalDropDown").show();
-            }
-            } else {
-            $("#personalDropDown").hide();
-            }
-        })
-
-        $("#dropDownParticipantMenu").on("hide", function () {
-            if ($("#dropDownParticipant").text() === "Cá nhân" || $("#dropDownParticipant").text() === "Tự chỉ định") {
-            $("#personalDropDown").show();
-            }
-        });
-
         $("#dropDownParticipantMenu li div").click(function () {
             var selectedText = $(this).text();
             $("#user-box").empty();
 
             if (selectedText === "Cá nhân" || selectedText === "Tự chỉ định") {
                 $("#personalDropDown").fadeIn();
+                if (selectedText === "Tự chỉ định") {
+                    $("#save-group-btn").show();
+                } else {
+                    $("#save-group-btn").hide();
+                }
             } else if (selectedText === "Mọi người") {
                 $("#user-box").append($(`
                 <div class="user-row tiny-box" id="user_1">
@@ -479,6 +450,9 @@
                 </div>
                 `))
                 $("#personalDropDown").fadeOut();
+            } else {
+              $("#personalDropDown").fadeOut();
+              $("#save-group-btn").hide();
             }
             $("#dropDownParticipant").text(selectedText);
         });
@@ -518,6 +492,67 @@
             if (!idList.includes($id)) {
                 $("#user-box").append(htmlCode);
             }
+        })
+
+        $(document).on("click", function(event) {
+          var elementToCheck = $("#personalDropDownMenu");
+          if (elementToCheck.css("display") === "block") {
+            var toggleButton = $("#personalDropDownBtn");
+            if (!elementToCheck.is(event.target) && elementToCheck.has(event.target).length === 0 && !toggleButton.is(event.target)) {
+              elementToCheck.removeClass("show")
+            }
+          }
+        });
+
+        $("#save-group").on("change", function() {
+          let childDivs = $("#user-box").find(".user-row");
+          let idList = [];
+          childDivs.each(function() {
+            idList.push($(this).attr("id"));
+          });
+          if (idList.length > 1) {
+            $(this).toggle(!$("#save-group").checked)
+          } else {
+            $(this).prop("checked", false);
+            alert("Phải có từ 2 người dùng!");
+          }
+          if ($("#save-group").prop("checked")) {
+            $("#group-name-input").show();
+            $("#groupName").attr("required", "required");
+          } else {
+            $("#group-name-input").hide();
+            $("#groupName").removeAttr("required");
+          }
+        })
+
+        $("#upload_invitation_post").submit(function() {
+          event.preventDefault();
+          let form = $("#upload_invitation_post")[0];
+          let formData = new FormData(form);
+          let post = {};
+          post.content = formData.get("content");
+          post.isActiveComment = false;
+          let postInvitation = {};
+          postInvitation.eventName = formData.get("eventName");
+          postInvitation.startAt = formData.get("startAt");
+          if ($("#save-group").prop("checked") && $("#groupName").val().length != 0) {
+            let groupId = {};
+            groupId.groupName = formData.get("groupName");
+            postInvitation.groupId = groupId;
+          }
+          if ($("#dropDownParticipant").text() !== "Mọi người") {
+            let postInvitationUsers = [];
+            let childDivs = $("#user-box").find(".user-row");
+            childDivs.each(function() {
+              let object = {};
+              object.userId = $(this).attr("id").split("_")[1];
+              postInvitationUsers.push(object);
+            });
+            postInvitation.postInvitationUsers = postInvitationUsers;
+          }
+          post.postInvitation = postInvitation;
+          let json = JSON.stringify(post, null, 4);
+          console.log(json);
         })
     });
 

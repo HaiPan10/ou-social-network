@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ou.pojo.Account;
 import com.ou.pojo.Post;
+import com.ou.service.interfaces.AccountService;
 import com.ou.service.interfaces.PostService;
 
 @Controller
@@ -28,6 +30,8 @@ public class PostController {
     private PostService postService;
     @Autowired
     private Environment env;
+    @Autowired
+    private AccountService accountService;
 
     @GetMapping
     public String posts(Model model, @RequestParam Map<String, String> params) {
@@ -71,6 +75,8 @@ public class PostController {
     public String uploadPost(Model model, @RequestParam(name = "status", required = false) String status) {
         Post post = new Post();
         model.addAttribute("post", post);
+        List<Object[]> accountList = accountService.list();
+        model.addAttribute("accountList", accountList);
         if (status != null) {
             model.addAttribute("status", status);
         }
