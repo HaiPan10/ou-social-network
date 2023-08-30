@@ -14,7 +14,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
@@ -31,7 +30,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.ou.pojo.Comment;
 import com.ou.pojo.Post;
 import com.ou.pojo.PostSurvey;
-import com.ou.pojo.Question;
 import com.ou.pojo.User;
 import com.ou.repository.interfaces.PostRepository;
 

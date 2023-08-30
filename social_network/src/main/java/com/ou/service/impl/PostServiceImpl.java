@@ -3,6 +3,7 @@ package com.ou.service.impl;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -16,13 +17,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.pojo.ImageInPost;
+import com.ou.pojo.InvitationGroup;
 import com.ou.pojo.Post;
+import com.ou.pojo.PostInvitation;
+import com.ou.pojo.PostInvitationUser;
 import com.ou.pojo.PostSurvey;
 import com.ou.pojo.Question;
+import com.ou.pojo.User;
 import com.ou.repository.interfaces.PostRepository;
+import com.ou.repository.interfaces.UserRepository;
 import com.ou.service.interfaces.CloudinaryService;
 import com.ou.service.interfaces.CommentService;
 import com.ou.service.interfaces.ImageInPostService;
+import com.ou.service.interfaces.PostInvitationService;
 import com.ou.service.interfaces.PostReactionService;
 import com.ou.service.interfaces.PostService;
 import com.ou.service.interfaces.PostSurveyService;
@@ -46,6 +53,10 @@ public class PostServiceImpl implements PostService {
     private PostSurveyService postSurveyService;
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private PostInvitationService postInvitationService;
 
     @Override
     public Post uploadPost(String postContent, Integer userId, List<MultipartFile> images, boolean isActiveComment)
@@ -182,6 +193,36 @@ public class PostServiceImpl implements PostService {
         questionService.create(postSurvey, questions);
         postSurvey.setQuestions(questions);
         post.setPostSurvey(postSurvey);
+        return post;
+    }
+
+    @Override
+    public Post uploadPostInvitation(Post post, Integer userId) throws Exception {
+        System.out.println("[DEBUG] - START TO CREATE INVITATION POST");
+        post.setCreatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+        post.setUpdatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+        PostInvitation postInvitation = post.getPostInvitation();
+        post.setPostInvitation(null);
+        postRepository.uploadPost(post, userId);
+
+        List<Integer> listUserId = null;
+        List<PostInvitationUser> list = postInvitation.getPostInvitationUsers();
+        if (list != null) {
+            if (list.size() > 0) {
+                listUserId = list.stream()
+                        .map(p -> Integer.valueOf(p.getUserId().getId())).collect(Collectors.toList());
+            } else {
+                throw new Exception("Vui lòng chọn người nhận bài đăng");
+            }
+        }
+
+        List<User> listUsers = userRepository.list(listUserId);
+        postInvitation.setPostInvitationUsers(null);
+        InvitationGroup group = postInvitation.getGroupId();
+        postInvitation.setGroupId(null);
+        postInvitation = postInvitationService.create(post.getId(), postInvitation, listUsers);
+
+        post.setPostInvitation(postInvitation);
         return post;
     }
 }

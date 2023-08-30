@@ -93,7 +93,6 @@ public class Post implements Serializable {
     @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "post")
     private PostSurvey postSurvey;
 
-    @JsonIgnore
     @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "post")
     private PostInvitation postInvitation;
 

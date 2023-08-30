@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
@@ -28,6 +29,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class PostInvitationUser implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -42,9 +44,9 @@ public class PostInvitationUser implements Serializable {
     @ManyToOne(optional = false)
     private User userId;
 
-    @Override
-    public String toString() {
-        return "com.ou.pojo.PostInvitationUser[ id=" + id + " ]";
-    }
+    // @Override
+    // public String toString() {
+    //     return "com.ou.pojo.PostInvitationUser[ id=" + id + " ]";
+    // }
     
 }
