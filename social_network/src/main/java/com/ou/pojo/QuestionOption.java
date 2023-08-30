@@ -5,7 +5,8 @@
 package com.ou.pojo;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +19,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,7 +42,6 @@ public class QuestionOption implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
     @Column(name = "id")
     private Integer id;
     @NotNull
@@ -49,9 +52,10 @@ public class QuestionOption implements Serializable {
     private Integer questionOrder;
     @JoinColumn(name = "question_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
+    @JsonIgnore
     private Question questionId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "questionOptionId")
-    private Collection<AnswerOption> answerOptions;
+    private List<AnswerOption> answerOptions;
     @Override
     public String toString() {
         return "QuestionOption [value=" + value + ", questionOrder=" + questionOrder + ", questionId=" + questionId

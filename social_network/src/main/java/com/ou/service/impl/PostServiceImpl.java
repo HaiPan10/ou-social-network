@@ -17,12 +17,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.pojo.ImageInPost;
 import com.ou.pojo.Post;
+import com.ou.pojo.PostSurvey;
+import com.ou.pojo.Question;
 import com.ou.repository.interfaces.PostRepository;
 import com.ou.service.interfaces.CloudinaryService;
 import com.ou.service.interfaces.CommentService;
 import com.ou.service.interfaces.ImageInPostService;
 import com.ou.service.interfaces.PostReactionService;
 import com.ou.service.interfaces.PostService;
+import com.ou.service.interfaces.PostSurveyService;
+import com.ou.service.interfaces.QuestionService;
 import com.ou.utils.CloudinaryUtils;
 
 @Service
@@ -38,9 +42,14 @@ public class PostServiceImpl implements PostService {
     private CommentService commentService;
     @Autowired
     private CloudinaryService cloudinaryService;
+    @Autowired
+    private PostSurveyService postSurveyService;
+    @Autowired
+    private QuestionService questionService;
 
     @Override
-    public Post uploadPost(String postContent, Integer userId, List<MultipartFile> images, boolean isActiveComment) throws Exception {
+    public Post uploadPost(String postContent, Integer userId, List<MultipartFile> images, boolean isActiveComment)
+            throws Exception {
         Post newPost = new Post();
         if (postContent.length() == 0 && (images == null || images.get(0).getSize() == 0)) {
             throw new Exception("Empty post!");
@@ -66,7 +75,8 @@ public class PostServiceImpl implements PostService {
             posts.forEach(p -> {
                 postReactionService.countReaction(p, currentUserId);
                 p.setCommentTotal(commentService.countComment(p.getId()));
-                p.getImageInPostList().forEach(img -> img.setContentType(String.format("image/%s", CloudinaryUtils.getImageType(img.getImageUrl()))));
+                p.getImageInPostList().forEach(img -> img
+                        .setContentType(String.format("image/%s", CloudinaryUtils.getImageType(img.getImageUrl()))));
             });
             return posts;
         } else {
@@ -79,8 +89,7 @@ public class PostServiceImpl implements PostService {
         Post persistPost = retrieve(post.getId());
         if (!persistPost.getUserId().getId().equals(post.getUserId().getId())) {
             throw new Exception("Not owner");
-        }
-        else if (isEditImage) {
+        } else if (isEditImage) {
             List<ImageInPost> imageInPostList = persistPost.getImageInPostList();
             if (imageInPostList.size() != 0) {
                 imageInPostService.deleteImageInPost(imageInPostList);
@@ -98,6 +107,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post retrieve(Integer postId) throws Exception {
+        System.out.println("[DEBUG] - INSIDE THE POST SERVICE");
         Optional<Post> postOptional = postRepository.retrieve(postId);
         if (postOptional.isPresent()) {
             return postOptional.get();
@@ -112,8 +122,9 @@ public class PostServiceImpl implements PostService {
         if (!persistPost.getUserId().getId().equals(userId) && userId != 1) {
             throw new Exception("Not owner");
         }
-        List<String> oldImageUrls = persistPost.getImageInPostList().stream().map(img -> img.getImageUrl()).collect(Collectors.toList());
-        System.out.println("GOT PERSIST: " + persistPost);        
+        List<String> oldImageUrls = persistPost.getImageInPostList().stream().map(img -> img.getImageUrl())
+                .collect(Collectors.toList());
+        System.out.println("GOT PERSIST: " + persistPost);
         if (postRepository.delete(persistPost)) {
             oldImageUrls.forEach(oldImage -> {
                 try {
@@ -134,7 +145,8 @@ public class PostServiceImpl implements PostService {
             posts.forEach(p -> {
                 postReactionService.countReaction(p, currentUserId);
                 p.setCommentTotal(commentService.countComment(p.getId()));
-                p.getImageInPostList().forEach(img -> img.setContentType(String.format("image/%s", CloudinaryUtils.getImageType(img.getImageUrl()))));
+                p.getImageInPostList().forEach(img -> img
+                        .setContentType(String.format("image/%s", CloudinaryUtils.getImageType(img.getImageUrl()))));
             });
             return posts;
         } else {
@@ -155,5 +167,21 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> search(Map<String, String> params) {
         return postRepository.search(params);
+    }
+
+    @Override
+    public Post uploadPostSurvey(Post post, Integer userId) throws Exception {
+        post.setCreatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+        post.setUpdatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
+        PostSurvey postSurvey = post.getPostSurvey();
+        post.setPostSurvey(null);
+        postRepository.uploadPost(post, userId);
+        List<Question> questions = postSurvey.getQuestions();
+        postSurvey.setQuestions(null);
+        postSurvey = postSurveyService.uploadPostSurvey(post.getId(), postSurvey);
+        questionService.create(postSurvey, questions);
+        postSurvey.setQuestions(questions);
+        post.setPostSurvey(postSurvey);
+        return post;
     }
 }

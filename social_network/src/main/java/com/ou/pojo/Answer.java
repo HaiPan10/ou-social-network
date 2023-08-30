@@ -18,6 +18,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -44,9 +47,11 @@ public class Answer implements Serializable {
     @Size(max = 1000)
     @Column(name = "value")
     private String value;
+    @JsonIgnore
     @JoinColumn(name = "question_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Question questionId;
+    @JsonIgnore
     @JoinColumn(name = "response_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Response responseId;

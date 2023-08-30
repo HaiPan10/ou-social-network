@@ -10,6 +10,7 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -18,7 +19,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -41,7 +41,6 @@ public class PostInvitation implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @NotNull
     @Column(name = "id")
     private Integer id;
     @Size(max = 250)
@@ -57,7 +56,7 @@ public class PostInvitation implements Serializable {
     private InvitationGroup groupId;
     @JsonIgnore
     @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
-    @OneToOne(optional = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     private Post post;
 
     @Override

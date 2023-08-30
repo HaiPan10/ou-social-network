@@ -5,10 +5,12 @@
 package com.ou.pojo;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,12 +18,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
@@ -33,12 +38,12 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Question implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
     @Column(name = "id")
     private Integer id;
     @Size(max = 2000)
@@ -49,20 +54,21 @@ public class Question implements Serializable {
     @Column(name = "question_order")
     private Integer questionOrder;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "questionId")
-    private Collection<QuestionOption> questionOptions;
+    private List<QuestionOption> questionOptions;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "questionId")
-    private Collection<Answer> answers;
+    private List<Answer> answers;
+    @JsonIgnore
     @JoinColumn(name = "survey_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private PostSurvey surveyId;
     @JoinColumn(name = "question_type_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private QuestionType questionTypeId;
-    @Override
-    public String toString() {
-        return "Question [questionText=" + questionText + ", isMandatory=" + isMandatory + ", questionOrder="
-                + questionOrder + ", questionOptions=" + questionOptions + ", questionTypeId=" + questionTypeId + "]";
-    }
+    // @Override
+    // public String toString() {
+    //     return "Question [questionText=" + questionText + ", isMandatory=" + isMandatory + ", questionOrder="
+    //             + questionOrder + ", questionOptions=" + questionOptions + ", questionTypeId=" + questionTypeId + "]";
+    // }
 
     
     
