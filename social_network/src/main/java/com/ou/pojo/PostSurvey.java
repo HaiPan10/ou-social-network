@@ -29,6 +29,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import net.bytebuddy.agent.builder.AgentBuilder.InitializationStrategy.SelfInjection.Eager;
 
 /**
  *
@@ -57,9 +58,12 @@ public class PostSurvey implements Serializable {
     @Size(max = 6)
     @Column(name = "survey_status")
     private String surveyStatus;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "surveyId")
+
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "surveyId")
     private List<Question> questions;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "surveyId")
+
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "surveyId")
     private List<Response> responses;
     @JsonIgnore
     @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)

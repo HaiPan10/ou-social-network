@@ -46,21 +46,29 @@ public class Question implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
+
     @Size(max = 2000)
     @Column(name = "question_text")
     private String questionText;
+
     @Column(name = "is_mandatory")
     private Boolean isMandatory;
+
     @Column(name = "question_order")
     private Integer questionOrder;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "questionId")
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, mappedBy = "questionId")
     private List<QuestionOption> questionOptions;
+
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "questionId")
     private List<Answer> answers;
+
     @JsonIgnore
     @JoinColumn(name = "survey_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private PostSurvey surveyId;
+
     @JoinColumn(name = "question_type_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private QuestionType questionTypeId;

@@ -90,10 +90,11 @@ public class Post implements Serializable {
     @Transient
     private Reaction currentReaction;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "post")
+    @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "post")
     private PostSurvey postSurvey;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "post")
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "post")
     private PostInvitation postInvitation;
 
     public Post(Integer id){

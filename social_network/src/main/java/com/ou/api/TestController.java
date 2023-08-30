@@ -68,6 +68,15 @@ public class TestController {
     //     }
     // }
 
+    @GetMapping(path = "posts/{id}")
+    public ResponseEntity<?> getPost(@PathVariable Integer id) {
+        try {
+            return ResponseEntity.ok().body(postService.retrieve(id));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
     @GetMapping(path = "postSurvey/{id}")
     public ResponseEntity<?> retrievePostSurvey(@PathVariable Integer id) {
         try {

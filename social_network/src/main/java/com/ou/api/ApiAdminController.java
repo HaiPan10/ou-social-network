@@ -19,6 +19,7 @@ import com.ou.pojo.Account;
 import com.ou.pojo.Post;
 import com.ou.service.interfaces.AccountService;
 import com.ou.service.interfaces.PostService;
+import com.ou.service.interfaces.PostSurveyService;
 
 @RestController
 @RequestMapping("admin")
@@ -27,6 +28,8 @@ public class ApiAdminController {
     private AccountService accountService;
     @Autowired
     private PostService postService;
+    @Autowired
+    private PostSurveyService postSurveyService;
 
     @PatchMapping("accounts/update_status")
     public ResponseEntity<?> update(@RequestBody Map<String, String> request){
@@ -52,7 +55,11 @@ public class ApiAdminController {
 
     @PostMapping("posts/upload_survey")
     public ResponseEntity<?> uploadSurvey(@RequestBody Post post) {
-        return ResponseEntity.ok().body(post);
+        try {
+            return ResponseEntity.ok().body(postService.uploadPostSurvey(post, 1));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping(path = "get/accounts")

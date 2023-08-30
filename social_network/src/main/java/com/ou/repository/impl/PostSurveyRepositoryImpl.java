@@ -37,7 +37,7 @@ public class PostSurveyRepositoryImpl implements PostSurveyRepository{
         Session session = sessionFactoryBean.getObject().getCurrentSession();
         PostSurvey postSurvey = session.get(PostSurvey.class, id);
         if(postSurvey != null){
-            System.out.println("[DEBUG] - Post: " + postSurvey);
+            //System.out.println("[DEBUG] - Post: " + postSurvey);
             return Optional.of(postSurvey);
         }
 

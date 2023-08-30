@@ -14,6 +14,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
@@ -29,6 +30,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ou.pojo.Comment;
 import com.ou.pojo.Post;
+import com.ou.pojo.PostSurvey;
+import com.ou.pojo.Question;
 import com.ou.pojo.User;
 import com.ou.repository.interfaces.PostRepository;
 
@@ -112,12 +115,53 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public Optional<Post> retrieve(Integer postId) {
         Session s = sessionFactoryBean.getObject().getCurrentSession();
+        Post persistPost = (Post) s.get(Post.class, postId);
+        PostSurvey persistPostSurvey = persistPost.getPostSurvey();
+        if (persistPostSurvey != null) {
+            Query query = s.createQuery("FROM Question WHERE surveyId.id = :postId");
+            query.setParameter("postId", postId);
+            persistPostSurvey.setQuestions(query.getResultList());
+        }
         try {
-            return Optional.ofNullable((Post) s.get(Post.class, postId));
+            return Optional.ofNullable(persistPost);
         } catch (NoResultException e) {
             return Optional.empty();
         }
     }
+
+    // @Override
+    // public Optional<Post> retrieve(Integer postId) {
+    //     Session s = sessionFactoryBean.getObject().getCurrentSession();
+    //     try {
+    //         return Optional.ofNullable((Post) s.get(Post.class, postId));
+    //     } catch (NoResultException e) {
+    //         return Optional.empty();
+    //     }
+    // }
+
+    // @Override
+    // public Optional<Post> retrieve(Integer postId) {
+    //     Session session = sessionFactoryBean.getObject().getCurrentSession();
+        
+    //     CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+    //     CriteriaQuery<Post> criteriaQuery = criteriaBuilder.createQuery(Post.class);
+    //     Root<Post> root = criteriaQuery.from(Post.class);
+        
+    //     Join<Post, PostSurvey> postSurveyJoin = root.join("postSurvey", JoinType.LEFT);
+    
+    //     postSurveyJoin.fetch("questions", JoinType.LEFT);
+        
+    //     criteriaQuery
+    //         .select(root)
+    //         .where(criteriaBuilder.equal(root.get("id"), postId));
+            
+    //     try {
+    //         Post post = session.createQuery(criteriaQuery).getSingleResult();
+    //         return Optional.ofNullable(post);
+    //     } catch (NoResultException e) {
+    //         return Optional.empty();
+    //     }
+    // }
 
     @Override
     public boolean delete(Post persistPost) {

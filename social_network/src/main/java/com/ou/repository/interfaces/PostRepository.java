@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ou.pojo.Post;
+import com.ou.pojo.Question;
 
 public interface PostRepository {
     Post uploadPost(Post post, Integer userId) throws Exception;
