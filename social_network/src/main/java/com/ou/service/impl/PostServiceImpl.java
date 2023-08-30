@@ -3,6 +3,7 @@ package com.ou.service.impl;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import com.ou.pojo.ImageInPost;
 import com.ou.pojo.InvitationGroup;
 import com.ou.pojo.Post;
 import com.ou.pojo.PostInvitation;
+import com.ou.pojo.PostInvitationUser;
 import com.ou.pojo.PostSurvey;
 import com.ou.pojo.Question;
 import com.ou.pojo.User;
@@ -196,21 +198,30 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post uploadPostInvitation(Post post, Integer userId) throws Exception {
+        System.out.println("[DEBUG] - START TO CREATE INVITATION POST");
         post.setCreatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
         post.setUpdatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
         PostInvitation postInvitation = post.getPostInvitation();
         post.setPostInvitation(null);
         postRepository.uploadPost(post, userId);
 
-        List<Integer> listUserId = postInvitation.getPostInvitationUsers().stream().map(p ->
-            Integer.valueOf(p.getUserId().getId())).collect(Collectors.toList());
+        List<Integer> listUserId = null;
+        List<PostInvitationUser> list = postInvitation.getPostInvitationUsers();
+        if (list != null) {
+            if (list.size() > 0) {
+                listUserId = list.stream()
+                        .map(p -> Integer.valueOf(p.getUserId().getId())).collect(Collectors.toList());
+            } else {
+                throw new Exception("Vui lòng chọn người nhận bài đăng");
+            }
+        }
+
         List<User> listUsers = userRepository.list(listUserId);
         postInvitation.setPostInvitationUsers(null);
-        postInvitation.setId(post.getId());
         InvitationGroup group = postInvitation.getGroupId();
-        postInvitation.setGroupId(null); 
-        postInvitation = postInvitationService.create(userId, postInvitation, listUsers);
-        
+        postInvitation.setGroupId(null);
+        postInvitation = postInvitationService.create(post.getId(), postInvitation, listUsers);
+
         post.setPostInvitation(postInvitation);
         return post;
     }

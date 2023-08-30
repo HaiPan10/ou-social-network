@@ -77,7 +77,9 @@ public class UserRepositoryImpl implements UserRepository {
         Root<User> root = criteriaQuery.from(User.class);
 
         criteriaQuery.select(root);
-        criteriaQuery.where(root.get("id").in(listUserId));
+        if(listUserId != null && listUserId.size() > 0){
+            criteriaQuery.where(root.get("id").in(listUserId));
+        }
         
         Query query = s.createQuery(criteriaQuery);
         return query.getResultList();

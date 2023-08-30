@@ -4,19 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ou.pojo.Post;
-import com.ou.pojo.PostInvitation;
-import com.ou.service.interfaces.AccountService;
 import com.ou.service.interfaces.CloudinaryService;
-import com.ou.service.interfaces.PostInvitationService;
 import com.ou.service.interfaces.PostService;
-import com.ou.service.interfaces.PostSurveyService;
 
 @RestController
 @RequestMapping("/api/test")
@@ -28,11 +23,11 @@ public class TestController {
     @Autowired
     private PostService postService;
     @Autowired
-    private AccountService accountService;
-    @Autowired
-    private PostSurveyService postSurveyService;
-    @Autowired
-    private PostInvitationService postInvitationService;
+    // private AccountService accountService;
+    // @Autowired
+    // private PostSurveyService postSurveyService;
+    // @Autowired
+    // private PostInvitationService postInvitationService;
 
     @GetMapping("beans")
     public ResponseEntity<String> retrives() {
