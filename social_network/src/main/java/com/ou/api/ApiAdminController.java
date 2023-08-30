@@ -66,4 +66,13 @@ public class ApiAdminController {
     public ResponseEntity<?> list() {
         return ResponseEntity.ok().body(accountService.list());
     }
+
+    @PostMapping(path = "posts/upload_invitation")
+    public ResponseEntity<?> uploadInvitation(@RequestBody Post post) {
+        try {
+            return ResponseEntity.ok().body(postService.uploadPostInvitation(post, 1));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

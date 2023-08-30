@@ -51,14 +51,17 @@ public class PostInvitation implements Serializable {
     @Column(name = "start_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date startAt;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "postInvitationId")
     private List<PostInvitationUser> postInvitationUsers;
+
     @JoinColumn(name = "group_id", referencedColumnName = "id")
     @ManyToOne
     private InvitationGroup groupId;
+
     @JsonIgnore
     @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @OneToOne(optional = false)
     private Post post;
 
     @Override

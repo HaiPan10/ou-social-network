@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ou.pojo.Comment;
 import com.ou.pojo.Post;
+import com.ou.pojo.PostInvitation;
 import com.ou.pojo.PostSurvey;
 import com.ou.pojo.User;
 import com.ou.repository.interfaces.PostRepository;
@@ -111,14 +112,23 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public Optional<Post> retrieve(Integer postId) {
+    public Optional<Post> retrieve(Integer postId) throws Exception {
         Session s = sessionFactoryBean.getObject().getCurrentSession();
         Post persistPost = (Post) s.get(Post.class, postId);
+        if (persistPost == null) {
+            throw new Exception("Null post");
+        }
         PostSurvey persistPostSurvey = persistPost.getPostSurvey();
         if (persistPostSurvey != null) {
             Query query = s.createQuery("FROM Question WHERE surveyId.id = :postId");
             query.setParameter("postId", postId);
             persistPostSurvey.setQuestions(query.getResultList());
+        }
+        PostInvitation persistPostInvitation = persistPost.getPostInvitation();
+        if (persistPostInvitation != null) {
+            Query query = s.createQuery("FROM PostInvitationUser WHERE postInvitationId.id = :postId");
+            query.setParameter("postId", postId);
+            persistPostInvitation.setPostInvitationUsers(query.getResultList());
         }
         try {
             return Optional.ofNullable(persistPost);

@@ -13,7 +13,7 @@ public interface PostRepository {
     Post uploadPost(Post post, Integer userId) throws Exception;
     Optional<List<Post>> loadPost(Integer userId, @RequestParam Map<String, String> params);
     boolean update(Post persistPost, Post post);
-    Optional<Post> retrieve(Integer postId);
+    Optional<Post> retrieve(Integer postId) throws Exception;
     boolean delete(Post persistPost);
     Optional<List<Post>> loadNewFeed(@RequestParam Map<String, String> params);
     List<Post> list(Map<String, String> params);

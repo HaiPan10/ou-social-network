@@ -105,6 +105,7 @@
                 <button type="submit" class="btn btn-primary" id="surveySubmit">Đăng bài</button>
             </form>
 
+            <c:url value="/admin/posts/upload_invitation" var="uploadInvitation" />
             <!-- Upload invitation post form -->
             <form id="upload_invitation_post" style="display: none;">
                 <div class="mb-3 pt-5">
@@ -328,41 +329,6 @@
             }
         });
 
-        function deleteQuestion(buttonId) {
-          let currentPos = buttonId.split("_")[1];
-          $(`#question_\${currentPos}`).slideUp(function() {
-            $(this).remove();
-          })
-        }
-
-        function addOption(buttonId) {
-            let currentPos = buttonId.split("_")[1];
-            let nextId = $(`#option-wrapper_\${currentPos}`).children().length + 1;
-            var newOption = $(`
-                <div id="option_\${currentPos}_\${nextId}" class="d-flex pb-2" style="gap: 10px; display: none">
-                <button class="btn btn-danger p-0 px-2" id="delete_option_\${currentPos}_\${nextId}" type="button"><i class='bx bxs-trash' ></i></button>
-                <div class="input-group input-group-merge">
-                    <input type="text" name="value_\${currentPos}_\${nextId}" class="form-control" maxlength="100" placeholder="Nhập tùy chọn" required></input>
-                </div>
-                </div>
-            `)
-            $(`#option-wrapper_\${currentPos}`).append(newOption);
-            newOption.slideDown();
-            document.getElementById(`delete_option_\${currentPos}_\${nextId}`).addEventListener("click", function() {
-            deleteOption(`delete_option_\${currentPos}_\${nextId}`);
-            });
-        }
-
-        function deleteOption(buttonId) {
-            let currentPos = buttonId.split("_")[2];
-            let currentOpt = buttonId.split("_")[3];
-            if ($(`#option-wrapper_\${currentPos}`).children().length > 1) {
-            $(`#option_\${currentPos}_\${currentOpt}`).slideUp(function() {
-                $(this).remove();
-            })
-            }
-        }
-
         $("#upload_survey_post").submit(function(event) {
           event.preventDefault();
           let form = $("#upload_survey_post")[0];
@@ -405,26 +371,6 @@
           let json = JSON.stringify(post);
           uploadSurveyPost(json);
         });
-
-        async function uploadSurveyPost(json){
-            let url = "${uploadSurvey}";
-            let response = await fetch(url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: json
-            })
-
-            let data = await response.json();
-            console.log(data);
-
-            if(response.ok){
-
-            } else {
-                alert("Lỗi");
-            }
-        }
 
         $("#dropDownParticipant").text("Mọi người");
         $("#dropDownParticipantMenu li div").click(function () {
@@ -535,7 +481,7 @@
           let postInvitation = {};
           postInvitation.eventName = formData.get("eventName");
           postInvitation.startAt = formData.get("startAt");
-          if ($("#save-group").prop("checked") && $("#groupName").val().length != 0) {
+          if ($("#save-group").prop("checked") && $("#groupName").val().length() != 0) {
             let groupId = {};
             groupId.groupName = formData.get("groupName");
             postInvitation.groupId = groupId;
@@ -551,10 +497,87 @@
             postInvitation.postInvitationUsers = postInvitationUsers;
           }
           post.postInvitation = postInvitation;
-          let json = JSON.stringify(post, null, 4);
-          console.log(json);
+        //   let json = JSON.stringify(post, null, 4);
+        //   console.log(json);
+          let json = JSON.stringify(post);
+          uploadInvitationPost(json);
         })
     });
+
+    async function uploadInvitationPost(json){
+        let url = "${uploadInvitation}";
+        let response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: json
+        })
+
+        let data = await response.json();
+        console.log(data);
+
+        if(response.ok){
+
+        } else {
+            alert("Lỗi");
+        }
+    }
+
+    async function uploadSurveyPost(json){
+        let url = "${uploadSurvey}";
+        let response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: json
+        })
+
+        let data = await response.json();
+        console.log(data);
+
+        if(response.ok){
+
+        } else {
+            alert("Lỗi");
+        }
+    }
+
+    function deleteQuestion(buttonId) {
+        let currentPos = buttonId.split("_")[1];
+        $(`#question_\${currentPos}`).slideUp(function() {
+        $(this).remove();
+        })
+    }
+
+    function addOption(buttonId) {
+        let currentPos = buttonId.split("_")[1];
+        let nextId = $(`#option-wrapper_\${currentPos}`).children().length + 1;
+        var newOption = $(`
+            <div id="option_\${currentPos}_\${nextId}" class="d-flex pb-2" style="gap: 10px; display: none">
+            <button class="btn btn-danger p-0 px-2" id="delete_option_\${currentPos}_\${nextId}" type="button"><i class='bx bxs-trash' ></i></button>
+            <div class="input-group input-group-merge">
+                <input type="text" name="value_\${currentPos}_\${nextId}" class="form-control" maxlength="100" placeholder="Nhập tùy chọn" required></input>
+            </div>
+            </div>
+        `)
+        $(`#option-wrapper_\${currentPos}`).append(newOption);
+        newOption.slideDown();
+        document.getElementById(`delete_option_\${currentPos}_\${nextId}`).addEventListener("click", function() {
+        deleteOption(`delete_option_\${currentPos}_\${nextId}`);
+        });
+    }
+
+    function deleteOption(buttonId) {
+        let currentPos = buttonId.split("_")[2];
+        let currentOpt = buttonId.split("_")[3];
+        if ($(`#option-wrapper_\${currentPos}`).children().length > 1) {
+        $(`#option_\${currentPos}_\${currentOpt}`).slideUp(function() {
+            $(this).remove();
+        })
+        }
+    }
 
     function autoComplete() {
         var input, filter, ul, li, a, i;
