@@ -4,12 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ou.service.interfaces.AccountService;
 import com.ou.service.interfaces.CloudinaryService;
 import com.ou.service.interfaces.PostService;
+import com.ou.service.interfaces.PostSurveyService;
 
 @RestController
 @RequestMapping("/api/test")
@@ -22,6 +24,8 @@ public class TestController {
     private PostService postService;
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private PostSurveyService postSurveyService;
 
     @GetMapping("beans")
     public ResponseEntity<String> retrives() {
@@ -50,15 +54,24 @@ public class TestController {
     //     }
     // }
 
-    @GetMapping(path = "accounts")
-    public ResponseEntity<?> list() {
-        return ResponseEntity.ok().body(accountService.list());
-    }
+    // @GetMapping(path = "accounts")
+    // public ResponseEntity<?> list() {
+    //     return ResponseEntity.ok().body(accountService.list());
+    // }
 
-    @GetMapping(path = "accounts/{id}")
-    public ResponseEntity<?> list(Integer id) {
+    // @GetMapping(path = "accounts/{id}")
+    // public ResponseEntity<?> list(Integer id) {
+    //     try {
+    //         return ResponseEntity.ok().body(postService.retrieve(id));
+    //     } catch (Exception e) {
+    //         return ResponseEntity.badRequest().body(e.getMessage());
+    //     }
+    // }
+
+    @GetMapping(path = "postSurvey/{id}")
+    public ResponseEntity<?> retrievePostSurvey(@PathVariable Integer id) {
         try {
-            return ResponseEntity.ok().body(postService.retrieve(id));
+            return ResponseEntity.ok().body(postSurveyService.retrieve(id));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

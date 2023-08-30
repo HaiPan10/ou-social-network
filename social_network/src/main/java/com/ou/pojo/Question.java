@@ -53,13 +53,13 @@ public class Question implements Serializable {
     private Boolean isMandatory;
     @Column(name = "question_order")
     private Integer questionOrder;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "questionId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "questionId")
     private List<QuestionOption> questionOptions;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "questionId")
     private List<Answer> answers;
+    @JsonIgnore
     @JoinColumn(name = "survey_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
-    @JsonIgnore
     private PostSurvey surveyId;
     @JoinColumn(name = "question_type_id", referencedColumnName = "id")
     @ManyToOne(optional = false)

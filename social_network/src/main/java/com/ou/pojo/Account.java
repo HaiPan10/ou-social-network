@@ -56,6 +56,7 @@ public class Account implements Serializable{
     @NotBlank(message = "{account.password.notBlank}")
     @Size(min = 1, message = "{account.password.invalidSize}")
     @Column(name = "password")
+    @JsonIgnore
     private String password;
 
     @Transient

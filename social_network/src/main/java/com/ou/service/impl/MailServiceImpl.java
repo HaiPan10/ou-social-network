@@ -1,6 +1,7 @@
 package com.ou.service.impl;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -193,5 +194,10 @@ public class MailServiceImpl implements MailService {
                     env.getProperty("CLIENT_HOSTNAME"));
             sendEmail(account.getEmail(), "Đặt lại mật khẩu mặc định", mailBody);
         }
+    }
+
+    @Override
+    public void sendEventMail(List<String> email, String body, String title) throws Exception {
+        
     }
 }

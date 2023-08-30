@@ -57,13 +57,13 @@ public class PostSurvey implements Serializable {
     @Size(max = 6)
     @Column(name = "survey_status")
     private String surveyStatus;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "surveyId", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "surveyId")
     private List<Question> questions;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "surveyId")
     private List<Response> responses;
     @JsonIgnore
     @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
-    @OneToOne(optional = false)
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
     private Post post;
     // @Override
     // public String toString() {

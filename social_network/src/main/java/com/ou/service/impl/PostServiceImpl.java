@@ -107,6 +107,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post retrieve(Integer postId) throws Exception {
+        System.out.println("[DEBUG] - INSIDE THE POST SERVICE");
         Optional<Post> postOptional = postRepository.retrieve(postId);
         if (postOptional.isPresent()) {
             return postOptional.get();

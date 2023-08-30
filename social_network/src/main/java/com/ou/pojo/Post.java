@@ -93,7 +93,7 @@ public class Post implements Serializable {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "post")
     private PostSurvey postSurvey;
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "post")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "post")
     private PostInvitation postInvitation;
 
     public Post(Integer id){
