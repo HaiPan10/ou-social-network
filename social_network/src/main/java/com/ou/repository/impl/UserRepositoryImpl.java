@@ -1,8 +1,13 @@
 package com.ou.repository.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +67,20 @@ public class UserRepositoryImpl implements UserRepository {
         }        
         s.update(persistUser);
         return persistUser;
+    }
+
+    @Override
+    public List<User> list(List<Integer> listUserId) {
+        Session s = sessionFactoryBean.getObject().getCurrentSession();
+        CriteriaBuilder builder = s.getCriteriaBuilder();
+        CriteriaQuery<User> criteriaQuery = builder.createQuery(User.class);
+        Root<User> root = criteriaQuery.from(User.class);
+
+        criteriaQuery.select(root);
+        criteriaQuery.where(root.get("id").in(listUserId));
+        
+        Query query = s.createQuery(criteriaQuery);
+        return query.getResultList();
     }
     
 }

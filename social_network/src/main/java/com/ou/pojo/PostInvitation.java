@@ -7,6 +7,8 @@ package com.ou.pojo;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -50,7 +52,7 @@ public class PostInvitation implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date startAt;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "postInvitationId")
-    private Collection<PostInvitationUser> postInvitationUserCollection;
+    private List<PostInvitationUser> postInvitationUsers;
     @JoinColumn(name = "group_id", referencedColumnName = "id")
     @ManyToOne
     private InvitationGroup groupId;

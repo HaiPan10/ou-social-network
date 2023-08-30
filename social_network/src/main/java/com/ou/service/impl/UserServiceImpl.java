@@ -2,6 +2,7 @@ package com.ou.service.impl;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -106,6 +107,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Object updateUser(User user, Integer userId) {
         return userRepository.updateUser(user, userId);
+    }
+
+    @Override
+    public List<User> list(List<Integer> listUserId) {
+        return userRepository.list(listUserId);
     }
     
 }
