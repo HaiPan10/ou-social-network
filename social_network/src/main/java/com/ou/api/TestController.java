@@ -77,12 +77,12 @@ public class TestController {
         }
     }
 
-    @GetMapping(path = "postSurvey/{id}")
-    public ResponseEntity<?> retrievePostSurvey(@PathVariable Integer id) {
-        try {
-            return ResponseEntity.ok().body(postSurveyService.retrieve(id));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
+    // @GetMapping(path = "postSurvey/{id}")
+    // public ResponseEntity<?> retrievePostSurvey(@PathVariable Integer id) {
+    //     try {
+    //         return ResponseEntity.ok().body(postSurveyService.retrieve(id));
+    //     } catch (Exception e) {
+    //         return ResponseEntity.badRequest().body(e.getMessage());
+    //     }
+    // }
 }
