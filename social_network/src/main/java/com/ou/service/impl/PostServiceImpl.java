@@ -3,7 +3,6 @@ package com.ou.service.impl;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -25,15 +24,16 @@ import com.ou.pojo.PostSurvey;
 import com.ou.pojo.Question;
 import com.ou.pojo.User;
 import com.ou.repository.interfaces.PostRepository;
-import com.ou.repository.interfaces.UserRepository;
 import com.ou.service.interfaces.CloudinaryService;
 import com.ou.service.interfaces.CommentService;
+import com.ou.service.interfaces.GroupService;
 import com.ou.service.interfaces.ImageInPostService;
 import com.ou.service.interfaces.PostInvitationService;
 import com.ou.service.interfaces.PostReactionService;
 import com.ou.service.interfaces.PostService;
 import com.ou.service.interfaces.PostSurveyService;
 import com.ou.service.interfaces.QuestionService;
+import com.ou.service.interfaces.UserService;
 import com.ou.utils.CloudinaryUtils;
 
 @Service
@@ -54,9 +54,11 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private QuestionService questionService;
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
     @Autowired
     private PostInvitationService postInvitationService;
+    @Autowired
+    private GroupService groupService;
 
     @Override
     public Post uploadPost(String postContent, Integer userId, List<MultipartFile> images, boolean isActiveComment)
@@ -216,11 +218,22 @@ public class PostServiceImpl implements PostService {
             }
         }
 
-        List<User> listUsers = userRepository.list(listUserId);
+        List<User> listUsers = userService.list(listUserId);
         postInvitation.setPostInvitationUsers(null);
         InvitationGroup group = postInvitation.getGroupId();
         postInvitation.setGroupId(null);
         postInvitation = postInvitationService.create(post.getId(), postInvitation, listUsers);
+
+        if(group != null && listUsers != null){
+            group = groupService.create(group);
+            groupService.addUsers(group.getId(), listUsers);
+        }
+
+        if(listUsers == null){
+            // fetch all user
+            System.out.println("[DEBUG] - FETCH ALL USER");
+            listUsers = userService.list();
+        }
 
         post.setPostInvitation(postInvitation);
         return post;

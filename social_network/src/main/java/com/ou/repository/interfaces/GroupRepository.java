@@ -7,5 +7,5 @@ import com.ou.pojo.User;
 
 public interface GroupRepository {
     InvitationGroup create(InvitationGroup invitationGroup);
-    void addUsers(List<User> users) throws Exception;
+    void addUsers(Integer groupId, List<User> users) throws Exception;
 }

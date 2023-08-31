@@ -70,7 +70,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> list(List<Integer> listUserId) {
+    public List<User> list(List<Integer> listUserId){
         Session s = sessionFactoryBean.getObject().getCurrentSession();
         CriteriaBuilder builder = s.getCriteriaBuilder();
         CriteriaQuery<User> criteriaQuery = builder.createQuery(User.class);
@@ -79,9 +79,18 @@ public class UserRepositoryImpl implements UserRepository {
         criteriaQuery.select(root);
         if(listUserId != null && listUserId.size() > 0){
             criteriaQuery.where(root.get("id").in(listUserId));
+        } else {
+            return null;
         }
         
         Query query = s.createQuery(criteriaQuery);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<User> list() {
+        Session s = sessionFactoryBean.getObject().getCurrentSession();
+        Query query = s.createQuery("FROM User", User.class);
         return query.getResultList();
     }
     

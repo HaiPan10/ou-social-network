@@ -17,4 +17,5 @@ public interface UserService {
     Object uploadCover(MultipartFile uploadCover, Integer userId) throws IOException, Exception;
     Object updateUser(User user, Integer userId);
     List<User> list(List<Integer> listUserId);
+    List<User> list();
 }
