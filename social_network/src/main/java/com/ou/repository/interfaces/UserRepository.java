@@ -12,4 +12,5 @@ public interface UserRepository {
     User updateCover(User persistUser, String url);
     Object updateUser(User user, Integer userId);
     List<User> list(List<Integer> listUserId);
+    List<User> list();
 }

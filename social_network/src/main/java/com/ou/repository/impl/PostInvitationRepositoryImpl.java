@@ -15,21 +15,24 @@ import com.ou.repository.interfaces.PostInvitationRepository;
 
 @Repository
 @Transactional
-public class PostInvitationRepositoryImpl implements PostInvitationRepository{
+public class PostInvitationRepositoryImpl implements PostInvitationRepository {
     @Autowired
     private LocalSessionFactoryBean sessionFactoryBean;
 
     @Override
     public PostInvitation create(PostInvitation postInvitation, List<User> listUsers) {
+        System.out.println("[DEBUG] - START TO INSERT POST INVITATION");
         Session session = sessionFactoryBean.getObject().getCurrentSession();
         postInvitation.setId((Integer) session.save(postInvitation));
-        listUsers.stream().forEach(u -> {
-            PostInvitationUser p = new PostInvitationUser();
-            p.setPostInvitationId(postInvitation);
-            p.setUserId(u);
-            session.save(p);
-        });
+        if (listUsers != null) {
+            listUsers.stream().forEach(u -> {
+                PostInvitationUser p = new PostInvitationUser();
+                p.setPostInvitationId(postInvitation);
+                p.setUserId(u);
+                session.save(p);
+            });
+        }
         return postInvitation;
     }
-    
+
 }

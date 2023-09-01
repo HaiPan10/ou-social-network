@@ -113,5 +113,10 @@ public class UserServiceImpl implements UserService {
     public List<User> list(List<Integer> listUserId) {
         return userRepository.list(listUserId);
     }
+
+    @Override
+    public List<User> list(){
+        return userRepository.list();
+    }
     
 }
