@@ -5,12 +5,15 @@ import SearchIcon from '@mui/icons-material/Search';
 import { authAPI, endpoints } from '../../configs/Api';
 import Loading from '../Loading';
 import { Link } from 'react-router-dom';
+import { ChatContext } from "../../context/ChatContext";
 export const Search = () => {
     const { showSearch } = useContext(SearchContext)
     const [searchContent, setSearchContent] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [searchResult, setSearchResult] = useState()
     const { toggleSearch } = useContext(SearchContext)
+    const { showChat } = useContext(ChatContext)
+    const { toggleChat } = useContext(ChatContext)
 
     useEffect(() => {
         const search = async () => {
@@ -33,6 +36,13 @@ export const Search = () => {
         setSearchContent('')
     }
 
+    const naviage = () => {
+        toggleSearch()
+        if (showChat) {
+            toggleChat()
+        }
+    }
+
     return (
         <div className="search">
             <div className="search-title"><SearchIcon/> Tìm kiếm</div>
@@ -49,7 +59,7 @@ export const Search = () => {
                     isLoading ? <div className="loading"><Loading/></div> :
                     <div className="content">
                         {searchResult && searchResult.map(user=>(
-                            <Link to={`/profile/${user.id}`} onClick={toggleSearch} className='turnoff-link-style'>
+                            <Link to={`/profile/${user.id}`} onClick={naviage} className='turnoff-link-style'>
                                 <div className="search-row">
                                     <div className="avatar">
                                         <img src={user.avatar} alt="" />

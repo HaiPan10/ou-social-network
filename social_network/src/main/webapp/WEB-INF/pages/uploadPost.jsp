@@ -497,8 +497,6 @@
             postInvitation.postInvitationUsers = postInvitationUsers;
           }
           post.postInvitation = postInvitation;
-        //   let json = JSON.stringify(post, null, 4);
-        //   console.log(json);
           let json = JSON.stringify(post);
           uploadInvitationPost(json);
         })
@@ -514,13 +512,13 @@
             body: json
         })
 
-        let data = await response.json();
-        console.log(data);
+        // let data = await response.json();
 
         if(response.ok){
-
+            location.replace("${upload}/?status=success")
         } else {
-            alert("Lỗi");
+            const errorText = await response.text();
+            alert(errorText);
         }
     }
 
@@ -534,13 +532,13 @@
             body: json
         })
 
-        let data = await response.json();
-        console.log(data);
+        // let data = await response.json();
 
         if(response.ok){
-
+            location.replace("${upload}/?status=success")
         } else {
-            alert("Lỗi");
+            const errorText = await response.text();
+            alert(errorText);
         }
     }
 

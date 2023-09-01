@@ -12,6 +12,8 @@ const userReducer = (state, action) => {
             paths.forEach(path => {
                 remove('access-token', path)
                 remove('current-user', path)
+                remove('firebase-email', path)
+                remove('firebase-password', path)
                 remove('role', path)
                 remove('theme', path)
             })

@@ -12,6 +12,8 @@ import { DarkModeContext, DarkModeContextProvider } from "./context/DarkModeCont
 import { ReloadContextProvider } from "./context/ReloadContext";
 import './index.css'
 import { SearchContextProvider } from "./context/SearchContext";
+import { Chat } from "./pages/chat/Chat";
+import { ChatContextProvider } from "./context/ChatContext";
 
 
 const App = () => {
@@ -23,7 +25,9 @@ const App = () => {
         <DarkModeContextProvider>
           <ReloadContextProvider>
             <SearchContextProvider>
-              <Layout/>
+              <ChatContextProvider>
+                <Layout/>
+              </ChatContextProvider>
             </SearchContextProvider>
           </ReloadContextProvider>
         </DarkModeContextProvider>
@@ -37,6 +41,14 @@ const App = () => {
           path: "/profile/:id",
           element: <Profile />,
         },
+        {
+          path: "/chat",
+          element: <Chat />,
+        },
+        {
+          path: "/chat/:id",
+          element: <Chat />,
+        }
       ],
     },
     {

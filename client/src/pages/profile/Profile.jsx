@@ -3,7 +3,7 @@ import { Post } from "../../components/post/Post";
 import "./profile.scss"
 import { AuthContext } from "../../context/AuthContext";
 import { load, save } from "react-cookies";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Api, { authAPI, endpoints } from "../../configs/Api";
 import Loading from "../../components/Loading";
 import EditIcon from '@mui/icons-material/Edit';
@@ -18,6 +18,10 @@ import { ReloadContext } from "../../context/ReloadContext";
 import ImageModal from '../../components/imageInPost/ImageModal'
 import { InView } from 'react-intersection-observer';
 import { SearchContext } from "../../context/SearchContext";
+import { collection, doc, onSnapshot, query, updateDoc, where } from "firebase/firestore";
+import { updateProfile } from "firebase/auth";
+import { auth, db } from "../../configs/firebase";
+import { ChatContext } from "../../context/ChatContext";
 
 const UpdateAvatar = (props) => {
   const {darkMode} = useContext(DarkModeContext)
@@ -40,6 +44,12 @@ const UpdateAvatar = (props) => {
     props.setEditProfileShow(true)
   };
 
+  const updateDocAvt = async (res) => {
+    await updateDoc(doc(db, "users", auth.currentUser.uid), {
+      photoURL: res.data.avatar,
+    });
+  }
+
   const updateAvatar = (evt) => {
     evt.preventDefault()
     setDisableButton(true)
@@ -56,6 +66,12 @@ const UpdateAvatar = (props) => {
           })
           if (res.status === 200) {
             setDisableButton(false)
+            await updateProfile(auth.currentUser, {
+              photoURL: res.data.avatar
+            })
+
+            updateDocAvt(res)
+
             save("current-user", res.data)
             userDispatch({
               "type": "LOGIN", 
@@ -368,6 +384,8 @@ export const Profile = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [isCaughtUp, setIsCaughtUp] = useState(false)
   const { showSearch } = useContext(SearchContext)
+  const { showChat } = useContext(ChatContext)
+  const { toggleChat } = useContext(ChatContext)
 
   const toggleAvatarModal = () => setShowAvatarModal(!showAvatarModal);
   const toggleCoverModal = () => setShowCoverModal(!showCoverModal);
@@ -424,6 +442,12 @@ export const Profile = () => {
   const handleIntersection = (inView) => {
     if (inView && !isLoading && !isCaughtUp) {
       setPage(page + 1);
+    }
+  }
+
+  const setChatOn = () => {
+    if (!showChat) {
+      toggleChat()
     }
   }
 
@@ -507,7 +531,9 @@ export const Profile = () => {
           </div>
           {profileUser.id !== user.id ? 
             role.id !== 3 && <div className="right">
-              <button className="softColor"><MessageIcon/> Nhắn tin</button>
+              <Link to={`/chat/${profileUser.id}`} className='turnoff-link-style' >
+                <button className="softColor" onClick={setChatOn}><MessageIcon/> Nhắn tin</button>
+              </Link>
             </div> :
             <div className="right">
               <button className="softColor" onClick={() => setEditProfileShow(true)}><EditIcon/> Sửa hồ sơ</button>

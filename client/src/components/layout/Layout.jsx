@@ -10,12 +10,16 @@ import { AccountLocked } from '../../pages/accountLocked/AccountLocked';
 import { AccountPending } from '../../pages/accountPending/AccountPending';
 import { AccountRejected } from '../../pages/accountRejected/AccountRejected';
 import { AuthenBackground } from '../authenBackground/AuthenBackground';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import '../../style.scss'
 import './layout.scss'
 import { DarkModeContext } from '../../context/DarkModeContext';
 import 'react-image-lightbox/style.css';
 import { ReloadContext } from "../../context/ReloadContext";
 import { SearchContext } from '../../context/SearchContext';
+import { auth } from '../../configs/firebase';
+import { load, save } from 'react-cookies';
+import { ChatContext } from '../../context/ChatContext';
 
 export const Layout = () => {
     const [user, dispatch] = useContext(AuthContext)
@@ -23,6 +27,8 @@ export const Layout = () => {
     const {darkMode} = useContext(DarkModeContext)
     const { reload } = useContext(ReloadContext)
     const { showSearch } = useContext(SearchContext)
+    const firebaseToken = load("firebase-token");
+    const { showChat } = useContext(ChatContext)
     
     useEffect(() => {
         if (user !== null) {
@@ -32,10 +38,18 @@ export const Layout = () => {
                     setStatus(res.data)
                 } catch (ex) {  
                     setStatus("ERROR")
-                }  
+                }
+            }
+
+            const authFirebase = async () => {
+                try {
+                    await signInWithEmailAndPassword(auth, load("firebase-email"), load("firebase-password"));
+                } catch (ex) {
+                }
             }
     
             getStatus()
+            authFirebase()
         } else {
             setStatus("LOGIN")
         }
@@ -43,7 +57,7 @@ export const Layout = () => {
 
     }, [reload])
 
-    if (user === null) {
+    if (user === null || firebaseToken === null) {
         return <Navigate to="/login" />
     }
 
@@ -54,7 +68,8 @@ export const Layout = () => {
                 <NavBar />
                 <div style={{ display: "flex" }}>
                     <LeftBar status={status}/>
-                    <div style={{flex: showSearch ? "5" : "6", position: "relative"}}><Outlet/></div>
+                    {/* <div style={{flex: showSearch ? "5" : showChat ? "9.5" : "6", position: "relative"}}><Outlet/></div> */}
+                    <div style={{flex: showSearch || showChat ? "5" : "6", position: "relative"}}><Outlet/></div>
                     <RightBar />
                 </div>
             </div>
