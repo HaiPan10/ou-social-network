@@ -133,7 +133,12 @@ export const LeftBar = (props) => {
               {dropdownVisible && <div className="dropdown-content">
                 <div className='icon-wrapper'  onClick={logout}  style={{justifyContent: showSearch || showChat ? "center": ""}}> <LogoutOutlinedIcon/> <span style={{display: showSearch || showChat ? "none": "block"}}>Đăng xuất</span></div>
                 <div className='icon-wrapper' onClick={() =>setChangePasswordShow(true)}  style={{justifyContent: showSearch || showChat ? "center": ""}}>
-                  <div > <LockPersonIcon/> <span style={{display: showSearch || showChat ? "none": ""}}>Đổi mật khẩu</span></div>
+                  <div > <LockPersonIcon/> 
+                  {(showSearch || showChat) && props.status === "PASSWORD_CHANGE_REQUIRED" && <div className='piority-setting' >
+                    <div className="piority-item"></div>
+                  </div> }
+                    <span style={{display: showSearch || showChat ? "none": ""}}>Đổi mật khẩu</span>
+                  </div>
                   {props.status === "PASSWORD_CHANGE_REQUIRED" && <div className='piority-setting'>
                     <div className="piority-item"></div>
                   </div> }

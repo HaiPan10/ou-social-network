@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ou.pojo.Post;
-import com.ou.pojo.Question;
 
 public interface PostRepository {
     Post uploadPost(Post post, Integer userId) throws Exception;
@@ -15,7 +14,7 @@ public interface PostRepository {
     boolean update(Post persistPost, Post post);
     Optional<Post> retrieve(Integer postId) throws Exception;
     boolean delete(Post persistPost);
-    Optional<List<Post>> loadNewFeed(@RequestParam Map<String, String> params);
+    Optional<List<Post>> loadNewFeed(Integer currentUserId, @RequestParam Map<String, String> params);
     List<Post> list(Map<String, String> params);
     Integer countPosts(Map<String, String> params);
     List<Post> search(Map<String, String> params);

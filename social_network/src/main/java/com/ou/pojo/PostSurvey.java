@@ -48,10 +48,12 @@ public class PostSurvey implements Serializable {
     @NotNull
     @Column(name = "id")
     private Integer id;
+
     @Column(name = "start_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date startAt;
     @Size(max = 100)
+    
     @Column(name = "survey_title")
     private String surveyTitle;
     @Size(max = 6)

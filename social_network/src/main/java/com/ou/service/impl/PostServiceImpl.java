@@ -152,7 +152,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> loadNewFeed(Integer currentUserId, @RequestParam Map<String, String> params) throws Exception {
-        Optional<List<Post>> listPostOptional = postRepository.loadNewFeed(params);
+        Optional<List<Post>> listPostOptional = postRepository.loadNewFeed(currentUserId, params);
         if (listPostOptional.isPresent() && listPostOptional.get().size() != 0) {
             List<Post> posts = listPostOptional.get();
             posts.forEach(p -> {

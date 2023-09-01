@@ -24,6 +24,8 @@ import ThumbUpRoundedIcon from '@mui/icons-material/ThumbUpRounded';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteBorderTwoTone';
 import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import Reaction from '../reaction/Reaction';
+import EmailIcon from '@mui/icons-material/Email';
+import PostImage from '../../images/invitation-post-image.png'
 
 const DeleteConfirmation = (props) => {
     const {darkMode} = useContext(DarkModeContext)
@@ -73,7 +75,7 @@ const DeleteConfirmation = (props) => {
     );
   }
 
-export const Post = ({post, posts, setPosts}) => {
+  export const PostInvitation = ({post, posts, setPosts}) => {
     const [commentOpen, setCommentOpen] = useState(false)
     const images = post.imageInPostList.map(image => image.imageUrl);
     const [user, userDispatch] = useContext(AuthContext)
@@ -86,6 +88,19 @@ export const Post = ({post, posts, setPosts}) => {
     const [reloadReaction, setReloadReaction] = useState(false);
     const [total, setTotal] = useState(null);
     const dropdownRef = useRef(null);
+
+    const [datePart, timePart] = post.postInvitation.startAt.split(' ');
+    const [day, month, year] = datePart.split('-').map(Number);
+    const [hours, minutes, seconds] = timePart.split(':').map(Number);
+    const date = new Date(year, month - 1, day);
+
+    const dayNames = [
+      'Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'
+    ];
+  
+    const formattedInvitationDate = `${dayNames[date.getDay()]}, ngày ${day} tháng ${month} năm ${year}`;
+    const formattedInvitationTime = `${hours} giờ ${minutes} phút`
+
 
     const toggleDropdown = () => {
         setDropdownVisible(!dropdownVisible);
@@ -218,7 +233,7 @@ export const Post = ({post, posts, setPosts}) => {
                         
                         <div className="details">
                             <Link to={`/profile/${post.userId.id}`} style={{textDecoration:"none", color:"inherit"}}>
-                                <span className='name'>{post.userId.lastName} {post.userId.firstName}</span>
+                                <span className='name'>{post.userId.lastName} {post.userId.firstName} <span>mời bạn tham gia sự kiện <EmailIcon/></span></span>
                             </Link>
                             <span className='date'><Moment locale="vi" fromNow>{formattedDate}</Moment></span>
                         </div>
@@ -238,11 +253,16 @@ export const Post = ({post, posts, setPosts}) => {
                     }
                 </div>
                 <div className="content">
-                    <p>{post.content}</p>
-                    <ImageInPost hideOverlay={true} images={images} />
-                    {/* <img src={post.img} /> */}
+                    <h3 className='title'>{post.postInvitation.eventName}</h3>
+                    <p style={{marginBottom: "2px"}}>{post.content}</p>
+                    <div className="image-post">
+                      <img style={{marginTop: "0"}} src={PostImage} alt="" />
+                    </div>
+                    {/* <ImageInPost hideOverlay={true} images={images} /> */}
+                    {/* <div className="start_at">Sự kiện bắt đầu vào lúc <span>{post.postInvitation.startAt}</span></div> */}
+                    <div className="start_at">{formattedInvitationDate}<span> lúc {formattedInvitationTime}</span></div>
                 </div>
-                <div className="info">
+                {/* <div className="info">
                     <div className="item">
                       {currentReaction === 1 ? <ThumbUpRoundedIcon onClick={(e) => deleteReaction(e, 1)} className='reaction-icon selected'/> : <ThumbUpOutlinedIcon onClick={(e) => react(e, 1)} className='reaction-icon' /> }
                       <div className="reaction_number" onClick={() => showReactionInformation(1)}>{like}</div>
@@ -257,13 +277,10 @@ export const Post = ({post, posts, setPosts}) => {
                         {post.commentTotal} bình luận
                     </div> :
                     <div className='lockComment'> <SpeakerNotesOffOutlinedIcon/> Bình luận bị khóa! </div> }
-                    {/* <div className="item">
-                        <ShareOutlinedIcon />
-                        Share
-                    </div> */}
-                </div>
-                {post.isActiveComment && commentOpen && <Comment post={post}/>}
+                </div> */}
+                {/* {post.isActiveComment && commentOpen && <Comment post={post}/>} */}
             </div>
         </div>
   )
 }
+

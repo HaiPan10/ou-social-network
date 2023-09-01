@@ -99,4 +99,9 @@ public class Post implements Serializable {
     public Post(Integer id){
         this.id = id;
     }
+
+    public Post(Post post, PostInvitation postInvitation) {
+        this.id = post.getId();
+        this.postInvitation = postInvitation;
+    }
 }

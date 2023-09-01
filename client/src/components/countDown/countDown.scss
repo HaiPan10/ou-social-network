@@ -1,0 +1,43 @@
+
+@import url('https://fonts.googleapis.com/css?family=Lato');
+@import "../../style.scss";
+
+.countdown-wrapper {
+    @include themify($themes) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        gap: 5px;
+
+        .countdown-item {
+            color: white;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            line-height: 20px;
+            margin: 10px;
+            position: relative;
+            height: 80%;
+
+            @include mobile {
+                font-size: 10px;
+                line-height: 10px;
+            }
+
+            span {
+                color: white;
+                font-size: 12px;
+                font-weight: 600;
+                text-transform: uppercase;
+
+                @include mobile {
+                    font-size: 6px;
+                }
+            }
+        }
+        
+    }
+}

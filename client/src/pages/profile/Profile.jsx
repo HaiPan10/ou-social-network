@@ -22,6 +22,8 @@ import { collection, doc, onSnapshot, query, updateDoc, where } from "firebase/f
 import { updateProfile } from "firebase/auth";
 import { auth, db } from "../../configs/firebase";
 import { ChatContext } from "../../context/ChatContext";
+import { PostSurvey } from "../../components/post/PostSurvey";
+import { PostInvitation } from "../../components/post/PostInvitation";
 
 const UpdateAvatar = (props) => {
   const {darkMode} = useContext(DarkModeContext)
@@ -556,6 +558,12 @@ export const Profile = () => {
       <div className="posts" style={{paddingLeft: showSearch ? "21.5px" : ""}}>
         {profileUser.id === user.id ? <PostLayout/> : <></>}        
         {posts.length !== 0 && posts.map(post=>(
+          post.postSurvey !== null ?
+            <PostSurvey post={post} key={post.id} posts={posts} setPosts={setPosts}/>
+          :
+          post.postInvitation !== null ?
+            <PostInvitation post={post} key={post.id} posts={posts} setPosts={setPosts}/>
+          :
           <Post post={post} key={post.id} posts={posts} setPosts={setPosts}/>
         ))}
         {posts.length !== 0 && <InView onChange={handleIntersection}>

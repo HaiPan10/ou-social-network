@@ -138,7 +138,7 @@ export const Chat = () => {
         <div className="chat-wrapper">
             <div className='chat'>
                 <div className="target-user">
-                    {targetUser && 
+                    {targetUser && available &&
                         <div className="target-user-wrapper">
                             <div className="photoURL"><img src={targetUser.photoURL} alt="" /></div>
                             <div className="displayName">{targetUser.displayName}</div>
@@ -199,7 +199,7 @@ export const Chat = () => {
                         </div>
                     } */}
                 </div>
-                {id !== undefined &&
+                {id !== undefined && targetUser && available &&
                 <div className="chat-input">
                     <form className='form' onSubmit={handleSubmit}>
                         <input type='text' placeholder='Nhập tin nhắn' value={newMessage} onChange={(e) => setNewMessage(e.target.value)}/>
