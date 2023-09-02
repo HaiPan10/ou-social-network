@@ -18,4 +18,5 @@ public interface AccountRepository {
     void updateAccount(Account account) throws Exception; 
     Integer countAccounts(Map<String, String> params);
     List<Object[]> list();
+    List<Object[]> StatisticsNumberOfUsers(Map<String, String> params);
 }

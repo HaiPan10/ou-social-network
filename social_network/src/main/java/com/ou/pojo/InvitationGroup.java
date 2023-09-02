@@ -44,8 +44,8 @@ public class InvitationGroup implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "group_name")
     private String groupName;
-    @OneToMany(mappedBy = "groupId")
-    private Collection<PostInvitation> postInvitationCollection;
+    // @OneToMany(mappedBy = "groupId")
+    // private Collection<PostInvitation> postInvitationCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "groupId")
     private List<GroupUser> groupUsers;
 

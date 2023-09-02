@@ -11,10 +11,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -54,9 +52,9 @@ public class PostInvitation implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "postInvitationId")
     private List<PostInvitationUser> postInvitationUsers;
 
-    @JoinColumn(name = "group_id", referencedColumnName = "id")
-    @ManyToOne
-    private InvitationGroup groupId;
+    // @JoinColumn(name = "group_id", referencedColumnName = "id")
+    // @ManyToOne
+    // private InvitationGroup groupId;
 
     @JsonIgnore
     @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
