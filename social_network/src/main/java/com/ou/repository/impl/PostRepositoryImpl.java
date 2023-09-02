@@ -59,7 +59,7 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public Optional<List<Post>> loadPost(Integer userId, @RequestParam Map<String, String> params) {
+    public Optional<List<Post>> loadPost(Integer userId, @RequestParam Map<String, String> params, Integer currentUserId) {
         Session session = sessionFactoryBean.getObject().getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Post> criteriaQuery = builder.createQuery(Post.class);
@@ -75,8 +75,8 @@ public class PostRepositoryImpl implements PostRepository {
             builder.isNull(joinPostInvitation),
             builder.isNull(joinPostInvitationUser),
             builder.and(
-                builder.equal(joinPostInvitationUser.get("userId"), userId),
-                builder.greaterThan(joinPostInvitation.get("startAt"), new Date())
+                builder.equal(joinPostInvitationUser.get("userId"), currentUserId)
+                // builder.greaterThan(joinPostInvitation.get("startAt"), new Date())
             )
         ));
 
@@ -221,12 +221,14 @@ public class PostRepositoryImpl implements PostRepository {
         Join<Post, PostInvitation> joinPostInvitation = rPost.join("postInvitation", JoinType.LEFT);
         Join<PostInvitation, PostInvitationUser> joinPostInvitationUser = joinPostInvitation.join("postInvitationUsers", JoinType.LEFT);
 
+        System.out.println("startAt" + joinPostInvitation.get("startAt"));
+        System.out.println("TODAY " + new Date());
         predicates.add(builder.or(
             builder.isNull(joinPostInvitation),
             builder.isNull(joinPostInvitationUser),
             builder.and(
-                builder.equal(joinPostInvitationUser.get("userId"), currentUserId),
-                builder.greaterThan(joinPostInvitation.get("startAt"), new Date())
+                builder.equal(joinPostInvitationUser.get("userId"), currentUserId)
+                // builder.greaterThan(joinPostInvitation.get("startAt"), new Date())
             )
         ));
 

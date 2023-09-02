@@ -185,7 +185,7 @@
                       <label class="form-label">Tên nhóm</label>
                       <div class="input-group input-group-merge">
                         <span class="input-group-text"><i class='bx bxs-group'></i></span>
-                        <input type="text" class="form-control" maxlength="100" name="groupName"></input>
+                        <input id="groupName" type="text" class="form-control" maxlength="100" name="groupName"></input>
                       </div>
                     </div>
                 </div>
@@ -409,19 +409,6 @@
         })
 
         showLessDiv();
-        function showLessDiv() {
-            var divs = document.querySelectorAll("#personalDropDownMenu .user-row:not([style*='display: none'])");
-            if (divs.length > 5) {
-                for (var i = 0; i < divs.length; i++) {
-                if (i < 5) {
-                    divs[i].style.display = "";
-                } else {
-                    divs[i].style.display = "none";
-                }
-            }
-            } else {
-            }
-        }
 
         $(".user-row").click(function() {
             if ($("#dropDownParticipant").text() === "Cá nhân") {
@@ -481,7 +468,7 @@
           let postInvitation = {};
           postInvitation.eventName = formData.get("eventName");
           postInvitation.startAt = convertDate(formData.get("startAt"));
-          if ($("#save-group").prop("checked") && $("#groupName").val().length() != 0) {
+          if ($("#save-group").prop("checked")) {
             let groupId = {};
             groupId.groupName = formData.get("groupName");
             postInvitation.groupId = groupId;
@@ -587,6 +574,20 @@
         const minutes = originalDate.getMinutes().toString().padStart(2, '0');
         const seconds = originalDate.getSeconds().toString().padStart(2, '0');
         return `\${day}-\${month}-\${year} \${hours}:\${minutes}:\${seconds}`;
+    }
+
+    function showLessDiv() {
+        var divs = document.querySelectorAll("#personalDropDownMenu .user-row:not([style*='display: none'])");
+        if (divs.length > 5) {
+            for (var i = 0; i < divs.length; i++) {
+            if (i < 5) {
+                divs[i].style.display = "";
+            } else {
+                divs[i].style.display = "none";
+            }
+        }
+        } else {
+        }
     }
 
     function autoComplete() {
