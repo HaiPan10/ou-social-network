@@ -30,6 +30,8 @@ export const Login = () => {
             })
             save('access-token', res.data.accessToken)
             save('current-user', res.data.user)
+            save('firebase-email', account.email)
+            save('firebase-password', account.password)
             save('role', res.data.role)
 
             userDispatch({

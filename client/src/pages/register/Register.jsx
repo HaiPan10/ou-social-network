@@ -4,10 +4,11 @@ import { AuthenBackground } from "../../components/authenBackground/AuthenBackgr
 import { useContext, useState } from "react";
 import Api, { endpoints } from "../../configs/Api";
 import ErrorAlert from "../../components/ErrorAlert";
-import { EmailVerification } from "../emailVerification/EmailVerification";
 import { AuthContext } from "../../context/AuthContext";
 import { save } from "react-cookies";
-
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth, db } from "../../configs/firebase";
+import { doc, setDoc } from "firebase/firestore";
 export const Register = () => {
   const [err, setErr] = useState()
   const [disableButton, setDisableButton] = useState()
@@ -36,6 +37,32 @@ export const Register = () => {
     return <Navigate to="/" />
   }
 
+  const createFirebaseAuth = async (res) => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, account.email, account.password);
+
+      if (userCredential && auth.currentUser) {
+        try {
+          await updateProfile(auth.currentUser, {
+            displayName: user.lastName + " " + user.firstName,
+            photoURL: "https://res.cloudinary.com/dxjkpbzmo/image/upload/v1691907285/zp0am1x1g5puovvwfvzv.png"
+          });
+
+          await setDoc(doc(db, "users", auth.currentUser.uid), {
+            uid: auth.currentUser.uid,
+            user_id: res.user.id,
+            displayName: auth.currentUser.displayName,
+            photoURL: "https://res.cloudinary.com/dxjkpbzmo/image/upload/v1691907285/zp0am1x1g5puovvwfvzv.png",
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    } catch (ex) {
+      // console.log(ex);
+    }
+  };
+
   const register = (evt) => {
     evt.preventDefault()
     setDisableButton(true);
@@ -49,8 +76,11 @@ export const Register = () => {
             })
             
             if (res.status === 201) {
+              await createFirebaseAuth(res.data)
               save('access-token', res.data.accessToken)
               save('current-user', res.data.user)
+              save('firebase-email', account.email)
+              save('firebase-password', account.password)
               save('role', res.data.role)
               userDispatch({
                 "type": "LOGIN", 

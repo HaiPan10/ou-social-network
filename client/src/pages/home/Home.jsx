@@ -10,6 +10,8 @@ import Loading from "../../components/Loading"
 import KeyboardCapslockIcon from '@mui/icons-material/KeyboardCapslock';
 import { InView } from 'react-intersection-observer';
 import { SearchContext } from "../../context/SearchContext"
+import { PostInvitation } from "../../components/post/PostInvitation"
+import { PostSurvey } from "../../components/post/PostSurvey"
 
 export const Home = () => {
   const [posts, setPosts] = useState([])
@@ -76,7 +78,13 @@ export const Home = () => {
         <>
           <PostLayout/>
             {posts.length !== 0 && posts.map(post=>(
-              <Post post={post} key={post.id} posts={posts} setPosts={setPosts}/>
+              post.postSurvey !== null ?
+              <PostSurvey post={post} key={post.id} posts={posts} setPosts={setPosts}/>
+            :
+            post.postInvitation !== null ?
+              <PostInvitation post={post} key={post.id} posts={posts} setPosts={setPosts}/>
+            :
+            <Post post={post} key={post.id} posts={posts} setPosts={setPosts}/>
           ))}
           {isLoading && <div className="bottom-loading">
             <Loading/>

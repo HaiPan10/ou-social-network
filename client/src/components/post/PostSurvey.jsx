@@ -72,9 +72,8 @@ const DeleteConfirmation = (props) => {
         </Modal>
     );
   }
-
-export const Post = ({post, posts, setPosts}) => {
-    const [commentOpen, setCommentOpen] = useState(false)
+export const PostSurvey = ({post, posts, setPosts}) => {
+  const [commentOpen, setCommentOpen] = useState(false)
     const images = post.imageInPostList.map(image => image.imageUrl);
     const [user, userDispatch] = useContext(AuthContext)
     const [dropdownVisible, setDropdownVisible] = useState(false)
@@ -238,8 +237,51 @@ export const Post = ({post, posts, setPosts}) => {
                     }
                 </div>
                 <div className="content">
-                    <p>{post.content}</p>
-                    <ImageInPost hideOverlay={true} images={images} />
+                    <h3 className='title'>{post.postSurvey.surveyTitle}</h3>
+                    <p style={{marginBottom: "2px"}}>{post.content}</p>
+                    <form>
+                    {post.postSurvey.questions.map( (question) => {
+                      return (
+                        <div className="question-wrapper" key={question.id}>
+                          {question.questionTypeId.id === 2 && 
+                            <div className="input-question">
+                              <label htmlFor="">{question.questionText}</label>
+                              <input type='text' />
+                            </div>
+                          }
+                          {question.questionTypeId.id === 1 && 
+                            <div className="multiple-question">
+                              <label htmlFor="">{question.questionText}</label>
+                              {question.questionOptions.map( (option) => {
+                                return (
+                                  <div className="question-option" key={option.id}>
+                                    <input type="radio" name={question.questionText} value={option.value}/>
+                                    <label>{option.value}</label>
+                                  </div>
+                                )
+                              })}
+                            </div>
+                          }
+                          {question.questionTypeId.id === 3 && 
+                            <div className="checkbox-question">
+                              <label htmlFor="">{question.questionText}</label>
+                              {question.questionOptions.map( (option) => {
+                                return (
+                                  <div className="question-option" key={option.id}>
+                                    <input type="checkbox" name={question.questionText} value={option.value}/>
+                                    <label>{option.value}</label>
+                                  </div>
+                                )
+                              })}
+                            </div>
+                          }
+                        </div>
+                      )
+                    })}
+                    <button type='submit'>Submit</button>
+                    </form>
+
+                    {/* <ImageInPost hideOverlay={true} images={images} /> */}
                     {/* <img src={post.img} /> */}
                 </div>
                 <div className="info">

@@ -18,6 +18,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.UserRecord;
 import com.ou.configs.JwtService;
 import com.ou.pojo.Account;
 import com.ou.pojo.AuthRequest;
@@ -64,6 +66,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private ScheduleService scheduleService;
+
+    // @Autowired
+    // private FirebaseAuth firebaseAuth;
 
     @Autowired
     private Environment env;
@@ -224,6 +229,10 @@ public class AccountServiceImpl implements AccountService {
             System.out.println("[DEBUG] - Saved account id: " + account.getId());
             userService.create(user, account);
             account.setUser(user);
+            // UserRecord.CreateRequest request = new UserRecord.CreateRequest()
+            //     .setEmail(account.getEmail())
+            //     .setPassword(env.getProperty("DEFAULT_PASSWORD").toString());
+            // firebaseAuth.createUser(request);
             mailService.sendGrantedAccount(account);
             scheduleService.changePasswordRequiredSchedule(account.getEmail());
             return account;

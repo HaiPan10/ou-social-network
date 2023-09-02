@@ -494,7 +494,7 @@
         <!-- Content -->
 
         <div class="container-xxl flex-grow-1 container-p-y">
-            <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Forms/</span> Vertical Layouts</h4>
+            <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Bảng điều khiển /</span> Thống kê</h4>
             <div style="margin-bottom: 25px">
                 <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
                     id="dropDownOption">
@@ -534,8 +534,6 @@
     d.className += " active";
 
     var ctx = document.getElementById('myChart');
-    // var baseUrl = "http://localhost:8080/social_network";
-    // var statisticsEndpoint = "/admin/statistics/users";
     var url = "${statisticsAction}";
     console.log(url);
 
@@ -616,10 +614,7 @@
     statistics([], null, url);
 
     function statistics(labels, requestParams, api) {
-        // console.log(`${baseUrl}/${api}?${requestParams != null ? requestParams.toString() : null}`);
-        console.log(api);
-        console.log(`${api}${requestParams != null ? `?${requestParams.toString()}` : ''}`);
-        fetch(`${api}?${requestParams != null ? requestParams.toString() : null}`)
+        fetch(`\${api}\${requestParams != null ? '?' + requestParams.toString() : ''}`)
             .then(res => {
                 if (res.ok) {
                     console.log("GET SUCCESS");
@@ -642,7 +637,7 @@
                                 if (!isInit) {
                                     var newLi = $(`
                                     <li>
-                                    <div class="dropdown-item">${element[0]}</div>
+                                    <div class="dropdown-item">\${element[0]}</div>
                                     </li>
                                 `)
                                     $("#dropDownYearMenu").append(newLi);

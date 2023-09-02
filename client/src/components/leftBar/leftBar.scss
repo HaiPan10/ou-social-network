@@ -15,6 +15,28 @@
         @include mobile{
             display: none;
         }
+        
+        .transition-container {
+            display: flex;
+        }
+          
+        .transition-item {
+            flex: 1;
+            transition: opacity 0.5s, transform 0.5s;
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .transition-item-exit {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .transition-item-exit-active {
+            opacity: 0;
+            transform: translateX(-100%);
+            }
+          
 
         .active {
             background-color: themed("bgSoft");

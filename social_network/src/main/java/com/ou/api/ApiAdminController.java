@@ -66,7 +66,7 @@ public class ApiAdminController {
         }
     }
 
-    @GetMapping(path = "accounts/accounts")
+    @GetMapping(path = "accounts/list")
     public ResponseEntity<?> list() {
         return ResponseEntity.ok().body(accountService.list());
     }

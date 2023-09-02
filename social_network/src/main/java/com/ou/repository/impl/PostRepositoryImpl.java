@@ -8,17 +8,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.persistence.EntityGraph;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 import javax.transaction.Transactional;
 
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.ou.pojo.Comment;
 import com.ou.pojo.Post;
 import com.ou.pojo.PostInvitation;
+import com.ou.pojo.PostInvitationUser;
 import com.ou.pojo.PostSurvey;
 import com.ou.pojo.User;
 import com.ou.repository.interfaces.PostRepository;
@@ -62,6 +66,19 @@ public class PostRepositoryImpl implements PostRepository {
 
         Root<Post> rPost = criteriaQuery.from(Post.class);
         List<Predicate> predicates = new ArrayList<>();
+        rPost.fetch("postSurvey", JoinType.LEFT).fetch("questions", JoinType.LEFT);
+
+        Join<Post, PostInvitation> joinPostInvitation = rPost.join("postInvitation", JoinType.LEFT);
+        Join<PostInvitation, PostInvitationUser> joinPostInvitationUser = joinPostInvitation.join("postInvitationUsers", JoinType.LEFT);
+
+        predicates.add(builder.or(
+            builder.isNull(joinPostInvitation),
+            builder.isNull(joinPostInvitationUser),
+            builder.and(
+                builder.equal(joinPostInvitationUser.get("userId"), userId),
+                builder.greaterThan(joinPostInvitation.get("startAt"), new Date())
+            )
+        ));
 
         predicates.add(builder.equal(rPost.get("userId"), userId));
         criteriaQuery.where(predicates.toArray(Predicate[]::new));
@@ -86,6 +103,13 @@ public class PostRepositoryImpl implements PostRepository {
 
         try {
             List<Post> posts = query.getResultList();
+            posts.forEach(post -> {
+                try {
+                    Hibernate.initialize(post.getPostInvitation().getPostInvitationUsers());
+                } catch (NullPointerException e) {
+
+                }
+            });
             return Optional.of(posts);
         } catch (NoResultException e) {
             return Optional.empty();
@@ -185,13 +209,26 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public Optional<List<Post>> loadNewFeed(@RequestParam Map<String, String> params) {
+    public Optional<List<Post>> loadNewFeed(Integer currentUserId, @RequestParam Map<String, String> params) {
         Session session = sessionFactoryBean.getObject().getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Post> criteriaQuery = builder.createQuery(Post.class);
 
         Root<Post> rPost = criteriaQuery.from(Post.class);
         List<Predicate> predicates = new ArrayList<>();
+
+        rPost.fetch("postSurvey", JoinType.LEFT).fetch("questions", JoinType.LEFT);
+        Join<Post, PostInvitation> joinPostInvitation = rPost.join("postInvitation", JoinType.LEFT);
+        Join<PostInvitation, PostInvitationUser> joinPostInvitationUser = joinPostInvitation.join("postInvitationUsers", JoinType.LEFT);
+
+        predicates.add(builder.or(
+            builder.isNull(joinPostInvitation),
+            builder.isNull(joinPostInvitationUser),
+            builder.and(
+                builder.equal(joinPostInvitationUser.get("userId"), currentUserId),
+                builder.greaterThan(joinPostInvitation.get("startAt"), new Date())
+            )
+        ));
 
         Subquery<Date> subquery = criteriaQuery.subquery(Date.class);
         Root<Comment> rComment = subquery.from(Comment.class);
@@ -228,6 +265,13 @@ public class PostRepositoryImpl implements PostRepository {
 
         try {
             List<Post> posts = query.getResultList();
+            posts.forEach(post -> {
+                try {
+                    Hibernate.initialize(post.getPostInvitation().getPostInvitationUsers());
+                } catch (NullPointerException e) {
+
+                }
+            });
             return Optional.of(posts);
         } catch (NoResultException e) {
             return Optional.empty();

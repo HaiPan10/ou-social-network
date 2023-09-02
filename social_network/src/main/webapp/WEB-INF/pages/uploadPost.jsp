@@ -480,7 +480,7 @@
           post.isActiveComment = false;
           let postInvitation = {};
           postInvitation.eventName = formData.get("eventName");
-          postInvitation.startAt = formData.get("startAt");
+          postInvitation.startAt = convertDate(formData.get("startAt"));
           if ($("#save-group").prop("checked") && $("#groupName").val().length() != 0) {
             let groupId = {};
             groupId.groupName = formData.get("groupName");
@@ -497,9 +497,8 @@
             postInvitation.postInvitationUsers = postInvitationUsers;
           }
           post.postInvitation = postInvitation;
-        //   let json = JSON.stringify(post, null, 4);
-        //   console.log(json);
           let json = JSON.stringify(post);
+        //   console.log(JSON.stringify(post, null, 4));
           uploadInvitationPost(json);
         })
     });
@@ -514,13 +513,13 @@
             body: json
         })
 
-        let data = await response.json();
-        console.log(data);
+        // let data = await response.json();
 
         if(response.ok){
-
+            location.replace("${upload}/?status=success")
         } else {
-            alert("Lỗi");
+            const errorText = await response.text();
+            alert(errorText);
         }
     }
 
@@ -534,13 +533,13 @@
             body: json
         })
 
-        let data = await response.json();
-        console.log(data);
+        // let data = await response.json();
 
         if(response.ok){
-
+            location.replace("${upload}/?status=success")
         } else {
-            alert("Lỗi");
+            const errorText = await response.text();
+            alert(errorText);
         }
     }
 
@@ -577,6 +576,17 @@
             $(this).remove();
         })
         }
+    }
+
+    function convertDate(inputDate) {
+        const originalDate = new Date(inputDate);
+        const day = originalDate.getDate().toString().padStart(2, '0');
+        const month = (originalDate.getMonth() + 1).toString().padStart(2, '0');
+        const year = originalDate.getFullYear();
+        const hours = originalDate.getHours().toString().padStart(2, '0');
+        const minutes = originalDate.getMinutes().toString().padStart(2, '0');
+        const seconds = originalDate.getSeconds().toString().padStart(2, '0');
+        return `\${day}-\${month}-\${year} \${hours}:\${minutes}:\${seconds}`;
     }
 
     function autoComplete() {

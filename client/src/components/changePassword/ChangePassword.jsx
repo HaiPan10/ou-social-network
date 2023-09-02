@@ -14,6 +14,10 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import Input from "@material-ui/core/Input";
 import { authAPI, endpoints } from "../../configs/Api";
+import { createUserWithEmailAndPassword, updatePassword, updateProfile } from "firebase/auth";
+import { load, save } from "react-cookies";
+import { auth, db } from "../../configs/firebase";
+import { doc, setDoc } from "firebase/firestore";
 
 const ChangePassword = (props) => {
     const {darkMode} = useContext(DarkModeContext)
@@ -41,6 +45,32 @@ const ChangePassword = (props) => {
         setErr()
     }
 
+    const createFirebaseAuth = async () => {
+        try {
+          const userCredential = await createUserWithEmailAndPassword(auth, load("firebase-email"), account.password);
+    
+          if (userCredential && auth.currentUser) {
+            try {
+              await updateProfile(auth.currentUser, {
+                displayName: user.lastName + " " + user.firstName,
+                photoURL: user.avatar
+              });
+    
+              await setDoc(doc(db, "users", auth.currentUser.uid), {
+                uid: auth.currentUser.uid,
+                user_id: user.id,
+                displayName: auth.currentUser.displayName,
+                photoURL: user.avatar
+              });
+            } catch (error) {
+              console.log(error);
+            }
+          }
+        } catch (ex) {
+          console.log(ex);
+        }
+      };
+
     const changePassword = (evt) => {
         evt.preventDefault()
         console.log(account)
@@ -55,6 +85,12 @@ const ChangePassword = (props) => {
                 })
                 
                 if (res.status === 200) {
+                    if(props.status === "ACTIVE") {
+                        updatePassword(auth.currentUser, account.password)
+                    } else if (props.status === "PASSWORD_CHANGE_REQUIRED") {
+                        createFirebaseAuth()
+                    }
+                    save('firebase-password', account.password)
                     clear()
                     reloadData()
                     setDisableButton(false)

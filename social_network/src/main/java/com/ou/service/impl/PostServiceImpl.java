@@ -152,7 +152,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> loadNewFeed(Integer currentUserId, @RequestParam Map<String, String> params) throws Exception {
-        Optional<List<Post>> listPostOptional = postRepository.loadNewFeed(params);
+        Optional<List<Post>> listPostOptional = postRepository.loadNewFeed(currentUserId, params);
         if (listPostOptional.isPresent() && listPostOptional.get().size() != 0) {
             List<Post> posts = listPostOptional.get();
             posts.forEach(p -> {
@@ -184,6 +184,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post uploadPostSurvey(Post post, Integer userId) throws Exception {
+        if (post.getPostSurvey().getQuestions() == null || post.getPostSurvey().getQuestions().size() == 0) {
+            throw new Exception("Empty question!");
+        }
         post.setCreatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
         post.setUpdatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
         PostSurvey postSurvey = post.getPostSurvey();
@@ -214,7 +217,7 @@ public class PostServiceImpl implements PostService {
                 listUserId = list.stream()
                         .map(p -> Integer.valueOf(p.getUserId().getId())).collect(Collectors.toList());
             } else {
-                throw new Exception("Vui lòng chọn người nhận bài đăng");
+                throw new Exception("Empty invitation user!");
             }
         }
 
