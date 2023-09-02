@@ -511,7 +511,7 @@
                     </li>
                 </ul>
             </div>
-            <div>
+            <div id="containerDropDownYear">
                 <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
                     id="dropDownYear">
                 </button>
@@ -549,15 +549,15 @@
         $("#dropDownOption").text("Năm");
         $("#dropDownOptionMenu li div").click(function () {
             var selectedText = $(this).text();
+            var requestParams = new URLSearchParams();
+            requestParams.append("year", $("#dropDownYear").text());
             if (selectedText === "Tháng") {
                 $("#containerDropDownYear").show();
-                var requestParams = new URLSearchParams();
                 requestParams.append("byMonth", "true");
                 statistics(months, requestParams, url);
 
             } else if (selectedText === "Quý") {
                 $("#containerDropDownYear").show();
-                var requestParams = new URLSearchParams();
                 requestParams.append("byQuarter", "true");
                 statistics(quarter, requestParams, url);
             } else if (selectedText === "Năm") {
@@ -614,6 +614,7 @@
     statistics([], null, url);
 
     function statistics(labels, requestParams, api) {
+        console.log(`\${api}\${requestParams != null ? '?' + requestParams.toString() : ''}`);
         fetch(`\${api}\${requestParams != null ? '?' + requestParams.toString() : ''}`)
             .then(res => {
                 if (res.ok) {
