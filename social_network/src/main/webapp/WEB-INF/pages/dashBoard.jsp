@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <div class="row">
+    <!--
     <div class="col-lg-8 mb-4 order-0">
         <div class="card">
             <div class="d-flex align-items-end row">
@@ -86,7 +87,7 @@
             </div>
         </div>
     </div>
-    <!-- Total Revenue -->
+    Total Revenue
     <div class="col-12 col-lg-8 order-2 order-md-3 order-lg-2 mb-4">
         <div class="card">
             <div class="row row-bordered g-0">
@@ -139,7 +140,7 @@
             </div>
         </div>
     </div>
-    <!--/ Total Revenue -->
+    / Total Revenue
     <div class="col-12 col-md-8 col-lg-4 order-3 order-md-2">
         <div class="row">
             <div class="col-6 mb-4">
@@ -195,8 +196,8 @@
                     </div>
                 </div>
             </div>
-            <!-- </div>
-<div class="row"> -->
+            </div>
+<div class="row">
             <div class="col-12 mb-4">
                 <div class="card">
                     <div class="card-body">
@@ -222,7 +223,7 @@
     </div>
 </div>
 <div class="row">
-    <!-- Order Statistics -->
+    Order Statistics
     <div class="col-md-6 col-lg-4 col-xl-4 order-0 mb-4">
         <div class="card h-100">
             <div class="card-header d-flex align-items-center justify-content-between pb-0">
@@ -313,9 +314,9 @@
             </div>
         </div>
     </div>
-    <!--/ Order Statistics -->
+    Order Statistics
 
-    <!-- Expense Overview -->
+    Expense Overview
     <div class="col-md-6 col-lg-4 order-1 mb-4">
         <div class="card h-100">
             <div class="card-header">
@@ -368,9 +369,9 @@
             </div>
         </div>
     </div>
-    <!--/ Expense Overview -->
+    Expense Overview
 
-    <!-- Transactions -->
+    Transactions
     <div class="col-md-6 col-lg-4 order-2 mb-4">
         <div class="card h-100">
             <div class="card-header d-flex align-items-center justify-content-between">
@@ -488,11 +489,175 @@
                 </ul>
             </div>
         </div>
-    </div>
-    <!--/ Transactions -->
-</div>
+    </div> -->
+    <div class="content-wrapper">
+        <!-- Content -->
 
+        <div class="container-xxl flex-grow-1 container-p-y">
+            <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Bảng điều khiển /</span> Thống kê</h4>
+            <div style="margin-bottom: 25px">
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                    id="dropDownOption">
+                </button>
+                <ul class="dropdown-menu" id="dropDownOptionMenu" style="cursor: pointer;">
+                    <li>
+                        <div class="dropdown-item" data-value="year">Năm</div>
+                    </li>
+                    <li>
+                        <div class="dropdown-item" data-value="month">Tháng</div>
+                    </li>
+                    <li>
+                        <div class="dropdown-item" data-value="quarter">Quý</div>
+                    </li>
+                </ul>
+            </div>
+            <div id="containerDropDownYear">
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                    id="dropDownYear">
+                </button>
+                <ul class="dropdown-menu" id="dropDownYearMenu" style="cursor: pointer;">
+
+                </ul>
+            </div>
+
+            <div style="width: 500px;height: 600px;">
+                <div>
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<c:url value="/admin/statistics/users" var="statisticsAction" />
 <script>
     var d = document.getElementById("dash-board");
     d.className += " active";
+
+    var ctx = document.getElementById('myChart');
+    var url = "${statisticsAction}";
+    console.log(url);
+
+    var months = [
+        "January", "February", "March", "April",
+        "May", "June", "July", "August",
+        "September", "October", "November", "December"
+    ];
+    var quarter = ["Quý 1", "Quý 2", "Quý 3", "Quý 4"]
+
+    $(document).ready(function (e) {
+        $("#containerDropDownYear").hide();
+        $("#dropDownOption").text("Năm");
+        $("#dropDownOptionMenu li div").click(function () {
+            var selectedText = $(this).text();
+            var requestParams = new URLSearchParams();
+            requestParams.append("year", $("#dropDownYear").text());
+            if (selectedText === "Tháng") {
+                $("#containerDropDownYear").show();
+                requestParams.append("byMonth", "true");
+                statistics(months, requestParams, url);
+
+            } else if (selectedText === "Quý") {
+                $("#containerDropDownYear").show();
+                requestParams.append("byQuarter", "true");
+                statistics(quarter, requestParams, url);
+            } else if (selectedText === "Năm") {
+                $("#containerDropDownYear").hide();
+                statistics([], null, url);
+            }
+            $("#dropDownOption").text(selectedText);
+        });
+
+        $("#dropDownYearMenu li div").click(function () {
+            var selectedText = $(this).text();
+            var requestParams = new URLSearchParams();
+            requestParams.append("year", selectedText);
+            var option = $("#dropDownOption").text();
+            if (option === "Tháng") {
+                requestParams.append("byMonth", "true");
+                statistics(months, requestParams, url);
+            } else if (option === "Quý") {
+                requestParams.append("byQuarter", "true");
+                statistics(quarter, requestParams, url);
+            }
+
+            $("#dropDownYear").text(selectedText);
+        });
+    });
+
+    var dataset = {
+        label: 'Số người dùng',
+        data: [],
+        borderWidth: 1
+    }
+
+    var dataValue = {
+        labels: [],
+        datasets: [dataset]
+    }
+
+    var configs = {
+        type: 'bar',
+        data: dataValue,
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    }
+
+    var isInit = false;
+
+    var myChart = new Chart(ctx, configs);
+
+    statistics([], null, url);
+
+    function statistics(labels, requestParams, api) {
+        console.log(`\${api}\${requestParams != null ? '?' + requestParams.toString() : ''}`);
+        fetch(`\${api}\${requestParams != null ? '?' + requestParams.toString() : ''}`)
+            .then(res => {
+                if (res.ok) {
+                    console.log("GET SUCCESS");
+                    res.json().then(d => {
+                        if (labels != null && labels.length > 0) {
+                            dataValue["labels"] = labels;
+                            dataset["data"] = Array.from({ length: labels.length }, () => 0);
+                            d.forEach(element => {
+                                dataset["data"][element[0] - 1] = element[1];
+                            });
+                            dataValue["datasets"] = [dataset];
+                            configs["data"] = dataValue;
+                            myChart.destroy();
+                            myChart = new Chart(ctx, configs);
+                        } else {
+                            data = [];
+                            d.forEach(element => {
+                                labels.push(element[0]);
+                                data.push(element[1]);
+                                if (!isInit) {
+                                    var newLi = $(`
+                                    <li>
+                                    <div class="dropdown-item">\${element[0]}</div>
+                                    </li>
+                                `)
+                                    $("#dropDownYearMenu").append(newLi);
+                                }
+                            });
+                            dataValue["labels"] = labels;
+                            dataset["data"] = data;
+                            dataValue["datasets"] = [dataset];
+                            configs["data"] = dataValue;
+                            myChart.destroy();
+                            myChart = new Chart(ctx, configs);
+                            $("#dropDownYear").text(labels[0]);
+                        }
+                        isInit = true;
+                    });
+                }
+
+            }).catch(err => {
+                console.log(err);
+            });
+    }
 </script>

@@ -318,15 +318,15 @@ CREATE TABLE `group_user` (
 DROP TABLE IF EXISTS `ou-social-network`.`post_invitation`;
 CREATE TABLE `post_invitation` (
     id INT UNSIGNED NOT NULL,
-    group_id INT UNSIGNED,
+   --  group_id INT UNSIGNED,
     event_name VARCHAR(250),
     start_at DATETIME,
 
     PRIMARY KEY (id),
-    INDEX(group_id),
-    FOREIGN KEY (group_id)
-		REFERENCES `invitation_group`(id)
-        ON DELETE CASCADE,
+    -- INDEX(group_id),
+  --   FOREIGN KEY (group_id)
+-- 		REFERENCES `invitation_group`(id)
+--         ON DELETE CASCADE,
 	FOREIGN KEY (id)
 		REFERENCES post(id)
         ON DELETE CASCADE

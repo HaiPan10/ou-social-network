@@ -1,5 +1,7 @@
 package com.ou.repository.impl;
 
+import java.text.SimpleDateFormat;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +35,8 @@ public class AccountRepositoryImpl implements AccountRepository {
     private LocalSessionFactoryBean sessionFactoryBean;
     @Autowired
     private Environment env;
+    @Autowired
+    private SimpleDateFormat simpleDateFormat;
 
     @Override
     public Optional<Account> retrieve(Integer id) {
@@ -249,6 +253,59 @@ public class AccountRepositoryImpl implements AccountRepository {
         criteriaQuery.multiselect(root.get("id"), root.get("email"), builder.function("concat", String.class,
                 join.get("lastName"), builder.literal(" "), join.get("firstName")), join.get("avatar"));
         Query query = session.createQuery(criteriaQuery);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Object[]> StatisticsNumberOfUsers(Map<String, String> params) {
+        Session session = sessionFactoryBean.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Object[]> criteriaQuery = builder.createQuery(Object[].class);
+        Root<Account> root = criteriaQuery.from(Account.class);
+
+        Expression<Integer> expression = null;
+
+        String month = params.get("byMonth");
+        String quarter = params.get("byQuarter");
+        if (month != null && month.equals("true")) {
+            expression = builder.function("MONTH", Integer.class, root.get("createdDate"));
+        } else if (quarter != null && quarter.equals("true")) {
+            expression = builder.function("QUARTER", Integer.class, root.get("createdDate"));
+        } else {
+            expression = builder.function("YEAR", Integer.class, root.get("createdDate"));
+        }
+
+        List<Predicate> predicates = new ArrayList<>();
+        // Integer year =
+        // Integer.valueOf(Optional.ofNullable(params.get("year")).orElse(Year.now().toString()));
+        // predicates.add(builder.equal(builder.function("YEAR", Integer.class,
+        // root.get("createdDate")), year));
+
+        String year = params.get("year");
+        if (year != null) {
+            predicates.add(builder.equal(builder.function("YEAR", Integer.class, root.get("createdDate")),
+                    Integer.valueOf(year)));
+        }
+
+        // String month = params.get("month");
+        // if (month != null) {
+        // predicates.add(builder.equal(builder.function("MONTH", Integer.class,
+        // root.get("createdDate")),
+        // Integer.valueOf(month)));
+        // }
+
+        // String quarter = params.get("quarter");
+        // if (quarter != null) {
+        // predicates.add(builder.equal(builder.function("QUARTER", Integer.class,
+        // root.get("createdDate")),
+        // Integer.valueOf(quarter)));
+        // }
+
+        criteriaQuery.multiselect(expression, builder.count(root.get("id")))
+                .where(predicates.toArray(Predicate[]::new)).groupBy(expression);
+
+        Query query = session.createQuery(criteriaQuery);
+
         return query.getResultList();
     }
 }

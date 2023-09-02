@@ -223,14 +223,14 @@ public class PostServiceImpl implements PostService {
 
         List<User> listUsers = userService.list(listUserId);
         postInvitation.setPostInvitationUsers(null);
-        InvitationGroup group = postInvitation.getGroupId();
-        postInvitation.setGroupId(null);
+        // InvitationGroup group = postInvitation.getGroupId();
+        // postInvitation.setGroupId(null);
         postInvitation = postInvitationService.create(post.getId(), postInvitation, listUsers);
 
-        if(group != null && listUsers != null){
-            group = groupService.create(group);
-            groupService.addUsers(group.getId(), listUsers);
-        }
+        // if(group != null && listUsers != null){
+        //     group = groupService.create(group);
+        //     groupService.addUsers(group.getId(), listUsers);
+        // }
 
         if(listUsers == null){
             // fetch all user

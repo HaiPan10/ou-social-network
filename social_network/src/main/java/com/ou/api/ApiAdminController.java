@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -20,6 +21,7 @@ import com.ou.pojo.Post;
 import com.ou.service.interfaces.AccountService;
 import com.ou.service.interfaces.PostService;
 import com.ou.service.interfaces.PostSurveyService;
+import com.ou.service.interfaces.StatisticService;
 
 @RestController
 @RequestMapping("admin")
@@ -30,6 +32,8 @@ public class ApiAdminController {
     private PostService postService;
     @Autowired
     private PostSurveyService postSurveyService;
+    @Autowired
+    private StatisticService statisticService;
 
     @PatchMapping("accounts/update_status")
     public ResponseEntity<?> update(@RequestBody Map<String, String> request){
@@ -62,7 +66,7 @@ public class ApiAdminController {
         }
     }
 
-    @GetMapping(path = "accounts/accounts")
+    @GetMapping(path = "accounts/list")
     public ResponseEntity<?> list() {
         return ResponseEntity.ok().body(accountService.list());
     }
@@ -71,6 +75,15 @@ public class ApiAdminController {
     public ResponseEntity<?> uploadInvitation(@RequestBody Post post) {
         try {
             return ResponseEntity.ok().body(postService.uploadPostInvitation(post, 1));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping(path = "statistics/users")
+    public ResponseEntity<?> numberOfUsers(@RequestParam Map<String, String> params){
+        try {
+            return ResponseEntity.ok().body(statisticService.StatisticsNumberOfUsers(params));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

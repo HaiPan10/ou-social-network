@@ -3,7 +3,7 @@
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Tài khoản /</span>Cấp tài khoản giảng viên</h4>
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Tài khoản /</span> Cấp tài khoản giảng viên</h4>
 <c:if test="${status != null}">
     <div class="alert alert-success">
         ${status}

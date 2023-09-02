@@ -32,6 +32,7 @@
 
         <script src="<c:url value='/resources/vendor/js/helpers.js'></c:url>"></script>
         <script src="<c:url value='/resources/js/config.js'></c:url>"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
         <!-- Latest compiled and minified CSS -->
         <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css"
