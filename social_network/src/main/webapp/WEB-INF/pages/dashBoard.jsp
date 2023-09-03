@@ -1,5 +1,5 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!-- <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%> -->
 <div class="row">
     <div class="content-wrapper">
         <div class="container-xxl flex-grow-1 container-p-y">
@@ -118,9 +118,7 @@
     d.className += " active";
 
     var months = [
-        "January", "February", "March", "April",
-        "May", "June", "July", "August",
-        "September", "October", "November", "December"
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
     ];
     var quarter = ["Quý 1", "Quý 2", "Quý 3", "Quý 4"];
 
