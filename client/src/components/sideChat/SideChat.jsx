@@ -45,7 +45,7 @@ export const SideChat = (props) => {
             {props.status === "ACTIVE" &&
                 <>
                             <div className="searchbar">
-                    <div class="input-group">
+                    <div className="input-group">
                         <input type="search" value={searchContent} onChange={(e) => setSearchContent(e.target.value)} className="form-control" placeholder="Tên người dùng" />
                     </div>
                 </div>

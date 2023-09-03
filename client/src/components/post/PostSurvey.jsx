@@ -24,6 +24,11 @@ import ThumbUpRoundedIcon from '@mui/icons-material/ThumbUpRounded';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteBorderTwoTone';
 import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import Reaction from '../reaction/Reaction';
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
+import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
+import PollIcon from '@mui/icons-material/Poll';
+import 'animate.css'
 
 const DeleteConfirmation = (props) => {
     const {darkMode} = useContext(DarkModeContext)
@@ -72,6 +77,7 @@ const DeleteConfirmation = (props) => {
         </Modal>
     );
   }
+
 export const PostSurvey = ({post, posts, setPosts}) => {
   const [commentOpen, setCommentOpen] = useState(false)
     const images = post.imageInPostList.map(image => image.imageUrl);
@@ -85,6 +91,8 @@ export const PostSurvey = ({post, posts, setPosts}) => {
     const [reloadReaction, setReloadReaction] = useState(false);
     const [total, setTotal] = useState(null);
     const dropdownRef = useRef(null);
+    const sortedQuestions = post.postSurvey.questions.sort((a, b) => a.questionOrder - b.questionOrder);
+    const [showMore, setShowMore] = useState(false)
 
     const toggleDropdown = () => {
         setDropdownVisible(!dropdownVisible);
@@ -200,7 +208,6 @@ export const PostSurvey = ({post, posts, setPosts}) => {
       // setReaction(null)
       // setTotal(null)
     }
-
     const formattedDate = post.createdAt.replace(/(\d{2})-(\d{2})-(\d{4}) (\d{2}:\d{2}:\d{2})/, '$3-$2-$1 $4');
 
     return (
@@ -217,7 +224,7 @@ export const PostSurvey = ({post, posts, setPosts}) => {
                         
                         <div className="details">
                             <Link to={`/profile/${post.userId.id}`} style={{textDecoration:"none", color:"inherit"}}>
-                                <span className='name'>{post.userId.lastName} {post.userId.firstName}</span>
+                                <span className='name'>{post.userId.lastName} {post.userId.firstName} <span>đã tiến hành cuộc khảo sát <PollIcon/></span></span>
                             </Link>
                             <span className='date'><Moment locale="vi" fromNow>{formattedDate}</Moment></span>
                         </div>
@@ -239,48 +246,72 @@ export const PostSurvey = ({post, posts, setPosts}) => {
                 <div className="content">
                     <h3 className='title'>{post.postSurvey.surveyTitle}</h3>
                     <p style={{marginBottom: "2px"}}>{post.content}</p>
-                    <form>
-                    {post.postSurvey.questions.map( (question) => {
-                      return (
-                        <div className="question-wrapper" key={question.id}>
-                          {question.questionTypeId.id === 2 && 
-                            <div className="input-question">
-                              <label htmlFor="">{question.questionText}</label>
-                              <input type='text' />
-                            </div>
-                          }
-                          {question.questionTypeId.id === 1 && 
-                            <div className="multiple-question">
-                              <label htmlFor="">{question.questionText}</label>
-                              {question.questionOptions.map( (option) => {
-                                return (
-                                  <div className="question-option" key={option.id}>
-                                    <input type="radio" name={question.questionText} value={option.value}/>
-                                    <label>{option.value}</label>
-                                  </div>
-                                )
-                              })}
-                            </div>
-                          }
-                          {question.questionTypeId.id === 3 && 
-                            <div className="checkbox-question">
-                              <label htmlFor="">{question.questionText}</label>
-                              {question.questionOptions.map( (option) => {
-                                return (
-                                  <div className="question-option" key={option.id}>
-                                    <input type="checkbox" name={question.questionText} value={option.value}/>
-                                    <label>{option.value}</label>
-                                  </div>
-                                )
-                              })}
-                            </div>
-                          }
+                    <div class="row">
+                      {!showMore ?
+                        <div className='show-more text-center'>
+                          <div onClick={() => setShowMore(true)} className='move-icon' ><KeyboardDoubleArrowDownIcon className=' animate__animated animate__infinite animate__flip'/> Mở khảo sát</div>
                         </div>
-                      )
-                    })}
-                    <button type='submit'>Submit</button>
-                    </form>
-
+                        :
+                        <form class="" style={{width: "100%"}} action="">
+                        {sortedQuestions.map( (question) => {
+                          return (
+                            <div className="question-wrapper" key={question.id}>
+                              {question.questionTypeId.id === 2 && 
+                                <div className="input-question">
+                                  <div class="form-outline mb-4">
+                                    <label class="fw-bold form-label">Câu hỏi {question.questionOrder}: {question.questionText}
+                                      {question.isMandatory && <span className='piority-question'>câu hỏi bắt buộc (*)</span>}
+                                    </label>
+                                    <textarea class="form-control" rows="2" maxLength={255} name={question.id} required={question.isMandatory ? true : false}></textarea>
+                                  </div>
+                                </div>
+                              }
+                              {question.questionTypeId.id === 1 && 
+                                <div className="multiple-question form-outline mb-4">
+                                  <p class="fw-bold form-label">Câu hỏi {question.questionOrder}: {question.questionText}
+                                    {question.isMandatory && <span className='piority-question'>câu hỏi bắt buộc (*)</span>}
+                                  </p>
+                                  {question.questionOptions.map( (option) => {
+                                  return (
+                                    <div className="form-check mb-2 question-option" key={option.id}>
+                                      <input class="form-check-input" type="radio" name={question.id} value={option.value} required={question.isMandatory ? true : false}/>
+                                      <label class="form-check-label" for="radioExample1">
+                                        {option.value}
+                                      </label>
+                                    </div>
+                                  )
+                                  })}
+                                </div>
+                              }
+                              {question.questionTypeId.id === 3 && 
+                                <div className="checkbox-question form-outline mb-4">
+                                  <p class="fw-bold form-label">Câu hỏi {question.questionOrder}: {question.questionText}
+                                    {question.isMandatory && <span className='piority-question'>câu hỏi bắt buộc (*)</span>}
+                                  </p>
+                                  {question.questionOptions.map( (option) => {
+                                    return (
+                                      <div class="question-option form-check" key={option.id}>
+                                        <input class="form-check-input" type="checkbox" name={question.id} value={option.value}/>
+                                        <label class="form-check-label">
+                                          {option.value}
+                                        </label>
+                                      </div>
+                                    )
+                                  })}
+                                </div>
+                              }
+                            </div>
+                          )
+                        })}
+                        <div class="text-center pb-4">
+                          <button type="submit" class="btn btn-primary"><TaskAltIcon/> Hoàn thành khảo sát</button>
+                        </div>
+                        <div className='show-more text-center'>
+                          <div onClick={() => setShowMore(false)} className='move-icon' ><KeyboardDoubleArrowUpIcon className=' animate__animated animate__infinite animate__flip'/>  Đóng khảo sát</div>
+                        </div>
+                        </form>
+                      }
+                    </div>
                     {/* <ImageInPost hideOverlay={true} images={images} /> */}
                     {/* <img src={post.img} /> */}
                 </div>
