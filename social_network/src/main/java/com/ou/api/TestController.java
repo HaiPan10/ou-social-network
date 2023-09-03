@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ou.pojo.Post;
+import com.ou.service.interfaces.AccountService;
 import com.ou.service.interfaces.CloudinaryService;
+import com.ou.service.interfaces.PostInvitationService;
 import com.ou.service.interfaces.PostService;
-import com.ou.service.interfaces.StatisticService;
+import com.ou.service.interfaces.PostSurveyService;
 
 @RestController
 @RequestMapping("/api/test")
@@ -28,7 +30,11 @@ public class TestController {
     @Autowired
     private PostService postService;
     @Autowired
-    private StatisticService statisticService;
+    private PostSurveyService postSurveyService;
+    @Autowired
+    private PostInvitationService postInvitationService;
+    @Autowired
+    private AccountService accountService;
     // @Autowired
     // private PostSurveyService postSurveyService;
     // @Autowired
@@ -105,7 +111,35 @@ public class TestController {
     @GetMapping(path = "statistics")
     public ResponseEntity<?> numberOfUsers(@RequestParam Map<String, String> params){
         try {
-            return ResponseEntity.ok().body(statisticService.StatisticsNumberOfUsers(params));
+            return ResponseEntity.ok().body(accountService.stat(params));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping(path = "stat/post")
+    public ResponseEntity<?> statPost(@RequestParam Map<String, String> params){
+        try {
+            return ResponseEntity.ok().body(postService.stat(params));
+        } catch (Exception e) {
+            System.out.println("[ERROR] - " + e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping(path = "stat/post_survey")
+    public ResponseEntity<?> statPostSurvey(@RequestParam Map<String, String> params){
+        try {
+            return ResponseEntity.ok().body(postSurveyService.stat(params));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping(path = "stat/post_invitation")
+    public ResponseEntity<?> statPostInvitation(@RequestParam Map<String, String> params){
+        try {
+            return ResponseEntity.ok().body(postInvitationService.stat(params));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

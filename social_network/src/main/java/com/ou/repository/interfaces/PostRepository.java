@@ -18,4 +18,5 @@ public interface PostRepository {
     List<Post> list(Map<String, String> params);
     Integer countPosts(Map<String, String> params);
     List<Post> search(Map<String, String> params);
+    List<Object[]> stat(Map<String, String> params);
 }

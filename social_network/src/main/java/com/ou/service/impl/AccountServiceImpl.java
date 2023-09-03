@@ -283,4 +283,14 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.list();
     }
 
+    @Override
+    public List<Object[]> stat(Map<String, String> params) throws Exception{
+        try{
+            return accountRepository.stat(params);
+        } catch(Exception exception){
+            System.out.println("[DEBUG] - " + exception.getMessage());
+            throw new Exception("Some things wrong");
+        }
+    }
+
 }

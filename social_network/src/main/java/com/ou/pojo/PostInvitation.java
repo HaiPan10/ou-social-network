@@ -18,6 +18,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -57,7 +58,8 @@ public class PostInvitation implements Serializable {
 
     // @JoinColumn(name = "group_id", referencedColumnName = "id")
     // @ManyToOne
-    // private InvitationGroup groupId;
+    @Transient
+    private InvitationGroup groupId;
 
     @JsonIgnore
     @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)

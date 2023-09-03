@@ -27,4 +27,5 @@ public interface AccountService{
     Account loadAccountByEmail(String email);
     Integer countAccounts(Map<String, String> params);
     List<Object[]> list();
+    List<Object[]> stat(Map<String, String> params) throws Exception;
 }

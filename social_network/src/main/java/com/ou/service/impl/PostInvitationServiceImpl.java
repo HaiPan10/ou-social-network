@@ -1,6 +1,7 @@
 package com.ou.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,11 @@ public class PostInvitationServiceImpl implements PostInvitationService{
     public PostInvitation create(Integer postId, PostInvitation postInvitation, List<User> listUsers) {
         postInvitation.setId(postId);
         return postInvitationRepository.create(postInvitation, listUsers);
+    }
+
+    @Override
+    public List<Object[]> stat(Map<String, String> params) {
+        return postInvitationRepository.stat(params);
     }
     
 }
