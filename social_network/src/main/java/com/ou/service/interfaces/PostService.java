@@ -20,4 +20,5 @@ public interface PostService {
     List<Post> search(Map<String, String> params);
     Post uploadPostSurvey(Post post, Integer userId) throws Exception;
     Post uploadPostInvitation(Post post, Integer userId) throws Exception;
+    List<Object[]> stat(Map<String, String> params);
 }

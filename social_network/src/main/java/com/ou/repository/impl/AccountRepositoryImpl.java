@@ -257,7 +257,7 @@ public class AccountRepositoryImpl implements AccountRepository {
     }
 
     @Override
-    public List<Object[]> StatisticsNumberOfUsers(Map<String, String> params) {
+    public List<Object[]> stat(Map<String, String> params) {
         Session session = sessionFactoryBean.getObject().getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<Object[]> criteriaQuery = builder.createQuery(Object[].class);

@@ -21,7 +21,6 @@ import com.ou.pojo.Post;
 import com.ou.service.interfaces.AccountService;
 import com.ou.service.interfaces.PostService;
 import com.ou.service.interfaces.PostSurveyService;
-import com.ou.service.interfaces.StatisticService;
 
 @RestController
 @RequestMapping("admin")
@@ -32,8 +31,6 @@ public class ApiAdminController {
     private PostService postService;
     @Autowired
     private PostSurveyService postSurveyService;
-    @Autowired
-    private StatisticService statisticService;
 
     @PatchMapping("accounts/update_status")
     public ResponseEntity<?> update(@RequestBody Map<String, String> request){
@@ -83,7 +80,7 @@ public class ApiAdminController {
     @GetMapping(path = "statistics/users")
     public ResponseEntity<?> numberOfUsers(@RequestParam Map<String, String> params){
         try {
-            return ResponseEntity.ok().body(statisticService.StatisticsNumberOfUsers(params));
+            return ResponseEntity.ok().body(accountService.stat(params));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

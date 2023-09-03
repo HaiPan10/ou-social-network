@@ -393,4 +393,44 @@ public class PostRepositoryImpl implements PostRepository {
         query.setFirstResult((page - 1) * pageSize);
         return query.getResultList();
     }
+
+    @Override
+    public List<Object[]> stat(Map<String, String> params) {
+        Session session = sessionFactoryBean.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Object[]> criteriaQuery = builder.createQuery(Object[].class);
+        Root<Post> root = criteriaQuery.from(Post.class);
+        Join<Post, PostSurvey> joinSurvey = root.join("postSurvey", JoinType.LEFT);
+        Join<Post, PostInvitation> joinInvitation = root.join("postInvitation", JoinType.LEFT);
+
+        Expression<Integer> expression = null;
+
+        String month = params.get("byMonth");
+        String quarter = params.get("byQuarter");
+        if (month != null && month.equals("true")) {
+            expression = builder.function("MONTH", Integer.class, root.get("createdAt"));
+        } else if (quarter != null && quarter.equals("true")) {
+            expression = builder.function("QUARTER", Integer.class, root.get("createdAt"));
+        } else {
+            expression = builder.function("YEAR", Integer.class, root.get("createdAt"));
+        }
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        String year = params.get("year");
+        if (year != null) {
+            predicates.add(builder.equal(builder.function("YEAR", Integer.class, root.get("createdAt")),
+                    Integer.valueOf(year)));
+        }
+
+        predicates.add(builder.isNull(joinSurvey.get("id")));
+        predicates.add(builder.isNull(joinInvitation.get("id")));
+
+        criteriaQuery.multiselect(expression, builder.count(root.get("id")))
+                .where(predicates.toArray(Predicate[]::new)).groupBy(expression);
+
+        Query query = session.createQuery(criteriaQuery);
+
+        return query.getResultList();
+    }
 }
