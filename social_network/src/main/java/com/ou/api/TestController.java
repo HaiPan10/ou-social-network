@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ou.pojo.Post;
 import com.ou.service.interfaces.AccountService;
 import com.ou.service.interfaces.CloudinaryService;
+import com.ou.service.interfaces.GroupService;
+import com.ou.service.interfaces.InvitationGroupService;
 import com.ou.service.interfaces.PostInvitationService;
 import com.ou.service.interfaces.PostService;
 import com.ou.service.interfaces.PostSurveyService;
@@ -35,6 +37,10 @@ public class TestController {
     private PostInvitationService postInvitationService;
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private InvitationGroupService invitationGroupService;
+    @Autowired
+    private GroupService groupService;
     // @Autowired
     // private PostSurveyService postSurveyService;
     // @Autowired
@@ -140,6 +146,24 @@ public class TestController {
     public ResponseEntity<?> statPostInvitation(@RequestParam Map<String, String> params){
         try {
             return ResponseEntity.ok().body(postInvitationService.stat(params));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping(path = "invitation_groups")
+    public ResponseEntity<?> getInvitationGroup(){
+        try {
+            return ResponseEntity.ok().body(invitationGroupService.list());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping(path = "invitation_groups/{id}")
+    public ResponseEntity<?> getUsers(@PathVariable Integer id){
+        try {
+            return ResponseEntity.ok().body(groupService.getUsers(id));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

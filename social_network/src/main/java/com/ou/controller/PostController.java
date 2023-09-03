@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.pojo.Account;
+import com.ou.pojo.InvitationGroup;
 import com.ou.pojo.Post;
 import com.ou.service.interfaces.AccountService;
+import com.ou.service.interfaces.InvitationGroupService;
 import com.ou.service.interfaces.PostService;
 
 @Controller
@@ -32,6 +34,8 @@ public class PostController {
     private Environment env;
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private InvitationGroupService invitationGroupService;
 
     @GetMapping
     public String posts(Model model, @RequestParam Map<String, String> params) {
@@ -76,7 +80,9 @@ public class PostController {
         Post post = new Post();
         model.addAttribute("post", post);
         List<Object[]> accountList = accountService.list();
+        List<InvitationGroup> invitationGroups = invitationGroupService.list();
         model.addAttribute("accountList", accountList);
+        model.addAttribute("invitationGroups", invitationGroups);
         if (status != null) {
             model.addAttribute("status", status);
         }

@@ -20,6 +20,8 @@ import com.ou.pojo.Account;
 import com.ou.pojo.Post;
 import com.ou.service.interfaces.AccountService;
 import com.ou.service.interfaces.PostInvitationService;
+import com.ou.service.interfaces.GroupService;
+import com.ou.service.interfaces.InvitationGroupService;
 import com.ou.service.interfaces.PostService;
 import com.ou.service.interfaces.PostSurveyService;
 
@@ -34,6 +36,8 @@ public class ApiAdminController {
     private PostSurveyService postSurveyService;
     @Autowired
     private PostInvitationService postInvitationService;
+    @Autowired
+    private GroupService groupService;
 
     @PatchMapping("accounts/update_status")
     public ResponseEntity<?> update(@RequestBody Map<String, String> request){
@@ -112,6 +116,10 @@ public class ApiAdminController {
     public ResponseEntity<?> statPostInvitation(@RequestParam Map<String, String> params){
         try {
             return ResponseEntity.ok().body(postInvitationService.stat(params));
+    @GetMapping(path = "invitation_groups/{id}")
+    public ResponseEntity<?> getUsers(@PathVariable Integer id){
+        try {
+            return ResponseEntity.ok().body(groupService.getUsers(id));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

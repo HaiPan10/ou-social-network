@@ -108,6 +108,49 @@
             .content {
                 margin: 10px 0px;
 
+                .show-more {
+                    position: relative;
+                    cursor: pointer;
+
+                    .move-icon {
+                        transition: "all 0.5s ease",
+                    }
+                    
+                    &:hover {
+                        background-color: themed("bgSoft");
+                    }
+                }
+
+                .question-wrapper {
+                    .piority-question {
+                        font-size: 12px;
+                        color: themed("mainColor");
+                        margin: 10px;
+                        font-weight: bold;
+                    }
+
+                    .input-question {
+                        width: 100%;
+
+                        textarea {
+                            width: 100%;
+                        }
+
+                        textarea::-webkit-scrollbar {
+                            width: 5px;
+                        }
+                        
+                        textarea::-webkit-scrollbar-track {
+                            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+                        }
+                        
+                        textarea::-webkit-scrollbar-thumb {
+                            background-color: darkgrey;
+                            outline: 1px solid slategrey;
+                        }
+                    }
+                }
+
                 .image-post {
                     position: relative;
                     .layout {
