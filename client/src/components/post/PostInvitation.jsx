@@ -26,6 +26,7 @@ import FavoriteRoundedIcon from '@mui/icons-material/FavoriteRounded';
 import Reaction from '../reaction/Reaction';
 import EmailIcon from '@mui/icons-material/Email';
 import PostImage from '../../images/invitation-post-image.png'
+import CountDown from '../countDown/CountDown';
 
 const DeleteConfirmation = (props) => {
     const {darkMode} = useContext(DarkModeContext)
@@ -77,31 +78,31 @@ const DeleteConfirmation = (props) => {
 
   export const PostInvitation = ({post, posts, setPosts}) => {
     const [commentOpen, setCommentOpen] = useState(false)
-    const images = post.imageInPostList.map(image => image.imageUrl);
+    const images = post.imageInPostList.map(image => image.imageUrl)
     const [user, userDispatch] = useContext(AuthContext)
     const [dropdownVisible, setDropdownVisible] = useState(false)
     const [editPostShow, setEditPostShow] = useState(false)
     const [deletePostShow, setDeletePostShow] = useState(false)
-    const [currentReaction, setCurrentReaction] = useState(post.currentReaction?.id || null);
+    const [currentReaction, setCurrentReaction] = useState(post.currentReaction?.id || null)
     const [reactionShow, setReactionShow] = useState(false)
     const [reaction, setReaction] = useState(null)
-    const [reloadReaction, setReloadReaction] = useState(false);
-    const [total, setTotal] = useState(null);
-    const dropdownRef = useRef(null);
+    const [reloadReaction, setReloadReaction] = useState(false)
+    const [total, setTotal] = useState(null)
+    const dropdownRef = useRef(null)
 
-    const [datePart, timePart] = post.postInvitation.startAt.split(' ');
+    const [datePart, timePart] = post.postInvitation.startAt.split(' ')
     const [day, month, year] = datePart.split('-').map(Number);
-    const [hours, minutes, seconds] = timePart.split(':').map(Number);
-    const date = new Date(year, month - 1, day);
+    const [hours, minutes, seconds] = timePart.split(':').map(Number)
+    const date = new Date(year, month - 1, day)
 
     const dayNames = [
       'Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'
     ];
   
-    const formattedInvitationDate = `${dayNames[date.getDay()]}, ngày ${day} tháng ${month} năm ${year}`;
+    const formattedInvitationDate = `${dayNames[date.getDay()]}, ngày ${day} tháng ${month} năm ${year}`
     const formattedInvitationTime = `${hours} giờ ${minutes} phút`
-
-
+    const dateInCowntDown = new Date(year, month - 1, day, hours, minutes, seconds)
+    const dateInMS = dateInCowntDown.getTime()
     const toggleDropdown = () => {
         setDropdownVisible(!dropdownVisible);
     }
@@ -256,6 +257,14 @@ const DeleteConfirmation = (props) => {
                     <h3 className='title'>{post.postInvitation.eventName}</h3>
                     <p style={{marginBottom: "2px"}}>{post.content}</p>
                     <div className="image-post">
+                      <div className="layout">
+                        <div className="layout-title">
+                          Sự kiện sẽ diễn ra sau
+                        </div>
+                        <div className="countdown">
+                          <CountDown thenInMS={dateInMS}></CountDown>
+                        </div>
+                      </div>
                       <img style={{marginTop: "0"}} src={PostImage} alt="" />
                     </div>
                     {/* <ImageInPost hideOverlay={true} images={images} /> */}

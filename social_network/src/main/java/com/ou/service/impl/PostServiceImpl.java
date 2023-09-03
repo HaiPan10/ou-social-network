@@ -82,7 +82,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> loadPost(Integer userId, Integer currentUserId, Map<String, String> params) throws Exception {
-        Optional<List<Post>> listPostOptional = postRepository.loadPost(userId, params);
+        Optional<List<Post>> listPostOptional = postRepository.loadPost(userId, params, currentUserId);
         if (listPostOptional.isPresent()) {
             List<Post> posts = listPostOptional.get();
             posts.forEach(p -> {

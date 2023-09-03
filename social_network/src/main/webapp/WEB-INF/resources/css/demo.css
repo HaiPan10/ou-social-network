@@ -139,6 +139,7 @@
   padding: 14px 20px 12px 15px;
   border: none;
   border-bottom: 1px solid #ddd;
+  width: 100%;
 }
 
 /* The search field when it gets focus/clicked on */
