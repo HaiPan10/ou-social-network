@@ -1,568 +1,224 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <div class="row">
-    <!--
-    <div class="col-lg-8 mb-4 order-0">
-        <div class="card">
-            <div class="d-flex align-items-end row">
-                <div class="col-sm-7">
-                    <div class="card-body">
-                        <h5 class="card-title text-primary">Area 1 Title</h5>
-                        <p class="mb-4">
-                            Area 1 content
-                        </p>
-
-                        <a href="javascript:;" class="btn btn-sm btn-outline-primary">Area 1
-                            button</a>
-                    </div>
-                </div>
-                <div class="col-sm-5 text-center text-sm-left">
-                    <div class="card-body pb-0 px-0 px-md-4">
-                        <img src="<c:url value=" /resources/img/illustrations/man-with-laptop-light.png" />"
-                        height="140"
-                        alt="View Badge User" data-app-dark-img="
-                        <c:url value="/resources/illustrations/man-with-laptop-dark.png" />
-                        data-app-light-img="
-                        <c:url value="/resources/illustrations/man-with-laptop-light.png" /> />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-4 col-md-4 order-1">
-        <div class="row">
-            <div class="col-lg-6 col-md-12 col-6 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title d-flex align-items-start justify-content-between">
-                            <div class="avatar flex-shrink-0">
-                                <img src="<c:url value=" /resources/img/icons/unicons/chart-success.png" />" alt="chart
-                                success"
-                                class="rounded" />
-                            </div>
-                            <div class="dropdown">
-                                <button class="btn p-0" type="button" id="cardOpt3" data-bs-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                    <i class="bx bx-dots-vertical-rounded"></i>
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt3">
-                                    <a class="dropdown-item" href="javascript:void(0);">View
-                                        More</a>
-                                    <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                                </div>
-                            </div>
-                        </div>
-                        <span class="fw-semibold d-block mb-1">Profit</span>
-                        <h3 class="card-title mb-2">$12,628</h3>
-                        <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +72.80%</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-12 col-6 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title d-flex align-items-start justify-content-between">
-                            <div class="avatar flex-shrink-0">
-                                <img src="<c:url value=" /resources/img/icons/unicons/wallet-info.png" />" alt="Credit
-                                Card"
-                                class="rounded" />
-                            </div>
-                            <div class="dropdown">
-                                <button class="btn p-0" type="button" id="cardOpt6" data-bs-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                    <i class="bx bx-dots-vertical-rounded"></i>
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt6">
-                                    <a class="dropdown-item" href="javascript:void(0);">View
-                                        More</a>
-                                    <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                                </div>
-                            </div>
-                        </div>
-                        <span>Sales</span>
-                        <h3 class="card-title text-nowrap mb-1">$4,679</h3>
-                        <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +28.42%</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    Total Revenue
-    <div class="col-12 col-lg-8 order-2 order-md-3 order-lg-2 mb-4">
-        <div class="card">
-            <div class="row row-bordered g-0">
-                <div class="col-md-8">
-                    <h5 class="card-header m-0 me-2 pb-3">Total Revenue</h5>
-                    <div id="totalRevenueChart" class="px-2"></div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card-body">
-                        <div class="text-center">
-                            <div class="dropdown">
-                                <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button"
-                                    id="growthReportId" data-bs-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
-                                    2022
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="growthReportId">
-                                    <a class="dropdown-item" href="javascript:void(0);">2021</a>
-                                    <a class="dropdown-item" href="javascript:void(0);">2020</a>
-                                    <a class="dropdown-item" href="javascript:void(0);">2019</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="growthChart"></div>
-                    <div class="text-center fw-semibold pt-3 mb-2">62% Company Growth</div>
-
-                    <div class="d-flex px-xxl-4 px-lg-2 p-4 gap-xxl-3 gap-lg-1 gap-3 justify-content-between">
-                        <div class="d-flex">
-                            <div class="me-2">
-                                <span class="badge bg-label-primary p-2"><i
-                                        class="bx bx-dollar text-primary"></i></span>
-                            </div>
-                            <div class="d-flex flex-column">
-                                <small>2022</small>
-                                <h6 class="mb-0">$32.5k</h6>
-                            </div>
-                        </div>
-                        <div class="d-flex">
-                            <div class="me-2">
-                                <span class="badge bg-label-info p-2"><i class="bx bx-wallet text-info"></i></span>
-                            </div>
-                            <div class="d-flex flex-column">
-                                <small>2021</small>
-                                <h6 class="mb-0">$41.2k</h6>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    / Total Revenue
-    <div class="col-12 col-md-8 col-lg-4 order-3 order-md-2">
-        <div class="row">
-            <div class="col-6 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title d-flex align-items-start justify-content-between">
-                            <div class="avatar flex-shrink-0">
-                                <img src="<c:url value=" /resources/img/icons/unicons/paypal.png" />" alt="Credit Card"
-                                class="rounded" />
-                            </div>
-                            <div class="dropdown">
-                                <button class="btn p-0" type="button" id="cardOpt4" data-bs-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                    <i class="bx bx-dots-vertical-rounded"></i>
-                                </button>
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt4">
-                                    <a class="dropdown-item" href="javascript:void(0);">View
-                                        More</a>
-                                    <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                                </div>
-                            </div>
-                        </div>
-                        <span class="d-block mb-1">Payments</span>
-                        <h3 class="card-title text-nowrap mb-2">$2,456</h3>
-                        <small class="text-danger fw-semibold"><i class="bx bx-down-arrow-alt"></i> -14.82%</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title d-flex align-items-start justify-content-between">
-                            <div class="avatar flex-shrink-0">
-                                <img src="<c:url value=" /resources/img/icons/unicons/cc-primary.png" />" alt="Credit
-                                Card"
-                                class="rounded" />
-                            </div>
-                            <div class="dropdown">
-                                <button class="btn p-0" type="button" id="cardOpt1" data-bs-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                    <i class="bx bx-dots-vertical-rounded"></i>
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="cardOpt1">
-                                    <a class="dropdown-item" href="javascript:void(0);">View
-                                        More</a>
-                                    <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                                </div>
-                            </div>
-                        </div>
-                        <span class="fw-semibold d-block mb-1">Transactions</span>
-                        <h3 class="card-title mb-2">$14,857</h3>
-                        <small class="text-success fw-semibold"><i class="bx bx-up-arrow-alt"></i> +28.14%</small>
-                    </div>
-                </div>
-            </div>
-            </div>
-<div class="row">
-            <div class="col-12 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between flex-sm-row flex-column gap-3">
-                            <div class="d-flex flex-sm-column flex-row align-items-start justify-content-between">
-                                <div class="card-title">
-                                    <h5 class="text-nowrap mb-2">Profile Report</h5>
-                                    <span class="badge bg-label-warning rounded-pill">Year
-                                        2021</span>
-                                </div>
-                                <div class="mt-sm-auto">
-                                    <small class="text-success text-nowrap fw-semibold"><i class="bx bx-chevron-up"></i>
-                                        68.2%</small>
-                                    <h3 class="mb-0">$84,686k</h3>
-                                </div>
-                            </div>
-                            <div id="profileReportChart"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-    Order Statistics
-    <div class="col-md-6 col-lg-4 col-xl-4 order-0 mb-4">
-        <div class="card h-100">
-            <div class="card-header d-flex align-items-center justify-content-between pb-0">
-                <div class="card-title mb-0">
-                    <h5 class="m-0 me-2">Order Statistics</h5>
-                    <small class="text-muted">42.82k Total Sales</small>
-                </div>
-                <div class="dropdown">
-                    <button class="btn p-0" type="button" id="orederStatistics" data-bs-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                        <i class="bx bx-dots-vertical-rounded"></i>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="orederStatistics">
-                        <a class="dropdown-item" href="javascript:void(0);">Select All</a>
-                        <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-                        <a class="dropdown-item" href="javascript:void(0);">Share</a>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="d-flex flex-column align-items-center gap-1">
-                        <h2 class="mb-2">8,258</h2>
-                        <span>Total Orders</span>
-                    </div>
-                    <div id="orderStatisticsChart"></div>
-                </div>
-                <ul class="p-0 m-0">
-                    <li class="d-flex mb-4 pb-1">
-                        <div class="avatar flex-shrink-0 me-3">
-                            <span class="avatar-initial rounded bg-label-primary"><i
-                                    class="bx bx-mobile-alt"></i></span>
-                        </div>
-                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                                <h6 class="mb-0">Electronic</h6>
-                                <small class="text-muted">Mobile, Earbuds, TV</small>
-                            </div>
-                            <div class="user-progress">
-                                <small class="fw-semibold">82.5k</small>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="d-flex mb-4 pb-1">
-                        <div class="avatar flex-shrink-0 me-3">
-                            <span class="avatar-initial rounded bg-label-success"><i class="bx bx-closet"></i></span>
-                        </div>
-                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                                <h6 class="mb-0">Fashion</h6>
-                                <small class="text-muted">T-shirt, Jeans, Shoes</small>
-                            </div>
-                            <div class="user-progress">
-                                <small class="fw-semibold">23.8k</small>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="d-flex mb-4 pb-1">
-                        <div class="avatar flex-shrink-0 me-3">
-                            <span class="avatar-initial rounded bg-label-info"><i class="bx bx-home-alt"></i></span>
-                        </div>
-                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                                <h6 class="mb-0">Decor</h6>
-                                <small class="text-muted">Fine Art, Dining</small>
-                            </div>
-                            <div class="user-progress">
-                                <small class="fw-semibold">849k</small>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="d-flex">
-                        <div class="avatar flex-shrink-0 me-3">
-                            <span class="avatar-initial rounded bg-label-secondary"><i
-                                    class="bx bx-football"></i></span>
-                        </div>
-                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                                <h6 class="mb-0">Sports</h6>
-                                <small class="text-muted">Football, Cricket Kit</small>
-                            </div>
-                            <div class="user-progress">
-                                <small class="fw-semibold">99</small>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    Order Statistics
-
-    Expense Overview
-    <div class="col-md-6 col-lg-4 order-1 mb-4">
-        <div class="card h-100">
-            <div class="card-header">
-                <ul class="nav nav-pills" role="tablist">
-                    <li class="nav-item">
-                        <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
-                            data-bs-target="#navs-tabs-line-card-income" aria-controls="navs-tabs-line-card-income"
-                            aria-selected="true">
-                            Income
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button type="button" class="nav-link" role="tab">Expenses</button>
-                    </li>
-                    <li class="nav-item">
-                        <button type="button" class="nav-link" role="tab">Profit</button>
-                    </li>
-                </ul>
-            </div>
-            <div class="card-body px-0">
-                <div class="tab-content p-0">
-                    <div class="tab-pane fade show active" id="navs-tabs-line-card-income" role="tabpanel">
-                        <div class="d-flex p-4 pt-3">
-                            <div class="avatar flex-shrink-0 me-3">
-                                <img src="<c:url value=" /resources/img/icons/unicons/wallet.png" />" alt="User" />
-                            </div>
-                            <div>
-                                <small class="text-muted d-block">Total Balance</small>
-                                <div class="d-flex align-items-center">
-                                    <h6 class="mb-0 me-1">$459.10</h6>
-                                    <small class="text-success fw-semibold">
-                                        <i class="bx bx-chevron-up"></i>
-                                        42.9%
-                                    </small>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="incomeChart"></div>
-                        <div class="d-flex justify-content-center pt-4 gap-2">
-                            <div class="flex-shrink-0">
-                                <div id="expensesOfWeek"></div>
-                            </div>
-                            <div>
-                                <p class="mb-n1 mt-1">Expenses This Week</p>
-                                <small class="text-muted">$39 less than last week</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    Expense Overview
-
-    Transactions
-    <div class="col-md-6 col-lg-4 order-2 mb-4">
-        <div class="card h-100">
-            <div class="card-header d-flex align-items-center justify-content-between">
-                <h5 class="card-title m-0 me-2">Transactions</h5>
-                <div class="dropdown">
-                    <button class="btn p-0" type="button" id="transactionID" data-bs-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                        <i class="bx bx-dots-vertical-rounded"></i>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="transactionID">
-                        <a class="dropdown-item" href="javascript:void(0);">Last 28 Days</a>
-                        <a class="dropdown-item" href="javascript:void(0);">Last Month</a>
-                        <a class="dropdown-item" href="javascript:void(0);">Last Year</a>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body">
-                <ul class="p-0 m-0">
-                    <li class="d-flex mb-4 pb-1">
-                        <div class="avatar flex-shrink-0 me-3">
-                            <img src="<c:url value=" /resources/img/icons/unicons/paypal.png" />" alt="User"
-                            class="rounded" />
-                        </div>
-                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                                <small class="text-muted d-block mb-1">Paypal</small>
-                                <h6 class="mb-0">Send money</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-1">
-                                <h6 class="mb-0">+82.6</h6>
-                                <span class="text-muted">USD</span>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="d-flex mb-4 pb-1">
-                        <div class="avatar flex-shrink-0 me-3">
-                            <img src="<c:url value=" /resources/img/icons/unicons/wallet.png" />" alt="User"
-                            class="rounded" />
-                        </div>
-                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                                <small class="text-muted d-block mb-1">Wallet</small>
-                                <h6 class="mb-0">Mac'D</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-1">
-                                <h6 class="mb-0">+270.69</h6>
-                                <span class="text-muted">USD</span>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="d-flex mb-4 pb-1">
-                        <div class="avatar flex-shrink-0 me-3">
-                            <img src="<c:url value=" /resources/img/icons/unicons/chart.png" />" alt="User"
-                            class="rounded" />
-                        </div>
-                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                                <small class="text-muted d-block mb-1">Transfer</small>
-                                <h6 class="mb-0">Refund</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-1">
-                                <h6 class="mb-0">+637.91</h6>
-                                <span class="text-muted">USD</span>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="d-flex mb-4 pb-1">
-                        <div class="avatar flex-shrink-0 me-3">
-                            <img src="<c:url value=" /resources/img/icons/unicons/cc-success.png" />" alt="User"
-                            class="rounded" />
-                        </div>
-                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                                <small class="text-muted d-block mb-1">Credit Card</small>
-                                <h6 class="mb-0">Ordered Food</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-1">
-                                <h6 class="mb-0">-838.71</h6>
-                                <span class="text-muted">USD</span>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="d-flex mb-4 pb-1">
-                        <div class="avatar flex-shrink-0 me-3">
-                            <img src="<c:url value=" /resources/img/icons/unicons/wallet.png" />" alt="User"
-                            class="rounded" />
-                        </div>
-                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                                <small class="text-muted d-block mb-1">Wallet</small>
-                                <h6 class="mb-0">Starbucks</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-1">
-                                <h6 class="mb-0">+203.33</h6>
-                                <span class="text-muted">USD</span>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="d-flex">
-                        <div class="avatar flex-shrink-0 me-3">
-                            <img src="<c:url value=" /resources/img/icons/unicons/cc-warning.png" />" alt="User"
-                            class="rounded" />
-                        </div>
-                        <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                            <div class="me-2">
-                                <small class="text-muted d-block mb-1">Mastercard</small>
-                                <h6 class="mb-0">Ordered Food</h6>
-                            </div>
-                            <div class="user-progress d-flex align-items-center gap-1">
-                                <h6 class="mb-0">-92.45</h6>
-                                <span class="text-muted">USD</span>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div> -->
     <div class="content-wrapper">
-        <!-- Content -->
-
         <div class="container-xxl flex-grow-1 container-p-y">
             <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Bảng điều khiển /</span> Thống kê</h4>
-            <div style="margin-bottom: 25px">
-                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
-                    id="dropDownOption">
-                </button>
-                <ul class="dropdown-menu" id="dropDownOptionMenu" style="cursor: pointer;">
-                    <li>
-                        <div class="dropdown-item" data-value="year">Năm</div>
-                    </li>
-                    <li>
-                        <div class="dropdown-item" data-value="month">Tháng</div>
-                    </li>
-                    <li>
-                        <div class="dropdown-item" data-value="quarter">Quý</div>
-                    </li>
-                </ul>
-            </div>
-            <div id="containerDropDownYear">
-                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
-                    id="dropDownYear">
-                </button>
-                <ul class="dropdown-menu" id="dropDownYearMenu" style="cursor: pointer;">
 
-                </ul>
+            <div class="card mb-4">
+                <h5 class="card-header">Thống kê số người dùng</h5>
+                <div class="card-body">
+                    <div class="row gy-3">
+                        <div class="col-md-8">
+                            <div>
+                                <div>
+                                    <canvas id="chartUser"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <div class="form-check form-check-inline mt-3">
+                                <button type="button" class="btn btn-secondary dropdown-toggle"
+                                    data-bs-toggle="dropdown" id="dropDownOption">
+                                </button>
+                                <ul class="dropdown-menu" id="dropDownOptionMenu" style="cursor: pointer;">
+                                    <li>
+                                        <div id="itemYear" class="dropdown-item" data-value="year">Năm</div>
+                                    </li>
+                                    <li>
+                                        <div class="dropdown-item" data-value="month">Tháng</div>
+                                    </li>
+                                    <li>
+                                        <div class="dropdown-item" data-value="quarter">Quý</div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="form-check form-check-inline" id="containerDropDownYear">
+                                <button type="button" class="btn btn-secondary dropdown-toggle"
+                                    data-bs-toggle="dropdown" id="dropDownYear">
+                                </button>
+                                <ul class="dropdown-menu" id="dropDownYearMenu" style="cursor: pointer;">
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div style="width: 500px;height: 600px;">
-                <div>
-                    <canvas id="myChart"></canvas>
+            <div class="card mb-4">
+                <h5 class="card-header">Thống kê số bài đăng</h5>
+                <div class="card-body">
+                    <div class="row gy-3">
+                        <div class="col-md-8">
+                            <div>
+                                <div>
+                                    <canvas id="chartPost"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md">
+                            <div class="mb-5">
+                                <div class="form-check form-check-inline">
+                                    <button type="button" class="btn btn-secondary dropdown-toggle"
+                                        data-bs-toggle="dropdown" id="dropDownPostOption">
+                                    </button>
+                                    <ul class="dropdown-menu" id="dropDownPostOptionMenu" style="cursor: pointer;">
+                                        <li>
+                                            <div id="itemYearPost" class="dropdown-item" data-value="postYear">Năm</div>
+                                        </li>
+                                        <li>
+                                            <div class="dropdown-item" data-value="postMonth">Tháng</div>
+                                        </li>
+                                        <li>
+                                            <div class="dropdown-item" data-value="postQuarter">Quý</div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="form-check form-check-inline" id="containerDropDownPostYear">
+                                    <button type="button" class="btn btn-secondary dropdown-toggle"
+                                        data-bs-toggle="dropdown" id="dropDownPostYear">
+                                    </button>
+                                    <ul class="dropdown-menu" id="dropDownPostYearMenu" style="cursor: pointer;">
+
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="m-5">
+                                <div class="form-check mt-3">
+                                    <input class="form-check-input" checked type="checkbox" id="totalPost"
+                                        value="post" />
+                                    <label class="form-check-label" for="totalPost">Bài đăng thường</label>
+                                </div>
+                                <div class="form-check mt-3">
+                                    <input class="form-check-input" checked type="checkbox" id="totalPostSurvey"
+                                        value="postSurvey" />
+                                    <label class="form-check-label" for="totalPostSurvey">Bài đăng khảo sát</label>
+                                </div>
+                                <div class="form-check mt-3">
+                                    <input class="form-check-input" checked type="checkbox" id="totalPostInvitation"
+                                        value="postInvitation" />
+                                    <label class="form-check-label" for="totalPostInvitation">Bài đăng thư mời</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<c:url value="/admin/statistics/users" var="statisticsAction" />
+<c:url value="/admin/statistics/users" var="statUserAction" />
+<c:url value="/admin/stat" var="statAction" />
+<c:url value="/admin/stat/post" var="statPostAction" />
+<c:url value="/admin/stat/post_survey" var="statSurveyAction" />
+<c:url value="/admin/stat/post_invitation" var="statInvitationAction" />
 <script>
     var d = document.getElementById("dash-board");
     d.className += " active";
-
-    var ctx = document.getElementById('myChart');
-    var url = "${statisticsAction}";
-    console.log(url);
 
     var months = [
         "January", "February", "March", "April",
         "May", "June", "July", "August",
         "September", "October", "November", "December"
     ];
-    var quarter = ["Quý 1", "Quý 2", "Quý 3", "Quý 4"]
+    var quarter = ["Quý 1", "Quý 2", "Quý 3", "Quý 4"];
+
+    var years = [];
+
+    var ctx = document.getElementById('chartUser');
+    var ctxPost = document.getElementById("chartPost");
+    // var baseUrl = "http://localhost:8080/social_network";
+    // var endpoint = "/api/test/beans";
+    // var statisticsEndpoint = "/api/test/statistics";
+    var statApi = "${statAction}"
+    var statUserApi = "${statUserAction}";
+    var statPostApi = "${statPostAction}";
+    var statSurveyApi = "${statSurveyAction}";
+    var statInvitationApi = "${statInvitationAction}";
+
+    var configs = {
+        type: 'bar',
+        data: {},
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true
+                },
+                datalabels: {
+                    formatter: function (value, index, values) {
+                        if (value > 0) {
+                            value = value.toString();
+                            return value;
+                        } else {
+                            value = "";
+                            return value;
+                        }
+                    }
+                }
+            }
+        },
+        plugins: [ChartDataLabels]
+    }
+
+    var configsCharPost = {
+        type: 'bar',
+        data: {},
+        options: {
+            scales: {
+                x: {
+                    stacked: true
+                },
+                y: {
+                    stacked: true,
+                    beginAtZero: false
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true
+                },
+                datalabels: {
+                    formatter: function (value, index, values) {
+                        if (value > 0) {
+                            value = value.toString();
+                            return value;
+                        } else {
+                            value = "";
+                            return value;
+                        }
+                    }
+                }
+            },
+            responsive: true
+        },
+        plugins: [ChartDataLabels]
+    }
 
     $(document).ready(function (e) {
-        $("#containerDropDownYear").hide();
-        $("#dropDownOption").text("Năm");
+        // $("#containerDropDownYear").hide();
+        $("#dropDownOption").text("Tháng");
         $("#dropDownOptionMenu li div").click(function () {
             var selectedText = $(this).text();
-            var requestParams = new URLSearchParams();
-            requestParams.append("year", $("#dropDownYear").text());
             if (selectedText === "Tháng") {
                 $("#containerDropDownYear").show();
+                var requestParams = new URLSearchParams();
                 requestParams.append("byMonth", "true");
-                statistics(months, requestParams, url);
+                stat(months, requestParams, statUserApi);
 
             } else if (selectedText === "Quý") {
                 $("#containerDropDownYear").show();
+                var requestParams = new URLSearchParams();
                 requestParams.append("byQuarter", "true");
-                statistics(quarter, requestParams, url);
+                stat(quarter, requestParams, statUserApi);
             } else if (selectedText === "Năm") {
                 $("#containerDropDownYear").hide();
-                statistics([], null, url);
+                stat(years, null, statUserApi);
             }
             $("#dropDownOption").text(selectedText);
         });
@@ -574,90 +230,247 @@
             var option = $("#dropDownOption").text();
             if (option === "Tháng") {
                 requestParams.append("byMonth", "true");
-                statistics(months, requestParams, url);
+                stat(months, requestParams, statUserApi);
             } else if (option === "Quý") {
                 requestParams.append("byQuarter", "true");
-                statistics(quarter, requestParams, url);
+                stat(quarter, requestParams, statUserApi);
             }
 
             $("#dropDownYear").text(selectedText);
         });
+
+        // $("#containerDropDownPostYear").hide();
+        $("#dropDownPostOption").text("Tháng");
+        $("#dropDownPostOptionMenu li div").click(function () {
+            var selectedText = $(this).text();
+            if (selectedText === "Tháng") {
+                $("#containerDropDownPostYear").show();
+                var requestParams = new URLSearchParams();
+                requestParams.append("byMonth", "true");
+                checkPostType(months, requestParams);
+            } else if (selectedText === "Quý") {
+                $("#containerDropDownPostYear").show();
+                var requestParams = new URLSearchParams();
+                requestParams.append("byQuarter", "true");
+                checkPostType(quarter, requestParams);
+            } else if (selectedText === "Năm") {
+                $("#containerDropDownPostYear").hide();
+                checkPostType(years, null);
+            }
+            $("#dropDownPostOption").text(selectedText);
+        });
+
+        $("#dropDownPostYearMenu li div").click(function () {
+            var selectedText = $(this).text();
+            var requestParams = new URLSearchParams();
+            requestParams.append("year", selectedText);
+            var option = $("#dropDownPostOption").text();
+            if (option === "Tháng") {
+                requestParams.append("byMonth", "true");
+                checkPostType(months, requestParams);
+            } else if (option === "Quý") {
+                requestParams.append("byQuarter", "true");
+                checkPostType(quarter, requestParams);
+            }
+
+            $("#dropDownPostYear").text(selectedText);
+        });
     });
 
-    var dataset = {
-        label: 'Số người dùng',
-        data: [],
-        borderWidth: 1
-    }
-
-    var dataValue = {
-        labels: [],
-        datasets: [dataset]
-    }
-
-    var configs = {
-        type: 'bar',
-        data: dataValue,
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+    async function stat(labels, requestParams, api) {
+        var data = {
+            labels: labels,
+            datasets: []
+        }
+        var datasetUser = {
+            label: 'Số người dùng',
+            data: labels.length > 0 ? Array.from({ length: labels.length }, () => 0) : [],
+            borderWidth: 1,
+            backgroundColor: "#6699FF",
+            datalabels: {
+                color: 'black'
             }
+        }
+
+        await fetch(`\${api}\${requestParams != null ? '?' + requestParams.toString() : ''}`)
+            .then(res => {
+                if (res.ok) {
+                    return res.json();
+                }
+                return res.text().then(text => { throw new Error(text) })
+
+            })
+            .then(d => {
+                var counter = 0;
+                d.forEach(element => {
+                    if (requestParams != null) {
+                        datasetUser.data[element[0] - 1] = element[1];
+                    } else {
+                        datasetUser.data[counter] = element[1];
+                        counter++;
+                    }
+                })
+            })
+            .catch(err => console.log(err));
+
+        data.datasets = [datasetUser];
+        configs.data = data;
+        drawChart(labels, ctx, configs);
+    }
+
+    async function statPost(labels, requestParams, api, postType) {
+        var data = null;
+
+        if (Object.keys(configsCharPost.data).length === 0) {
+            data = {
+                labels: labels,
+                datasets: []
+            };
+        } else {
+            data = configsCharPost.data;
+        }
+
+        var datasets = data.datasets;
+        var dataset = null;
+
+        if (postType === "post") {
+            dataset = createDataset('Bài đăng thường', labels, '#FFCC66', 1);
+            // posts[0] = true;
+        } else if (postType === "postSurvey") {
+            dataset = createDataset('Bài đăng khảo sát', labels, '#FFFF66', 2);
+            // posts[1] = true;
+        } else if (postType === "postInvitation") {
+            dataset = createDataset('Bài đăng thư mời', labels, '#6699FF', 3);
+            // posts[2] = true;
+        } else {
+            return;
+        }
+        await fetch(`\${api}\${requestParams != null ? '?' + requestParams.toString() : ''}`)
+            .then(res => {
+                if (res.ok) {
+                    return res.json();
+                }
+                return res.json().then(text => { throw new Error(text) })
+            }).then(d => {
+                var counter = 0;
+                d.forEach(value => {
+                    if (requestParams != null) {
+                        dataset.data[value[0] - 1] = value[1];
+                    } else {
+                        dataset.data[counter] = value[1];
+                        counter++;
+                    }
+                })
+
+
+            }).catch(err => console.log(err));
+
+        datasets.push(dataset);
+        data.datasets = datasets;
+        configsCharPost.data = data;
+    }
+
+    async function fetchData() {
+
+        await fetch(statUserApi)
+            .then(res => {
+                if (res.ok) {
+                    return res.json();
+                }
+                return res.text().then(err => { throw new Error(err) });
+            }).then(data => {
+                data.forEach(value => {
+                    var newLi = $(`
+                    <li>
+                      <div class="dropdown-item">\${value[0]}</div>
+                    </li>
+                  `)
+                    var newLi2 = $(`
+                    <li>
+                      <div class="dropdown-item">\${value[0]}</div>
+                    </li>
+                  `)
+                    years.push(value[0])
+                    $("#dropDownYearMenu").append(newLi);
+                    $("#dropDownPostYearMenu").append(newLi2);
+                })
+                $("#dropDownYear").text($("#dropDownYearMenu li:first div").text());
+                $("#dropDownPostYear").text($("#dropDownPostYearMenu li:first div").text());
+            })
+
+        // var yearValue = years[years.length - 1];
+        // years.push(yearValue + 1);
+        // years.push(yearValue + 2);
+        // years.push(yearValue + 3);
+
+        if (years.length === 1) {
+            $("#itemYear").hide();
+            $("#itemYearPost").hide();
+        }
+
+        var requestParams = new URLSearchParams();
+        requestParams.append("byMonth", "true");
+        requestParams.append("year", "2023");
+        await statPost(months, requestParams, statPostApi, "post");
+        await statPost(months, requestParams, statSurveyApi, "postSurvey");
+        await statPost(months, requestParams, statInvitationApi, "postInvitation");
+        await stat(months, requestParams, statUserApi);
+
+        drawChart(months, ctxPost, configsCharPost);
+    }
+
+    function createDataset(labelName, labels, color, id) {
+        return dataset = {
+            label: labelName,
+            data: labels.length > 0 ? Array.from({ length: labels.length }, () => 0) : [],
+            backgroundColor: color,
+            datalabels: {
+                color: 'black'
+            },
+            id: id
         }
     }
 
-    var isInit = false;
+    function drawChart(labels, chartCtx, chartConfis) {
+        if (Object.keys(configsCharPost.data).length === 0) {
+            var data = {
+                labels: labels,
+                datasets: [{
+                    label: "empty",
+                    data: Array.from({ length: labels.length }, () => 0),
+                    backgroundColor: 'red',
+                    datalabels: {
+                        color: 'black'
+                    },
+                    id: 1
+                }]
+            };
+            chartConfis.data = data;
+        }
+        var chart = Chart.getChart(chartCtx);
+        if (chart) {
+            chart.destroy();
+        }
 
-    var myChart = new Chart(ctx, configs);
-
-    statistics([], null, url);
-
-    function statistics(labels, requestParams, api) {
-        console.log(`\${api}\${requestParams != null ? '?' + requestParams.toString() : ''}`);
-        fetch(`\${api}\${requestParams != null ? '?' + requestParams.toString() : ''}`)
-            .then(res => {
-                if (res.ok) {
-                    console.log("GET SUCCESS");
-                    res.json().then(d => {
-                        if (labels != null && labels.length > 0) {
-                            dataValue["labels"] = labels;
-                            dataset["data"] = Array.from({ length: labels.length }, () => 0);
-                            d.forEach(element => {
-                                dataset["data"][element[0] - 1] = element[1];
-                            });
-                            dataValue["datasets"] = [dataset];
-                            configs["data"] = dataValue;
-                            myChart.destroy();
-                            myChart = new Chart(ctx, configs);
-                        } else {
-                            data = [];
-                            d.forEach(element => {
-                                labels.push(element[0]);
-                                data.push(element[1]);
-                                if (!isInit) {
-                                    var newLi = $(`
-                                    <li>
-                                    <div class="dropdown-item">\${element[0]}</div>
-                                    </li>
-                                `)
-                                    $("#dropDownYearMenu").append(newLi);
-                                }
-                            });
-                            dataValue["labels"] = labels;
-                            dataset["data"] = data;
-                            dataValue["datasets"] = [dataset];
-                            configs["data"] = dataValue;
-                            myChart.destroy();
-                            myChart = new Chart(ctx, configs);
-                            $("#dropDownYear").text(labels[0]);
-                        }
-                        isInit = true;
-                    });
-                }
-
-            }).catch(err => {
-                console.log(err);
-            });
+        chart = new Chart(chartCtx, chartConfis);
     }
+
+    async function checkPostType(labels, requestParams) {
+        configsCharPost.data = {};
+        if ($("#totalPost").prop("checked")) {
+            await statPost(labels, requestParams, statPostApi, "post");
+        }
+
+        if ($("#totalPostSurvey").prop("checked")) {
+            await statPost(labels, requestParams, statSurveyApi, "postSurvey");
+        }
+
+        if ($("#totalPostInvitation").prop("checked")) {
+            await statPost(labels, requestParams, statInvitationApi, "postInvitation");
+        }
+        console.log(configsCharPost.data)
+        drawChart(labels, ctxPost, configsCharPost);
+    }
+
+    fetchData();
 </script>

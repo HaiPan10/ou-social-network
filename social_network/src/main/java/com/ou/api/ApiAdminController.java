@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ou.pojo.Account;
 import com.ou.pojo.Post;
 import com.ou.service.interfaces.AccountService;
+import com.ou.service.interfaces.PostInvitationService;
 import com.ou.service.interfaces.PostService;
 import com.ou.service.interfaces.PostSurveyService;
 
@@ -31,6 +32,8 @@ public class ApiAdminController {
     private PostService postService;
     @Autowired
     private PostSurveyService postSurveyService;
+    @Autowired
+    private PostInvitationService postInvitationService;
 
     @PatchMapping("accounts/update_status")
     public ResponseEntity<?> update(@RequestBody Map<String, String> request){
@@ -81,6 +84,34 @@ public class ApiAdminController {
     public ResponseEntity<?> numberOfUsers(@RequestParam Map<String, String> params){
         try {
             return ResponseEntity.ok().body(accountService.stat(params));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping(path = "stat/post")
+    public ResponseEntity<?> statPost(@RequestParam Map<String, String> params){
+        try {
+            return ResponseEntity.ok().body(postService.stat(params));
+        } catch (Exception e) {
+            System.out.println("[ERROR] - " + e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping(path = "stat/post_survey")
+    public ResponseEntity<?> statPostSurvey(@RequestParam Map<String, String> params){
+        try {
+            return ResponseEntity.ok().body(postSurveyService.stat(params));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping(path = "stat/post_invitation")
+    public ResponseEntity<?> statPostInvitation(@RequestParam Map<String, String> params){
+        try {
+            return ResponseEntity.ok().body(postInvitationService.stat(params));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
