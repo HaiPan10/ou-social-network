@@ -134,7 +134,7 @@
 }
 
 /* The search field */
-#personalInput {
+#personalInput, #groupInput {
   font-size: 16px;
   padding: 14px 20px 12px 15px;
   border: none;

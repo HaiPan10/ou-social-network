@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ou.pojo.GroupUser;
 import com.ou.pojo.InvitationGroup;
 import com.ou.pojo.User;
 import com.ou.repository.interfaces.GroupRepository;
@@ -25,6 +26,11 @@ public class GroupServiceImpl implements GroupService{
     @Override
     public void addUsers(Integer groupId, List<User> users) throws Exception {
         groupRepository.addUsers(groupId, users);
+    }
+
+    @Override
+    public List<Object[]> getUsers(Integer groupId) {
+        return groupRepository.getUsers(groupId);
     }
     
 }

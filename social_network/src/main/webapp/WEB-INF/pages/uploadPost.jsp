@@ -161,15 +161,30 @@
                     <div id="personalDropDown" class="dropdown" style="display: none;">
                         <button type="button" id="personalDropDownBtn" class="btn btn-outline-secondary dropdown-toggle">Chọn người nhận</button>
                         <div id="personalDropDownMenu" class="dropdown-content">
-                        <input type="text" placeholder="Tìm kiếm.." id="personalInput" onkeyup="autoComplete()">
+                        <input type="text" placeholder="Tìm kiếm.." id="personalInput" onkeyup="autoCompletePerson()">
                         <c:forEach items="${accountList}" var="a">
                             <div class="user-row" id="user_${a[0]}">
                                 <div class="user-column">
-                                <img src="${a[3]}" alt="">
+                                    <img src="${a[3]}" alt="">
                                 </div>
                                 <div class="user-column">
-                                <div class="fullName">${a[2]}</div>
-                                <div class="mail">${a[1]}</div>
+                                    <div class="fullName">${a[2]}</div>
+                                    <div class="mail">${a[1]}</div>
+                                </div>
+                            </div>
+                        </c:forEach>
+                        </div>
+                    </div>
+
+                    <c:url value="/admin/invitation_groups/" var="getUsers" />
+                    <div id="groupDropDown" class="dropdown" style="display: none;">
+                        <button type="button" id="groupDropDownBtn" class="btn btn-outline-secondary dropdown-toggle">Chọn nhóm</button>
+                        <div id="groupDropDownMenu" class="dropdown-content">
+                        <input type="text" placeholder="Tìm kiếm.." id="groupInput" onkeyup="autoCompleteGroup()">
+                        <c:forEach items="${invitationGroups}" var="g">
+                            <div class="user-row" id="group_${g.id}">
+                                <div class="user-column">
+                                    <div class="groupName">${g.groupName}</div>
                                 </div>
                             </div>
                         </c:forEach>
@@ -287,7 +302,7 @@
                     <div style="display: flex; gap: 15px;">
                     <label class="form-label">Câu hỏi hộp kiểm</label>
                     <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" name="isMandatory_\${currentCount}"/>
+                        <input class="form-check-input" type="checkbox" disabled name="isMandatory_\${currentCount}"/>
                         <label class="form-check-label" 
                         >Bắt buộc</label
                         >
@@ -378,7 +393,8 @@
             $("#user-box").empty();
 
             if (selectedText === "Cá nhân" || selectedText === "Tự chỉ định") {
-                $("#personalDropDown").fadeIn();
+                $("#personalDropDown").show();
+                $("#groupDropDown").hide();
                 if (selectedText === "Tự chỉ định") {
                     $("#save-group-btn").show();
                 } else {
@@ -395,10 +411,13 @@
                     </div>
                 </div>
                 `))
-                $("#personalDropDown").fadeOut();
+                $("#personalDropDown").hide();
+                $("#groupDropDown").hide();
+                $("#save-group-btn").hide();
             } else {
-              $("#personalDropDown").fadeOut();
-              $("#save-group-btn").hide();
+                $("#groupDropDown").show();
+                $("#personalDropDown").hide();
+                $("#save-group-btn").hide();
             }
             $("#dropDownParticipant").text(selectedText);
         });
@@ -408,31 +427,49 @@
             document.getElementById("personalDropDownMenu").classList.toggle("show");
         })
 
-        showLessDiv();
+        $("#groupDropDownBtn").click(function() {
+            document.getElementById("groupDropDownMenu").classList.toggle("show");
+        })
+
+        showLessDivPerson();
+        showLessDivGroup();
 
         $(".user-row").click(function() {
             if ($("#dropDownParticipant").text() === "Cá nhân") {
                 document.getElementById("personalDropDownMenu").classList.toggle("show");
                 $("#user-box").empty();
             }
+            if ($("#dropDownParticipant").text() === "Cá nhân" || $("#dropDownParticipant").text() === "Tự chỉ định") {
                 let htmlCode = $(this)[0].outerHTML.replace('class="user-row"', 'class="user-row tiny-box"');
                 var $id = $(htmlCode).attr('id');
                 let childDivs = $("#user-box").find(".user-row");
                 let idList = [];
                 childDivs.each(function() {
-                idList.push($(this).attr("id"));
-            });
-            if (!idList.includes($id)) {
-                $("#user-box").append(htmlCode);
+                    idList.push($(this).attr("id"));
+                });
+                if (!idList.includes($id)) {
+                    $("#user-box").append(htmlCode);
+                }
+            } else if ($("#dropDownParticipant").text() === "Nhóm") {
+                let groupId = $(this).attr('id').split("_")[1];
+                let url = "${getUsers}" + groupId;
+                getUsers(url)
             }
         })
 
         $(document).on("click", function(event) {
-          var elementToCheck = $("#personalDropDownMenu");
-          if (elementToCheck.css("display") === "block") {
-            var toggleButton = $("#personalDropDownBtn");
-            if (!elementToCheck.is(event.target) && elementToCheck.has(event.target).length === 0 && !toggleButton.is(event.target)) {
-              elementToCheck.removeClass("show")
+          var elementToCheckPerson = $("#personalDropDownMenu");
+          if (elementToCheckPerson.css("display") === "block") {
+            var toggleButtonPerson = $("#personalDropDownBtn");
+            if (!elementToCheckPerson.is(event.target) && elementToCheckPerson.has(event.target).length === 0 && !toggleButtonPerson.is(event.target)) {
+                elementToCheckPerson.removeClass("show")
+            }
+          }
+          var elementToCheckGroup = $("#groupDropDownMenu");
+          if (elementToCheckGroup.css("display") === "block") {
+            var toggleButtonGroup = $("#groupDropDownBtn");
+            if (!elementToCheckGroup.is(event.target) && elementToCheckGroup.has(event.target).length === 0 && !toggleButtonGroup.is(event.target)) {
+                elementToCheckGroup.removeClass("show")
             }
           }
         });
@@ -530,6 +567,36 @@
         }
     }
 
+    async function getUsers(url){
+        let response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            },
+        })
+
+        if(response.ok){
+            let data = await response.json();
+            $("#user-box").empty();
+            data.forEach(function (item, index) {
+                $("#user-box").append($(`
+                    <div class="user-row" id="user_\${item[0]}">
+                        <div class="user-column">
+                            <img src="\${item[3]}" alt="">
+                        </div>
+                        <div class="user-column">
+                            <div class="fullName">\${item[2]}</div>
+                            <div class="mail">\${item[1]}</div>
+                        </div>
+                    </div>
+                `))
+            });
+        } else {
+            const errorText = await response.text();
+            alert(errorText);
+        }
+    }
+
     function deleteQuestion(buttonId) {
         let currentPos = buttonId.split("_")[1];
         $(`#question_\${currentPos}`).slideUp(function() {
@@ -576,7 +643,7 @@
         return `\${day}-\${month}-\${year} \${hours}:\${minutes}:\${seconds}`;
     }
 
-    function showLessDiv() {
+    function showLessDivPerson() {
         var divs = document.querySelectorAll("#personalDropDownMenu .user-row:not([style*='display: none'])");
         if (divs.length > 5) {
             for (var i = 0; i < divs.length; i++) {
@@ -590,7 +657,21 @@
         }
     }
 
-    function autoComplete() {
+    function showLessDivGroup() {
+        var divs = document.querySelectorAll("#groupDropDownMenu .user-row:not([style*='display: none'])");
+        if (divs.length > 5) {
+            for (var i = 0; i < divs.length; i++) {
+            if (i < 5) {
+                divs[i].style.display = "";
+            } else {
+                divs[i].style.display = "none";
+            }
+        }
+        } else {
+        }
+    }
+
+    function autoCompletePerson() {
         var input, filter, ul, li, a, i;
         input = document.getElementById("personalInput");
         filter = input.value.toUpperCase();
@@ -604,6 +685,23 @@
             a[i].style.display = "none";
           }
         }
-        showLessDiv();
+        showLessDivPerson();
+    }
+
+    function autoCompleteGroup() {
+        var input, filter, ul, li, a, i;
+        input = document.getElementById("groupInput");
+        filter = input.value.toUpperCase();
+        div = document.getElementById("groupDropDownMenu");
+        a = div.getElementsByClassName("user-row");
+        for (i = 0; i < a.length; i++) {
+          txtValue = a[i].textContent || a[i].innerText;
+          if (txtValue.toUpperCase().indexOf(filter) > -1) {
+            a[i].style.display = "";
+          } else {
+            a[i].style.display = "none";
+          }
+        }
+        showLessDivGroup();
     }
   </script>

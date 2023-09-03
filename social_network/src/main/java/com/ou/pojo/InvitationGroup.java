@@ -18,6 +18,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -46,6 +49,7 @@ public class InvitationGroup implements Serializable {
     private String groupName;
     // @OneToMany(mappedBy = "groupId")
     // private Collection<PostInvitation> postInvitationCollection;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "groupId")
     private List<GroupUser> groupUsers;
 

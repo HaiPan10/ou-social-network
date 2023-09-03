@@ -35,8 +35,6 @@ public class AccountRepositoryImpl implements AccountRepository {
     private LocalSessionFactoryBean sessionFactoryBean;
     @Autowired
     private Environment env;
-    @Autowired
-    private SimpleDateFormat simpleDateFormat;
 
     @Override
     public Optional<Account> retrieve(Integer id) {
