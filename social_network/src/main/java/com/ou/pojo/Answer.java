@@ -47,20 +47,21 @@ public class Answer implements Serializable {
     @Size(max = 1000)
     @Column(name = "value")
     private String value;
-    @JsonIgnore
+
     @JoinColumn(name = "question_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Question questionId;
+
     @JsonIgnore
     @JoinColumn(name = "response_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Response responseId;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "answerId")
     private Collection<AnswerOption> answerOptions;
 
     @Override
     public String toString() {
-        return "com.ou.pojo.Answer[ id=" + id + " ]";
-    }
-    
+        return "Answer [value=" + value + ", questionId=" + questionId + ", answerOptions=" + answerOptions + "]";
+    } 
 }

@@ -21,12 +21,14 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
@@ -45,23 +47,25 @@ public class Response implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
+
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss", timezone = "Asia/Ho_Chi_Minh")
     private Date createdAt;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "responseId")
     private Collection<Answer> answers;
-    @JsonIgnore
+
     @JoinColumn(name = "survey_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private PostSurvey surveyId;
-    @JsonIgnore
+
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private User userId;
 
     @Override
     public String toString() {
-        return "com.ou.pojo.Response[ id=" + id + " ]";
+        return "Response [answers=" + answers + ", surveyId=" + surveyId + ", userId=" + userId + "]";
     }
-    
 }

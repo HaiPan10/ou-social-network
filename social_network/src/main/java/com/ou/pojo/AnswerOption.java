@@ -14,6 +14,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,16 +40,18 @@ public class AnswerOption implements Serializable {
     @NotNull
     @Column(name = "id")
     private Integer id;
+
+    @JsonIgnore
     @JoinColumn(name = "answer_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Answer answerId;
+
     @JoinColumn(name = "question_option_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private QuestionOption questionOptionId;
 
     @Override
     public String toString() {
-        return "com.ou.pojo.AnswerOption[ id=" + id + " ]";
+        return "AnswerOption [questionOptionId=" + questionOptionId + "]";
     }
-    
 }

@@ -59,13 +59,11 @@ public class QuestionOption implements Serializable {
     @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "questionOptionId")
     private List<AnswerOption> answerOptions;
-    
+
     @Override
     public String toString() {
-        return "QuestionOption [value=" + value + ", questionOrder=" + questionOrder + ", questionId=" + questionId
-                + "]";
+        return "QuestionOption [id=" + id + "]";
     }
 
-    
     
 }

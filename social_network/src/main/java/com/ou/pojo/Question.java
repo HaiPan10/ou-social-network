@@ -38,7 +38,6 @@ import lombok.ToString;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class Question implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -72,12 +71,9 @@ public class Question implements Serializable {
     @JoinColumn(name = "question_type_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private QuestionType questionTypeId;
-    // @Override
-    // public String toString() {
-    //     return "Question [questionText=" + questionText + ", isMandatory=" + isMandatory + ", questionOrder="
-    //             + questionOrder + ", questionOptions=" + questionOptions + ", questionTypeId=" + questionTypeId + "]";
-    // }
 
-    
-    
+    @Override
+    public String toString() {
+        return "Question [id=" + id + "]";
+    }
 }
