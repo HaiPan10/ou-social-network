@@ -184,7 +184,6 @@ export const PostSurvey = ({post, posts, setPosts}) => {
     }
 
     useEffect(() => {
-      console.log(post)
       document.addEventListener('mousedown', handleClickOutside);
       return () => {
         document.removeEventListener('mousedown', handleClickOutside)
@@ -209,6 +208,59 @@ export const PostSurvey = ({post, posts, setPosts}) => {
       // setTotal(null)
     }
     const formattedDate = post.createdAt.replace(/(\d{2})-(\d{2})-(\d{4}) (\d{2}:\d{2}:\d{2})/, '$3-$2-$1 $4');
+
+    const getAnswers = () => {
+      const questions = document.querySelectorAll(".question-wrapper")
+      const answers = []
+    
+      questions.forEach((question) => {
+        const questionId = question.getAttribute("data-key")
+        const questionType = question.getAttribute("data-type")
+        const answer = { questionId: { id: questionId } }
+    
+        if (questionType === "2") {
+          const textarea = question.querySelector("textarea")
+          answer.value = textarea.value
+        } else if (questionType === "1") {
+          const radioInput = question.querySelector("input[type=radio]:checked");
+          if (radioInput) {
+            answer.answerOptions = [{
+              questionOptionId: { id: radioInput.value }            
+            }]
+          }
+        } else if (questionType === "3") {
+          const checkboxInputs = question.querySelectorAll("input[type=checkbox]:checked");
+          if (checkboxInputs) {
+            answer.answerOptions = Array.from(checkboxInputs).map((checkbox) => ({
+              questionOptionId: { id: parseInt(checkbox.value) },
+            }));
+          }
+        }
+    
+        answers.push(answer)
+      });
+      return answers
+    }
+
+    const submitSurvey = (evt) => {
+      evt.preventDefault();
+      const process = async () => {
+        try {
+          let res = await authAPI().post(endpoints['responses'], {
+            "surveyId": {
+              "id": post.id
+            },
+            "answers": getAnswers()
+          })
+          if (res.status === 201) {
+            setShowMore(false)
+            setPosts(posts.filter(p => p.id !== post.id))
+          }
+        } catch (ex) {
+        }
+      }
+      process()
+    }
 
     return (
         <div className='post'>
@@ -246,36 +298,36 @@ export const PostSurvey = ({post, posts, setPosts}) => {
                 <div className="content">
                     <h3 className='title'>{post.postSurvey.surveyTitle}</h3>
                     <p style={{marginBottom: "2px"}}>{post.content}</p>
-                    <div class="row">
+                    <div className="row">
                       {!showMore ?
                         <div className='show-more text-center'>
                           <div onClick={() => setShowMore(true)} className='move-icon' ><KeyboardDoubleArrowDownIcon className=' animate__animated animate__infinite animate__flip'/> Mở khảo sát</div>
                         </div>
                         :
-                        <form class="" style={{width: "100%"}} action="">
+                        <form onSubmit={submitSurvey} className="" style={{width: "100%"}} action="">
                         {sortedQuestions.map( (question) => {
                           return (
-                            <div className="question-wrapper" key={question.id}>
+                            <div className="question-wrapper" key={question.id} data-key={question.id} data-type={question.questionTypeId.id}>
                               {question.questionTypeId.id === 2 && 
                                 <div className="input-question">
-                                  <div class="form-outline mb-4">
-                                    <label class="fw-bold form-label">Câu hỏi {question.questionOrder}: {question.questionText}
+                                  <div className="form-outline mb-4">
+                                    <label className="fw-bold form-label">Câu hỏi {question.questionOrder}: {question.questionText}
                                       {question.isMandatory && <span className='piority-question'>câu hỏi bắt buộc (*)</span>}
                                     </label>
-                                    <textarea class="form-control" rows="2" maxLength={255} name={question.id} required={question.isMandatory ? true : false}></textarea>
+                                    <textarea className="form-control" rows="2" maxLength={255} id={`textarea_${question.id}`} name={question.id} required={question.isMandatory ? true : false}></textarea>
                                   </div>
                                 </div>
                               }
                               {question.questionTypeId.id === 1 && 
                                 <div className="multiple-question form-outline mb-4">
-                                  <p class="fw-bold form-label">Câu hỏi {question.questionOrder}: {question.questionText}
+                                  <p className="fw-bold form-label">Câu hỏi {question.questionOrder}: {question.questionText}
                                     {question.isMandatory && <span className='piority-question'>câu hỏi bắt buộc (*)</span>}
                                   </p>
                                   {question.questionOptions.map( (option) => {
                                   return (
                                     <div className="form-check mb-2 question-option" key={option.id}>
-                                      <input class="form-check-input" type="radio" name={question.id} value={option.value} required={question.isMandatory ? true : false}/>
-                                      <label class="form-check-label" for="radioExample1">
+                                      <input className="form-check-input" type="radio" name={question.id} value={option.id} required={question.isMandatory ? true : false}/>
+                                      <label className="form-check-label">
                                         {option.value}
                                       </label>
                                     </div>
@@ -285,14 +337,14 @@ export const PostSurvey = ({post, posts, setPosts}) => {
                               }
                               {question.questionTypeId.id === 3 && 
                                 <div className="checkbox-question form-outline mb-4">
-                                  <p class="fw-bold form-label">Câu hỏi {question.questionOrder}: {question.questionText}
+                                  <p className="fw-bold form-label">Câu hỏi {question.questionOrder}: {question.questionText}
                                     {question.isMandatory && <span className='piority-question'>câu hỏi bắt buộc (*)</span>}
                                   </p>
                                   {question.questionOptions.map( (option) => {
                                     return (
-                                      <div class="question-option form-check" key={option.id}>
-                                        <input class="form-check-input" type="checkbox" name={question.id} value={option.value}/>
-                                        <label class="form-check-label">
+                                      <div className="question-option form-check" key={option.id}>
+                                        <input className="form-check-input" type="checkbox" name={question.id} value={option.id}/>
+                                        <label className="form-check-label">
                                           {option.value}
                                         </label>
                                       </div>
@@ -303,8 +355,8 @@ export const PostSurvey = ({post, posts, setPosts}) => {
                             </div>
                           )
                         })}
-                        <div class="text-center pb-4">
-                          <button type="submit" class="btn btn-primary"><TaskAltIcon/> Hoàn thành khảo sát</button>
+                        <div className="text-center pb-4">
+                          <button type="submit" className="btn btn-primary"><TaskAltIcon/> Hoàn thành khảo sát</button>
                         </div>
                         <div className='show-more text-center'>
                           <div onClick={() => setShowMore(false)} className='move-icon' ><KeyboardDoubleArrowUpIcon className=' animate__animated animate__infinite animate__flip'/>  Đóng khảo sát</div>

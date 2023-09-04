@@ -41,9 +41,9 @@ public class Answer implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull
     @Column(name = "id")
     private Integer id;
+
     @Size(max = 1000)
     @Column(name = "value")
     private String value;
@@ -57,7 +57,7 @@ public class Answer implements Serializable {
     @ManyToOne(optional = false)
     private Response responseId;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "answerId")
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "answerId")
     private Collection<AnswerOption> answerOptions;
 
     @Override

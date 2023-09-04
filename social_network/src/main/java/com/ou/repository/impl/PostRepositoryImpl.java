@@ -35,6 +35,7 @@ import com.ou.pojo.Post;
 import com.ou.pojo.PostInvitation;
 import com.ou.pojo.PostInvitationUser;
 import com.ou.pojo.PostSurvey;
+import com.ou.pojo.Response;
 import com.ou.pojo.User;
 import com.ou.repository.interfaces.PostRepository;
 
@@ -71,12 +72,25 @@ public class PostRepositoryImpl implements PostRepository {
         Join<Post, PostInvitation> joinPostInvitation = rPost.join("postInvitation", JoinType.LEFT);
         Join<PostInvitation, PostInvitationUser> joinPostInvitationUser = joinPostInvitation.join("postInvitationUsers", JoinType.LEFT);
 
-        predicates.add(builder.or(
-            builder.isNull(joinPostInvitation),
-            builder.isNull(joinPostInvitationUser),
-            builder.and(
+        Join<Post, PostSurvey> joinPostSurvey = rPost.join("postSurvey", JoinType.LEFT);
+        Join<PostSurvey, Response> joinResponse = joinPostSurvey.join("responses", JoinType.LEFT);
+
+        // System.out.println("startAt" + joinPostInvitation.get("startAt"));
+        // System.out.println("TODAY " + new Date());
+        predicates.add(builder.and(
+            builder.or(
+                builder.isNull(joinPostSurvey),
+                builder.isNull(joinResponse),
+                builder.notEqual(joinResponse.get("userId"), currentUserId)
+            ),
+            builder.or(
+                builder.isNull(joinPostInvitation),
+                builder.isNull(joinPostInvitationUser),
                 builder.equal(joinPostInvitationUser.get("userId"), currentUserId)
-                // builder.greaterThan(joinPostInvitation.get("startAt"), new Date())
+                // builder.and(
+                //     builder.equal(joinPostInvitationUser.get("userId"), currentUserId)
+                //     builder.greaterThan(joinPostInvitation.get("startAt"), new Date())
+                // )
             )
         ));
 
@@ -221,14 +235,25 @@ public class PostRepositoryImpl implements PostRepository {
         Join<Post, PostInvitation> joinPostInvitation = rPost.join("postInvitation", JoinType.LEFT);
         Join<PostInvitation, PostInvitationUser> joinPostInvitationUser = joinPostInvitation.join("postInvitationUsers", JoinType.LEFT);
 
-        System.out.println("startAt" + joinPostInvitation.get("startAt"));
-        System.out.println("TODAY " + new Date());
-        predicates.add(builder.or(
-            builder.isNull(joinPostInvitation),
-            builder.isNull(joinPostInvitationUser),
-            builder.and(
+        Join<Post, PostSurvey> joinPostSurvey = rPost.join("postSurvey", JoinType.LEFT);
+        Join<PostSurvey, Response> joinResponse = joinPostSurvey.join("responses", JoinType.LEFT);
+
+        // System.out.println("startAt" + joinPostInvitation.get("startAt"));
+        // System.out.println("TODAY " + new Date());
+        predicates.add(builder.and(
+            builder.or(
+                builder.isNull(joinPostSurvey),
+                builder.isNull(joinResponse),
+                builder.notEqual(joinResponse.get("userId"), currentUserId)
+            ),
+            builder.or(
+                builder.isNull(joinPostInvitation),
+                builder.isNull(joinPostInvitationUser),
                 builder.equal(joinPostInvitationUser.get("userId"), currentUserId)
-                // builder.greaterThan(joinPostInvitation.get("startAt"), new Date())
+                // builder.and(
+                //     builder.equal(joinPostInvitationUser.get("userId"), currentUserId)
+                //     builder.greaterThan(joinPostInvitation.get("startAt"), new Date())
+                // )
             )
         ));
 

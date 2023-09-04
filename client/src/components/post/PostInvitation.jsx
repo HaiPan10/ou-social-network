@@ -193,7 +193,6 @@ const DeleteConfirmation = (props) => {
     }
 
     useEffect(() => {
-      console.log(post)
       document.addEventListener('mousedown', handleClickOutside);
       return () => {
         document.removeEventListener('mousedown', handleClickOutside)

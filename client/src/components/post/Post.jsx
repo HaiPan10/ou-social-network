@@ -177,7 +177,6 @@ export const Post = ({post, posts, setPosts}) => {
     }
 
     useEffect(() => {
-      console.log(post)
       document.addEventListener('mousedown', handleClickOutside);
       return () => {
         document.removeEventListener('mousedown', handleClickOutside)
