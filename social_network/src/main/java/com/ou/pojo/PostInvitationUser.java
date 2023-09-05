@@ -50,9 +50,9 @@ public class PostInvitationUser implements Serializable {
     @ManyToOne(optional = false)
     private User userId;
 
-    // @Override
-    // public String toString() {
-    //     return "com.ou.pojo.PostInvitationUser[ id=" + id + " ]";
-    // }
+    @Override
+    public String toString() {
+        return "User[ id=" + userId + " ]";
+    }
     
 }

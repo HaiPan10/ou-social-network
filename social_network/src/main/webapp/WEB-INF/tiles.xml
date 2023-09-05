@@ -74,6 +74,20 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
         <put-attribute name="pageImport"
                        value="/WEB-INF/pageImport/postDetailImport.jsp" />
     </definition>
+    <definition name="postSurveyDetail" extends="baseLayout">
+        <put-attribute name="title" value="Chi tiết bài đăng" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/postSurveyDetail.jsp" />
+        <put-attribute name="pageImport"
+                       value="/WEB-INF/pageImport/postDetailImport.jsp" />
+    </definition>
+    <definition name="postInvitationDetail" extends="baseLayout">
+        <put-attribute name="title" value="Chi tiết bài đăng" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/postInvitationDetail.jsp" />
+        <put-attribute name="pageImport"
+                       value="/WEB-INF/pageImport/postDetailImport.jsp" />
+    </definition>
     <definition name="uploadPost" extends="baseLayout">
         <put-attribute name="title" value="Đăng bài" />
         <put-attribute name="content"

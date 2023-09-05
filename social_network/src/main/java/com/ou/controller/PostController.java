@@ -40,6 +40,10 @@ public class PostController {
     @GetMapping
     public String posts(Model model, @RequestParam Map<String, String> params) {
         List<Post> posts = postService.search(params);
+        posts.forEach(p -> {
+            System.out.println("DEBUG POST INVITATION: " + p.getPostInvitation());
+            System.out.println("DEBUG POST SURVEY: " + p.getPostSurvey());
+        });
         model.addAttribute("posts", posts);
         Integer pageSize = Integer.parseInt(env.getProperty("POST_PAGE_SIZE"));
         model.addAttribute("counter", Math.ceil(postService.countPosts(params) * 1.0 / pageSize));
@@ -69,8 +73,14 @@ public class PostController {
         try {
             Post post = postService.retrieve(postId);
             model.addAttribute("post", post);
+            if (post.getPostSurvey() != null) {
+                return "postSurveyDetail";
+            } else if (post.getPostInvitation() != null) {
+                System.out.println(post.getPostInvitation().getPostInvitationUsers());
+                return "postInvitationDetail";
+            }
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         return "postDetail";
     }
