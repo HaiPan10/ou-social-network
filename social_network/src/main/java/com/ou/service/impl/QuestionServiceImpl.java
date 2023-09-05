@@ -20,5 +20,15 @@ public class QuestionServiceImpl implements QuestionService{
         question.forEach(q -> q.setSurveyId(postSurvey));
         return questionRepository.create(question);
     }
+
+    @Override
+    public List<Object[]> stat(Integer questionId) {
+        return questionRepository.stat(questionId);
+    }
+
+    @Override
+    public Integer countAnswerByQuestionId(Integer questionId) {
+        return questionRepository.countAnswerByQuestionId(questionId);
+    }
     
 }

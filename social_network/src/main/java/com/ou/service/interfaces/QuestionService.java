@@ -7,4 +7,6 @@ import com.ou.pojo.Question;
 
 public interface QuestionService {
     List<Question> create(PostSurvey postSurvey, List<Question> question);
+    List<Object[]> stat(Integer questionId);
+    Integer countAnswerByQuestionId(Integer questionId);
 }
