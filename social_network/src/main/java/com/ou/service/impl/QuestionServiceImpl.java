@@ -27,8 +27,13 @@ public class QuestionServiceImpl implements QuestionService{
     }
 
     @Override
-    public Integer countAnswerByQuestionId(Integer questionId) {
-        return questionRepository.countAnswerByQuestionId(questionId);
+    public Integer countUnchoiceOption(Integer questionId) {
+        return questionRepository.countUnchoiceOption(questionId);
+    }
+
+    @Override
+    public String getText(Integer id) {
+        return questionRepository.getText(id);
     }
     
 }

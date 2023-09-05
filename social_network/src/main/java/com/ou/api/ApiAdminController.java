@@ -22,6 +22,7 @@ import com.ou.service.interfaces.PostInvitationService;
 import com.ou.service.interfaces.GroupService;
 import com.ou.service.interfaces.PostService;
 import com.ou.service.interfaces.PostSurveyService;
+import com.ou.service.interfaces.QuestionService;
 
 @RestController
 @RequestMapping("admin")
@@ -36,6 +37,8 @@ public class ApiAdminController {
     private PostInvitationService postInvitationService;
     @Autowired
     private GroupService groupService;
+    @Autowired
+    private QuestionService questionService;
 
     @PatchMapping("accounts/update_status")
     public ResponseEntity<?> update(@RequestBody Map<String, String> request) {
@@ -123,6 +126,24 @@ public class ApiAdminController {
     public ResponseEntity<?> getUsers(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok().body(groupService.getUsers(id));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping(path = "stat/question/{id}")
+    public ResponseEntity<?> statQuestion(@PathVariable Integer id){
+        try {
+            return ResponseEntity.ok().body(questionService.stat(id));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping(path = "stat/question/get_total/{id}")
+    public ResponseEntity<?> getTotal(@PathVariable Integer id){
+        try {
+            return ResponseEntity.ok().body(questionService.countUnchoiceOption(id));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

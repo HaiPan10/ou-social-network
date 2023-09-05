@@ -95,4 +95,11 @@ Software Foundation//DTD Tiles Configuration 3.0//EN"
         <put-attribute name="pageImport"
                        value="" />
     </definition>
+    <definition name="questionDetail" extends="baseLayout">
+        <put-attribute name="title" value="Thống kê câu hỏi" />
+        <put-attribute name="content"
+                       value="/WEB-INF/pages/questionDetail.jsp" />
+        <put-attribute name="pageImport"
+                       value="" />
+    </definition>
 </tiles-definitions>

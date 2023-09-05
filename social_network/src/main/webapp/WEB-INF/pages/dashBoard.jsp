@@ -430,7 +430,7 @@
     }
 
     function drawChart(labels, chartCtx, chartConfis) {
-        if (Object.keys(configsCharPost.data).length === 0) {
+        if (Object.keys(chartConfis.data).length === 0) {
             var data = {
                 labels: labels,
                 datasets: [{

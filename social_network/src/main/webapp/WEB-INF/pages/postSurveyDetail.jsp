@@ -31,7 +31,7 @@
                         <td>${q.id}</td>
                         <td style="max-width: 200px; text-overflow: ellipsis; overflow: hidden;">${q.questionText}</td>
                         <td>${q.isMandatory}</td>
-                        <c:url value="/admin/posts/${p.id}" var="statsAction"/>
+                        <c:url value="/admin/posts/survey_question/${q.id}" var="statsAction" />
                         <th><a href="${statsAction}">Xem thống kê</a></th>
                     </tr>
                 </c:forEach>

@@ -21,6 +21,7 @@ import com.ou.service.interfaces.InvitationGroupService;
 import com.ou.service.interfaces.PostInvitationService;
 import com.ou.service.interfaces.PostService;
 import com.ou.service.interfaces.PostSurveyService;
+import com.ou.service.interfaces.QuestionService;
 
 @RestController
 @RequestMapping("/api/test")
@@ -41,6 +42,8 @@ public class TestController {
     private InvitationGroupService invitationGroupService;
     @Autowired
     private GroupService groupService;
+    @Autowired
+    private QuestionService questionService;
     // @Autowired
     // private PostSurveyService postSurveyService;
     // @Autowired
@@ -164,6 +167,24 @@ public class TestController {
     public ResponseEntity<?> getUsers(@PathVariable Integer id){
         try {
             return ResponseEntity.ok().body(groupService.getUsers(id));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping(path = "stat/question/{id}")
+    public ResponseEntity<?> statQuestion(@PathVariable Integer id){
+        try {
+            return ResponseEntity.ok().body(questionService.stat(id));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping(path = "stat/question/get_total/{id}")
+    public ResponseEntity<?> getTotal(@PathVariable Integer id){
+        try {
+            return ResponseEntity.ok().body(questionService.countUnchoiceOption(id));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

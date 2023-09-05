@@ -53,20 +53,29 @@ public class QuestionRepositoryImpl implements QuestionRepository {
         Join<QuestionOption, AnswerOption> join = root.join("answerOptions", JoinType.LEFT);
 
         criteriaQuery.multiselect(root.get("id"), root.get("value"), builder.count(join.get("id")))
-            .where(builder.equal(root.get("questionId)"), questionId)).groupBy(root.get("id"));
-        
+                .where(builder.equal(root.get("questionId").get("id"), questionId)).groupBy(root.get("id"));
+
         Query query = session.createQuery(criteriaQuery);
 
         return query.getResultList();
     }
 
     @Override
-    public Integer countAnswerByQuestionId(Integer questionId) {
+    public Integer countUnchoiceOption(Integer questionId) {
         Session session = sessionFactoryBean.getObject().getCurrentSession();
-        Query query = session.createQuery("SELECT COUNT(*) FROM Answer a where a.questionId = :questionId");
+        Query query = session.createQuery("SELECT COUNT(*) FROM Answer a "
+                + "LEFT JOIN AnswerOption ao on a.id = ao.answerId.id "
+                + "WHERE a.questionId.id = :questionId and ao.id IS NULL");
         query.setParameter("questionId", questionId);
 
-        return (Integer) query.getSingleResult();
+        return Integer.parseInt(query.getSingleResult().toString());
     }
 
+    @Override
+    public String getText(Integer id) {
+        Session session = sessionFactoryBean.getObject().getCurrentSession();
+        Query query = session.createQuery("SELECT questionText from Question where id = :id");
+        query.setParameter("id", id);
+        return query.getSingleResult().toString();
+    }
 }

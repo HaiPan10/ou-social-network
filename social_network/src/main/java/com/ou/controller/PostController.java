@@ -18,12 +18,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ou.pojo.Account;
 import com.ou.pojo.InvitationGroup;
 import com.ou.pojo.Post;
+import com.ou.pojo.Question;
 import com.ou.service.interfaces.AccountService;
 import com.ou.service.interfaces.InvitationGroupService;
 import com.ou.service.interfaces.PostService;
+import com.ou.service.interfaces.QuestionService;
 
 @Controller
 @RequestMapping("/admin/posts")
@@ -36,6 +37,8 @@ public class PostController {
     private AccountService accountService;
     @Autowired
     private InvitationGroupService invitationGroupService;
+    @Autowired
+    private QuestionService questionService;
 
     @GetMapping
     public String posts(Model model, @RequestParam Map<String, String> params) {
@@ -57,7 +60,7 @@ public class PostController {
             }
 
             String kw = params.get("kw");
-            if(kw != null){
+            if (kw != null) {
                 model.addAttribute("kw", kw);
             }
 
@@ -69,7 +72,8 @@ public class PostController {
     }
 
     @GetMapping("{id}")
-    public String retrieve(@PathVariable(value = "id") Integer postId, Model model, @RequestParam Map<String, String> params) {
+    public String retrieve(@PathVariable(value = "id") Integer postId, Model model,
+            @RequestParam Map<String, String> params) {
         try {
             Post post = postService.retrieve(postId);
             model.addAttribute("post", post);
@@ -100,8 +104,9 @@ public class PostController {
     }
 
     @PostMapping("/upload")
-    public String add(@ModelAttribute("post") Post post, 
-    @RequestPart(value = "images", required = false) List<MultipartFile> images, BindingResult bindingResult) throws Exception {
+    public String add(@ModelAttribute("post") Post post,
+            @RequestPart(value = "images", required = false) List<MultipartFile> images, BindingResult bindingResult)
+            throws Exception {
         try {
             postService.uploadPost(post.getContent(), 1, images, post.getIsActiveComment());
             return "redirect:/admin/posts/upload/?status=success";
@@ -109,5 +114,18 @@ public class PostController {
             bindingResult.addError(new ObjectError("exceptionError", e.getMessage()));
             return "uploadPost";
         }
+    }
+
+    @GetMapping(path = "/survey_question/{id}")
+    public String statQuestion(Model model, @PathVariable Integer id) {
+        List<Object[]> list = questionService.stat(id);
+        if (!list.isEmpty()) {
+            // model.addAttribute("statQuest", questionService.stat(id));
+            // model.addAttribute("unchoice", questionService.countUnchoiceOption(id));
+        }
+        model.addAttribute("questionText", questionService.getText(id));
+        model.addAttribute("id", id);
+
+        return "questionDetail";
     }
 }
