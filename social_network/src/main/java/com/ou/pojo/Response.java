@@ -64,8 +64,8 @@ public class Response implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private User userId;
 
-    @Override
-    public String toString() {
-        return "Response [answers=" + answers + ", surveyId=" + surveyId + ", userId=" + userId + "]";
-    }
+    // @Override
+    // public String toString() {
+    //     return "Response [answers=" + answers + ", surveyId=" + surveyId + ", userId=" + userId + "]";
+    // }
 }

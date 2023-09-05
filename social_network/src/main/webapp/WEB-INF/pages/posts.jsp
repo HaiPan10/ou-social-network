@@ -14,7 +14,7 @@
                     <th>Tên tác giả</th>
                     <th style="max-width: 200px; text-overflow: ellipsis; overflow: hidden;">Nội dung</th>
                     <th>Ngày tạo</th>
-                    <th>Ngày chỉnh sửa</th>
+                    <th>Loại bài đăng</th>
                     <th></th>
                 </tr>
             </thead>
@@ -28,7 +28,19 @@
                         <td>${p.userId.lastName} ${p.userId.firstName}</td>
                         <td style="max-width: 200px; text-overflow: ellipsis; overflow: hidden;">${p.content}</td>
                         <td>${p.createdAt}</td>
-                        <td>${p.updatedAt}</td>
+                        <td>
+                            <c:choose>
+                                <c:when test="${p.postSurvey == null && p.postInvitation != null}">
+                                    <i class='bx bxs-envelope' ></i> Bài đăng thư mời thông báo
+                                </c:when>
+                                <c:when test="${p.postSurvey != null && p.postInvitation == null}">
+                                    <i class='bx bx-bar-chart-square'></i> Bài đăng thống kê
+                                </c:when>
+                                <c:otherwise>
+                                    <i class='bx bxs-dock-right' ></i> Bài đăng thông thường
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
                         <c:url value="/admin/posts/${p.id}" var="editAction"/>
                         <th><a href="${editAction}">Xem chi tiết</a></th>
                     </tr>

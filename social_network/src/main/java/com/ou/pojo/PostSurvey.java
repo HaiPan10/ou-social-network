@@ -40,7 +40,6 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class PostSurvey implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -66,10 +65,16 @@ public class PostSurvey implements Serializable {
     @JsonIgnore
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "surveyId")
     private List<Response> responses;
+    
     @JsonIgnore
     @JoinColumn(name = "id", referencedColumnName = "id", insertable = false, updatable = false)
     @OneToOne(optional = false, fetch = FetchType.LAZY)
     private Post post;
+
+    @Override
+    public String toString() {
+        return "com.ou.pojo.PostSurvey[ id=" + id + " ]";
+    }
     // @Override
     // public String toString() {
     //     return "PostSurvey [surveyTitle=" + surveyTitle + ", surveyStatus=" + surveyStatus + ", questions=" + questions

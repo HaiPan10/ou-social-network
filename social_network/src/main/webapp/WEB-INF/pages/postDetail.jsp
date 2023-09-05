@@ -26,7 +26,7 @@
                             <button onclick="deletePost(`${deleteAction}`, `${redirectAction}`)" class="btn-delete"><i class='bx bx-trash' style="color: red; width: 100%;"></i></button>
                         </div>
                     </div>
-        
+
                     <div class="lg:p-4 p-2.5 pt-0 pb-0 dark:border-gray-700">
                         ${post.content}
                     </div>

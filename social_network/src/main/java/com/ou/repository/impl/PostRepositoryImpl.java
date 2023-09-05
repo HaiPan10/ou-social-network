@@ -379,7 +379,6 @@ public class PostRepositoryImpl implements PostRepository {
         CriteriaQuery<Post> criteriaQuery = builder.createQuery(Post.class);
         Root<Post> root = criteriaQuery.from(Post.class);
         Join<Post, User> join = root.join("userId");
-
         criteriaQuery.select(root);
 
         // List<Predicate> predicates = new ArrayList<>();
@@ -411,7 +410,8 @@ public class PostRepositoryImpl implements PostRepository {
         }
         int pageSize = Integer.parseInt(this.env.getProperty("POST_PAGE_SIZE"));
 
-        criteriaQuery.where(finalPredicate);
+        criteriaQuery.where(finalPredicate).orderBy(builder.desc(root.get("createdAt")));
+
         Query query = session.createQuery(criteriaQuery);
 
         query.setMaxResults(pageSize);
