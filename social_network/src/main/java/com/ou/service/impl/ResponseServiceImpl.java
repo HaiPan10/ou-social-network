@@ -1,10 +1,13 @@
 package com.ou.service.impl;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ou.pojo.Answer;
 import com.ou.pojo.Post;
 import com.ou.pojo.Response;
 import com.ou.pojo.User;
@@ -30,6 +33,11 @@ public class ResponseServiceImpl implements ResponseService{
         Post persistPost = postService.retrieve(response.getSurveyId().getId());
         User persistUser = userService.retrieve(response.getUserId().getId());
         return responseRepository.create(persistPost.getPostSurvey(), persistUser, response);
+    }
+
+    @Override
+    public List<Answer> getTextAnswers(Integer questionId) {
+        return responseRepository.getTextAnswers(questionId);
     }
     
 }

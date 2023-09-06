@@ -9,21 +9,40 @@
     <h5 class="card-header text-center"><span class="text-muted fw-light">Câu hỏi: </span> ${questionText}</h5>
     <!-- Checkboxes and Radios -->
     <div class="card-body">
-        <div class="row gy-3">
-            <div class="col-md-3">
-
-            </div>
-            <div class="col-md-6">
-                <div>
-                    <div>
-                        <canvas id="chartQuestion"></canvas>
-                    </div>
+        <c:choose>
+            <c:when test="${listTextAnswer is not null}">
+                <div class="table-responsive text-nowrap">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <!-- <th>Số thứ tự</th> -->
+                                <th>Câu trả lời</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-border-bottom-0">
+                            <c:forEach list="${listTextAnswer}" var="answer">
+                                <tr>
+                                    <td>${answer.value}</td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
                 </div>
-            </div>
-            <div class="col-md-3">
-
-            </div>
-        </div>
+            </c:when>
+            <c:otherwise>
+                <div class="row gy-3">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                        <div>
+                            <div>
+                                <canvas id="chartQuestion"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+            </c:otherwise>
+        </c:choose>
     </div>
 </div>
 <c:url value="/admin/stat/question/${id}" var="statQuestAction"/>
@@ -67,32 +86,6 @@
         },
         plugins: [ChartDataLabels]
     }
-
-    // function fetchData() {
-    //     var data = {
-    //         datasets: [],
-
-    //         labels: []
-    //     };
-
-    //     var dataset = {
-    //         data: [],
-    //         datalabels: {
-    //             color: 'black'
-    //         }
-    //     }
-
-    //     listObject.forEach(value => {
-    //         data.labels.push(value[1] + ": " + String(value[2]));
-    //         dataset.data.push(value[2]);
-    //     })
-
-    //     data.labels.push("Không chọn: " + String(totalUnchoice));
-    //     dataset.data.push(totalUnchoice);
-    //     data.datasets = [dataset];
-    //     configsChartQuestion.data = data;
-    //     drawChart(data.labels, ctxQuestion, configsChartQuestion);
-    // }
 
     async function statQuest(api) {
         var data = {
@@ -173,5 +166,7 @@
         chart = new Chart(chartCtx, chartConfis);
     }
 
-    statQuest(apiStatQuest);
+    <c:if test="${listTextAnswer is null}">
+        statQuest(apiStatQuest);
+    </c:if>
 </script>

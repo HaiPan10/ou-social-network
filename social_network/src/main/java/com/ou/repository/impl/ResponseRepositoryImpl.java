@@ -3,6 +3,12 @@ package com.ou.repository.impl;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
+
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.checkerframework.checker.units.qual.s;
 import org.hibernate.HibernateException;
@@ -13,6 +19,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.api.gax.rpc.UnimplementedException;
 import com.ou.pojo.Answer;
 import com.ou.pojo.AnswerOption;
 import com.ou.pojo.Post;
@@ -53,11 +60,12 @@ public class ResponseRepositoryImpl implements ResponseRepository {
                 transientAnswer.setValue(answer.getValue());
                 transientAnswer.setResponseId(transientResponse);
                 session.save(transientAnswer);
-                
+
                 if (answer.getAnswerOptions() != null) {
                     answer.getAnswerOptions().forEach(answerOption -> {
                         AnswerOption transientAnswerOption = new AnswerOption();
-                        QuestionOption persistQuestionOption = session.get(QuestionOption.class, answerOption.getQuestionOptionId().getId());
+                        QuestionOption persistQuestionOption = session.get(QuestionOption.class,
+                                answerOption.getQuestionOptionId().getId());
                         if (persistQuestionOption == null) {
                             try {
                                 throw new Exception("In valid question option!");
@@ -71,10 +79,26 @@ public class ResponseRepositoryImpl implements ResponseRepository {
                     });
                 }
             });
-            return transientResponse;         
+            return transientResponse;
         } catch (HibernateException ex) {
             throw new Exception(ex.getMessage());
         }
     }
-    
+
+    @Override
+    public List<Answer> getTextAnswers(Integer questionId) {
+        Session session = sessionFactoryBean.getObject().getCurrentSession();
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<Answer> criteriaQuery = builder.createQuery(Answer.class);
+        Root<Answer> root = criteriaQuery.from(Answer.class);
+
+        criteriaQuery.select(root).where(builder.and(
+            builder.equal(root.get("questionId").get("id"), questionId), 
+            builder.isNull(root.get("value"))
+        ));
+        
+        Query query = session.createQuery(criteriaQuery);
+
+        return query.getResultList();
+    }
 }

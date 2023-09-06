@@ -25,6 +25,7 @@ import com.ou.service.interfaces.AccountService;
 import com.ou.service.interfaces.InvitationGroupService;
 import com.ou.service.interfaces.PostService;
 import com.ou.service.interfaces.QuestionService;
+import com.ou.service.interfaces.ResponseService;
 
 @Controller
 @RequestMapping("/admin/posts")
@@ -39,6 +40,8 @@ public class PostController {
     private InvitationGroupService invitationGroupService;
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private ResponseService responseService;
 
     @GetMapping
     public String posts(Model model, @RequestParam Map<String, String> params) {
@@ -119,9 +122,8 @@ public class PostController {
     @GetMapping(path = "/survey_question/{id}")
     public String statQuestion(Model model, @PathVariable Integer id) {
         List<Object[]> list = questionService.stat(id);
-        if (!list.isEmpty()) {
-            // model.addAttribute("statQuest", questionService.stat(id));
-            // model.addAttribute("unchoice", questionService.countUnchoiceOption(id));
+        if (list.isEmpty()) {
+            model.addAttribute("listTextAnswer", responseService.getTextAnswers(id));
         }
         model.addAttribute("questionText", questionService.getText(id));
         model.addAttribute("id", id);
