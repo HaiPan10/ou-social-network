@@ -10,7 +10,7 @@
     <!-- Checkboxes and Radios -->
     <div class="card-body">
         <c:choose>
-            <c:when test="${listTextAnswer is not null}">
+            <c:when test="${listTextAnswer != null}">
                 <div class="table-responsive text-nowrap">
                     <table class="table">
                         <thead>
@@ -20,7 +20,7 @@
                             </tr>
                         </thead>
                         <tbody class="table-border-bottom-0">
-                            <c:forEach list="${listTextAnswer}" var="answer">
+                            <c:forEach items="${listTextAnswer}" var="answer">
                                 <tr>
                                     <td>${answer.value}</td>
                                 </tr>
@@ -166,7 +166,7 @@
         chart = new Chart(chartCtx, chartConfis);
     }
 
-    <c:if test="${listTextAnswer is null}">
+    <c:if test="${listTextAnswer == null}">
         statQuest(apiStatQuest);
     </c:if>
 </script>

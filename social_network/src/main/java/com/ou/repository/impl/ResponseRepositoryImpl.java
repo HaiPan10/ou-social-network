@@ -94,7 +94,7 @@ public class ResponseRepositoryImpl implements ResponseRepository {
 
         criteriaQuery.select(root).where(builder.and(
             builder.equal(root.get("questionId").get("id"), questionId), 
-            builder.isNull(root.get("value"))
+            builder.isNotNull(root.get("value"))
         ));
         
         Query query = session.createQuery(criteriaQuery);
