@@ -184,6 +184,7 @@ export const PostSurvey = ({post, posts, setPosts}) => {
     }
 
     useEffect(() => {
+      console.log(post.postSurvey.questions)
       document.addEventListener('mousedown', handleClickOutside);
       return () => {
         document.removeEventListener('mousedown', handleClickOutside)
@@ -305,7 +306,7 @@ export const PostSurvey = ({post, posts, setPosts}) => {
                         </div>
                         :
                         <form onSubmit={submitSurvey} className="" style={{width: "100%"}} action="">
-                        {sortedQuestions.map( (question) => {
+                        {post.postSurvey.questions.map( (question) => {
                           return (
                             <div className="question-wrapper" key={question.id} data-key={question.id} data-type={question.questionTypeId.id}>
                               {question.questionTypeId.id === 2 && 

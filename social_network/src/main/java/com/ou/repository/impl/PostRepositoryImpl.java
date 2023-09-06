@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityGraph;
 import javax.persistence.NoResultException;
@@ -72,27 +74,33 @@ public class PostRepositoryImpl implements PostRepository {
         Join<Post, PostInvitation> joinPostInvitation = rPost.join("postInvitation", JoinType.LEFT);
         Join<PostInvitation, PostInvitationUser> joinPostInvitationUser = joinPostInvitation.join("postInvitationUsers", JoinType.LEFT);
 
-        Join<Post, PostSurvey> joinPostSurvey = rPost.join("postSurvey", JoinType.LEFT);
-        Join<PostSurvey, Response> joinResponse = joinPostSurvey.join("responses", JoinType.LEFT);
+        // Join<Post, PostSurvey> joinPostSurvey = rPost.join("postSurvey", JoinType.LEFT);
+        // Join<PostSurvey, Response> joinResponse = joinPostSurvey.join("responses", JoinType.LEFT);
+
+        predicates.add(builder.or(
+            builder.isNull(joinPostInvitation),
+            builder.isNull(joinPostInvitationUser),
+            builder.equal(joinPostInvitationUser.get("userId"), currentUserId)
+        ));
 
         // System.out.println("startAt" + joinPostInvitation.get("startAt"));
         // System.out.println("TODAY " + new Date());
-        predicates.add(builder.and(
-            builder.or(
-                builder.isNull(joinPostSurvey),
-                builder.isNull(joinResponse),
-                builder.notEqual(joinResponse.get("userId"), currentUserId)
-            ),
-            builder.or(
-                builder.isNull(joinPostInvitation),
-                builder.isNull(joinPostInvitationUser),
-                builder.equal(joinPostInvitationUser.get("userId"), currentUserId)
-                // builder.and(
-                //     builder.equal(joinPostInvitationUser.get("userId"), currentUserId)
-                //     builder.greaterThan(joinPostInvitation.get("startAt"), new Date())
-                // )
-            )
-        ));
+        // predicates.add(builder.and(
+        //     builder.or(
+        //         builder.isNull(joinPostSurvey),
+        //         builder.isNull(joinResponse),
+        //         builder.notEqual(joinResponse.get("userId"), currentUserId)
+        //     ),
+        //     builder.or(
+        //         builder.isNull(joinPostInvitation),
+        //         builder.isNull(joinPostInvitationUser),
+        //         builder.equal(joinPostInvitationUser.get("userId"), currentUserId)
+        //         // builder.and(
+        //         //     builder.equal(joinPostInvitationUser.get("userId"), currentUserId)
+        //         //     builder.greaterThan(joinPostInvitation.get("startAt"), new Date())
+        //         // )
+        //     )
+        // ));
 
         predicates.add(builder.equal(rPost.get("userId"), userId));
         criteriaQuery.where(predicates.toArray(Predicate[]::new));
@@ -117,14 +125,18 @@ public class PostRepositoryImpl implements PostRepository {
 
         try {
             List<Post> posts = query.getResultList();
-            posts.forEach(post -> {
+            List<Post> filteredPosts = posts.stream()
+                .filter(p -> !isResponse(p.getId(), currentUserId))
+                .collect(Collectors.toList());
+            filteredPosts.forEach(post -> {
                 try {
                     Hibernate.initialize(post.getPostInvitation().getPostInvitationUsers());
                 } catch (NullPointerException e) {
-
+                    // Handle the exception if needed
                 }
             });
-            return Optional.of(posts);
+
+            return Optional.of(filteredPosts);
         } catch (NoResultException e) {
             return Optional.empty();
         }
@@ -222,6 +234,8 @@ public class PostRepositoryImpl implements PostRepository {
         }
     }
 
+    
+
     @Override
     public Optional<List<Post>> loadNewFeed(Integer currentUserId, @RequestParam Map<String, String> params) {
         Session session = sessionFactoryBean.getObject().getCurrentSession();
@@ -231,31 +245,37 @@ public class PostRepositoryImpl implements PostRepository {
         Root<Post> rPost = criteriaQuery.from(Post.class);
         List<Predicate> predicates = new ArrayList<>();
 
-        rPost.fetch("postSurvey", JoinType.LEFT).fetch("questions", JoinType.LEFT);
         Join<Post, PostInvitation> joinPostInvitation = rPost.join("postInvitation", JoinType.LEFT);
         Join<PostInvitation, PostInvitationUser> joinPostInvitationUser = joinPostInvitation.join("postInvitationUsers", JoinType.LEFT);
 
-        Join<Post, PostSurvey> joinPostSurvey = rPost.join("postSurvey", JoinType.LEFT);
-        Join<PostSurvey, Response> joinResponse = joinPostSurvey.join("responses", JoinType.LEFT);
-
+        // Join<Post, PostSurvey> joinPostSurvey = rPost.join("postSurvey", JoinType.LEFT);
+        // Join<PostSurvey, Response> joinResponse = joinPostSurvey.join("responses");
+        rPost.fetch("postSurvey", JoinType.LEFT).fetch("questions", JoinType.LEFT);
         // System.out.println("startAt" + joinPostInvitation.get("startAt"));
         // System.out.println("TODAY " + new Date());
-        predicates.add(builder.and(
-            builder.or(
-                builder.isNull(joinPostSurvey),
-                builder.isNull(joinResponse),
-                builder.notEqual(joinResponse.get("userId"), currentUserId)
-            ),
-            builder.or(
-                builder.isNull(joinPostInvitation),
-                builder.isNull(joinPostInvitationUser),
-                builder.equal(joinPostInvitationUser.get("userId"), currentUserId)
-                // builder.and(
-                //     builder.equal(joinPostInvitationUser.get("userId"), currentUserId)
-                //     builder.greaterThan(joinPostInvitation.get("startAt"), new Date())
-                // )
-            )
+
+        predicates.add(builder.or(
+            builder.isNull(joinPostInvitation),
+            builder.isNull(joinPostInvitationUser),
+            builder.equal(joinPostInvitationUser.get("userId"), currentUserId)
         ));
+
+        // predicates.add(builder.and(
+        //     builder.or(
+        //         builder.isNull(joinPostSurvey),
+        //         builder.isNull(joinResponse),
+        //         builder.notEqual(joinResponse.get("userId"), currentUserId)
+        //     ),
+        //     builder.or(
+        //         builder.isNull(joinPostInvitation),
+        //         builder.isNull(joinPostInvitationUser),
+        //         builder.equal(joinPostInvitationUser.get("userId"), currentUserId)
+        //         // builder.and(
+        //         //     builder.equal(joinPostInvitationUser.get("userId"), currentUserId)
+        //         //     builder.greaterThan(joinPostInvitation.get("startAt"), new Date())
+        //         // )
+        //     )
+        // ));
 
         Subquery<Date> subquery = criteriaQuery.subquery(Date.class);
         Root<Comment> rComment = subquery.from(Comment.class);
@@ -292,14 +312,17 @@ public class PostRepositoryImpl implements PostRepository {
 
         try {
             List<Post> posts = query.getResultList();
-            posts.forEach(post -> {
+            List<Post> filteredPosts = posts.stream()
+                .filter(p -> !isResponse(p.getId(), currentUserId))
+                .collect(Collectors.toList());
+            filteredPosts.forEach(post -> {
                 try {
                     Hibernate.initialize(post.getPostInvitation().getPostInvitationUsers());
                 } catch (NullPointerException e) {
-
+                    // Handle the exception if needed
                 }
             });
-            return Optional.of(posts);
+            return Optional.of(filteredPosts);
         } catch (NoResultException e) {
             return Optional.empty();
         }
@@ -457,5 +480,19 @@ public class PostRepositoryImpl implements PostRepository {
         Query query = session.createQuery(criteriaQuery);
 
         return query.getResultList();
+    }
+
+    @Override
+    public boolean isResponse(Integer postId, Integer userId) {
+        Session session = sessionFactoryBean.getObject().getCurrentSession();
+        try {
+            Query query = session.createQuery("SELECT ps FROM PostSurvey ps WHERE ps.id = :postId AND :userId IN (SELECT r.userId FROM Response r WHERE r.surveyId = ps)");
+            query.setParameter("postId", postId);
+            query.setParameter("userId", userId);
+            PostSurvey postSurvey = (PostSurvey) query.getSingleResult();
+            return true;
+        } catch (NoResultException e) {
+            return false;
+        }
     }
 }
