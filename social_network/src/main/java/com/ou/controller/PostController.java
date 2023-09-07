@@ -20,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ou.pojo.InvitationGroup;
 import com.ou.pojo.Post;
-import com.ou.pojo.Question;
 import com.ou.service.interfaces.AccountService;
 import com.ou.service.interfaces.InvitationGroupService;
 import com.ou.service.interfaces.PostService;

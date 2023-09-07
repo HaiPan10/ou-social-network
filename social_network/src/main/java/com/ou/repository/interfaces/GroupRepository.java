@@ -2,7 +2,6 @@ package com.ou.repository.interfaces;
 
 import java.util.List;
 
-import com.ou.pojo.GroupUser;
 import com.ou.pojo.InvitationGroup;
 import com.ou.pojo.User;
 

@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ou.pojo.GroupUser;
 import com.ou.pojo.InvitationGroup;
 import com.ou.pojo.User;
 import com.ou.repository.interfaces.GroupRepository;
