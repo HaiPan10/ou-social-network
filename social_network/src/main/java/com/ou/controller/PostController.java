@@ -46,10 +46,6 @@ public class PostController {
     @GetMapping
     public String posts(Model model, @RequestParam Map<String, String> params) {
         List<Post> posts = postService.search(params);
-        posts.forEach(p -> {
-            System.out.println("DEBUG POST INVITATION: " + p.getPostInvitation());
-            System.out.println("DEBUG POST SURVEY: " + p.getPostSurvey());
-        });
         model.addAttribute("posts", posts);
         Integer pageSize = Integer.parseInt(env.getProperty("POST_PAGE_SIZE"));
         model.addAttribute("counter", Math.ceil(postService.countPosts(params) * 1.0 / pageSize));
@@ -71,6 +67,9 @@ public class PostController {
             page = 1;
         }
         model.addAttribute("currentPage", page);
+        if (params.get("status") != null) {
+            model.addAttribute("status", params.get("status"));
+        }
         return "posts";
     }
 
@@ -100,9 +99,9 @@ public class PostController {
         List<InvitationGroup> invitationGroups = invitationGroupService.list();
         model.addAttribute("accountList", accountList);
         model.addAttribute("invitationGroups", invitationGroups);
-        if (status != null) {
-            model.addAttribute("status", status);
-        }
+        // if (status != null) {
+        // model.addAttribute("status", status);
+        // }
         return "uploadPost";
     }
 
@@ -112,7 +111,7 @@ public class PostController {
             throws Exception {
         try {
             postService.uploadPost(post.getContent(), 1, images, post.getIsActiveComment());
-            return "redirect:/admin/posts/upload/?status=success";
+            return "redirect:/admin/posts?status=success";
         } catch (Exception e) {
             bindingResult.addError(new ObjectError("exceptionError", e.getMessage()));
             return "uploadPost";

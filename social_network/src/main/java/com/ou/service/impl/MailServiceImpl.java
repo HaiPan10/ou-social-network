@@ -1,6 +1,9 @@
 package com.ou.service.impl;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Calendar;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -12,13 +15,16 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
 import com.ou.pojo.Account;
+import com.ou.pojo.PostInvitation;
 import com.ou.pojo.Status;
+import com.ou.pojo.User;
 import com.ou.service.interfaces.AccountService;
 import com.ou.service.interfaces.MailService;
 
@@ -32,6 +38,13 @@ public class MailServiceImpl implements MailService {
 
     @Autowired
     private AccountService accountService;
+
+    // @Autowired
+    // private SimpleDateFormat simpleDateFormat;
+
+    @Autowired
+    @Qualifier("executorService")
+    private ExecutorService executorService;
 
     @Override
     public void sendEmail(String userEmail, String subject, String content) {
@@ -82,7 +95,12 @@ public class MailServiceImpl implements MailService {
                             env.getProperty("SERVER_HOSTNAME"),
                             account.getId(),
                             account.getVerificationCode()));
-            sendEmail(account.getEmail(), "Xác thực email", mailBody);
+
+            Runnable runnable = () -> {
+                sendEmail(account.getEmail(), "Xác thực email", mailBody);
+            };
+
+            executorService.execute(runnable);
         }
     }
 
@@ -101,7 +119,12 @@ public class MailServiceImpl implements MailService {
                     + "OU Social Network",
                     String.format("%s %s", account.getUser().getLastName(), account.getUser().getFirstName()),
                     account.getEmail());
-            sendEmail(account.getEmail(), "Thông tin cấp tài khoản", mailBody);
+            // sendEmail(account.getEmail(), "Thông tin cấp tài khoản", mailBody);
+            Runnable runnable = () -> {
+                sendEmail(account.getEmail(), "Thông tin cấp tài khoản", mailBody);
+            };
+
+            executorService.execute(runnable);
         }
     }
 
@@ -122,7 +145,12 @@ public class MailServiceImpl implements MailService {
                     account.getUser().getFirstName(),
                     String.format("%s/",
                             env.getProperty("CLIENT_HOSTNAME")));
-            sendEmail(account.getEmail(), "Trạng thái kích hoạt tài khoản", mailBody);
+            // sendEmail(account.getEmail(), "Trạng thái kích hoạt tài khoản", mailBody);
+            Runnable runnable = () -> {
+                sendEmail(account.getEmail(), "Trạng thái kích hoạt tài khoản", mailBody);
+            };
+
+            executorService.execute(runnable);
         }
     }
 
@@ -139,7 +167,13 @@ public class MailServiceImpl implements MailService {
                     + "Chúng tôi xin cảm ơn,<br>"
                     + "OU Social Network",
                     account.getUser().getFirstName());
-            sendEmail(account.getEmail(), "Trạng thái kích hoạt tài khoản", mailBody);
+            // sendEmail(account.getEmail(), "Trạng thái kích hoạt tài khoản", mailBody);
+
+            Runnable runnable = () -> {
+                sendEmail(account.getEmail(), "Trạng thái kích hoạt tài khoản", mailBody);
+            };
+
+            executorService.execute(runnable);
         }
     }
 
@@ -148,13 +182,19 @@ public class MailServiceImpl implements MailService {
         if (account == null) {
             throw new Exception("Tài khoản không tồn tại!");
         } else {
-            String mailBody = String.format("Chào %s,<br>"
+            String mailBody = String.format("Kính chào %s,<br>"
                     + "<p>Tài khoản mạng mạng xã hội cựu sinh viên trường đại học Mở TP.HCM của bạn đã bị khóa bởi quản trị viên.</p>"
                     + "Xin vui lòng liên hệ quản trị viên để thêm thông tin chi tiết.<br>"
                     + "Chúng tôi xin cảm ơn sự đóng góp của bạn cho mạng xã hội cựu sinh viên,<br>"
                     + "OU Social Network",
                     String.format("%s %s", account.getUser().getLastName(), account.getUser().getFirstName()));
-            sendEmail(account.getEmail(), "Tài khoản bị khóa", mailBody);
+            // sendEmail(account.getEmail(), "Tài khoản bị khóa", mailBody);
+
+            Runnable runnable = () -> {
+                sendEmail(account.getEmail(), "Tài khoản bị khóa", mailBody);
+            };
+
+            executorService.execute(runnable);
         }
     }
 
@@ -163,14 +203,20 @@ public class MailServiceImpl implements MailService {
         if (account == null) {
             throw new Exception("Tài khoản không tồn tại!");
         } else {
-            String mailBody = String.format("Chào %s,<br>"
+            String mailBody = String.format("Kính chào %s,<br>"
                     + "<p>Tài khoản mạng mạng xã hội cựu sinh viên trường đại học Mở TP.HCM của bạn đã được gỡ khóa.</p>"
                     + "Hãy nhấn vào đường link để truy cập trang web: %s.<br>"
                     + "Chúng tôi xin cảm ơn sự đóng góp của bạn cho mạng xã hội cựu sinh viên,<br>"
                     + "OU Social Network",
                     String.format("%s %s", account.getUser().getLastName(), account.getUser().getFirstName()),
                     env.getProperty("CLIENT_HOSTNAME"));
-            sendEmail(account.getEmail(), "Tài khoản được gỡ khóa", mailBody);
+            // sendEmail(account.getEmail(), "Tài khoản được gỡ khóa", mailBody);
+
+            Runnable runnable = () -> {
+                sendEmail(account.getEmail(), "Tài khoản được gỡ khóa", mailBody);
+            };
+
+            executorService.execute(runnable);
         }
     }
 
@@ -179,7 +225,7 @@ public class MailServiceImpl implements MailService {
         if (account == null) {
             throw new Exception("Tài khoản không tồn tại!");
         } else {
-            String mailBody = String.format("Chào %s,<br>"
+            String mailBody = String.format("Kính Chào %s,<br>"
                     + "<p>Tài khoản mạng mạng xã hội cựu sinh viên trường đại học Mở TP.HCM của bạn đã được đặt lại mật khẩu mặc định.</p>"
                     + "Xin vui lòng đổi mật khẩu của bạn trong vòng 24 tiếng nếu không sẽ tiếp tục bị khóa.<br>"
                     + "Thông tin chi tiết tài khoản: <br>"
@@ -191,7 +237,21 @@ public class MailServiceImpl implements MailService {
                     String.format("%s %s", account.getUser().getLastName(), account.getUser().getFirstName()),
                     account.getEmail(),
                     env.getProperty("CLIENT_HOSTNAME"));
-            sendEmail(account.getEmail(), "Đặt lại mật khẩu mặc định", mailBody);
+            // sendEmail(account.getEmail(), "Đặt lại mật khẩu mặc định", mailBody);
+
+            Runnable runnable = () -> {
+                sendEmail(account.getEmail(), "Đặt lại mật khẩu mặc định", mailBody);
+            };
+
+            executorService.execute(runnable);
         }
+    }
+
+    @Override
+    public void sendMultipleEmail(List<User> listUser, PostInvitation postInvitation) {
+        listUser.parallelStream().forEach(u -> {
+            sendEmail(u.getAccount().getEmail(), postInvitation.getEventName(), postInvitation.getPost().getContent());
+        });
+        System.out.println("[DEBUG] - FINISH SENDING MAIL TO ALL TARGET " + Calendar.getInstance().getTimeInMillis());
     }
 }

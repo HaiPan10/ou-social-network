@@ -2,7 +2,11 @@
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Bài đăng /</span> Quản lý bài đăng</h4>
-
+<c:if test="${status != null}">
+    <div class="alert alert-success">
+        ${status}
+    </div>
+</c:if>
 <div class="card">
     <h5 class="card-header">Danh sách bài đăng</h5>
     <div class="table-responsive text-nowrap">

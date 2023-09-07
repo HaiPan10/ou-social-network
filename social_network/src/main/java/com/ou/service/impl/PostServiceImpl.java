@@ -3,13 +3,16 @@ package com.ou.service.impl;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,6 +31,7 @@ import com.ou.service.interfaces.CloudinaryService;
 import com.ou.service.interfaces.CommentService;
 import com.ou.service.interfaces.GroupService;
 import com.ou.service.interfaces.ImageInPostService;
+import com.ou.service.interfaces.MailService;
 import com.ou.service.interfaces.PostInvitationService;
 import com.ou.service.interfaces.PostReactionService;
 import com.ou.service.interfaces.PostService;
@@ -59,6 +63,11 @@ public class PostServiceImpl implements PostService {
     private PostInvitationService postInvitationService;
     @Autowired
     private GroupService groupService;
+    @Autowired
+    private MailService mailService;
+    @Autowired
+    @Qualifier("executorService")
+    private ExecutorService executorService;
 
     @Override
     public Post uploadPost(String postContent, Integer userId, List<MultipartFile> images, boolean isActiveComment)
@@ -203,7 +212,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post uploadPostInvitation(Post post, Integer userId) throws Exception {
-        System.out.println("[DEBUG] - START TO CREATE INVITATION POST");
+        System.out.println("[DEBUG] - START COUNT TIME " + Calendar.getInstance().getTimeInMillis());
         post.setCreatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
         post.setUpdatedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()));
         PostInvitation postInvitation = post.getPostInvitation();
@@ -234,11 +243,22 @@ public class PostServiceImpl implements PostService {
 
         if(listUsers == null){
             // fetch all user
-            System.out.println("[DEBUG] - FETCH ALL USER");
             listUsers = userService.list();
         }
 
+        postInvitation.setPost(post);
+
+        final List<User> finalList = listUsers;
+        final PostInvitation finalInvitation = postInvitation;
+
+        Runnable runnable = () -> {
+            mailService.sendMultipleEmail(finalList, finalInvitation);
+        };
+
+        executorService.execute(runnable);
+
         post.setPostInvitation(postInvitation);
+        System.out.println("[DEBUG] - FINISH CALLING SEND MAIL AT " + Calendar.getInstance().getTimeInMillis());
         return post;
     }
 

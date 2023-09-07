@@ -4,11 +4,11 @@
 <%@taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Bài đăng /</span> Đăng bài</h4>
-<c:if test="${status != null}">
+<!-- <c:if test="${status != null}">
     <div class="alert alert-success">
         ${status}
     </div>
-</c:if>
+</c:if> -->
 <div class="row">
     <div class="col-xl">
         <div class="card mb-4">
@@ -210,7 +210,7 @@
         </div>
     </div>
 </div>
-
+<c:url value="/admin/posts" var="posts" />
 <script>
     var provider = document.getElementById("upload-post");
     provider.className += " active";
@@ -540,7 +540,8 @@
         // let data = await response.json();
 
         if(response.ok){
-            location.replace("${upload}/?status=success")
+            // location.replace("${upload}/?status=success")
+            location.replace("${posts}/?status=success")
         } else {
             const errorText = await response.text();
             alert(errorText);
@@ -560,7 +561,8 @@
         // let data = await response.json();
 
         if(response.ok){
-            location.replace("${upload}/?status=success")
+            // location.replace("${upload}/?status=success")
+            location.replace("${posts}/?status=success")
         } else {
             const errorText = await response.text();
             alert(errorText);

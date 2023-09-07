@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -245,7 +246,7 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
         return new ObjectMapper();
     }
 
-    @Bean
+    @Bean(name="scheduledExecutorService")
     public ScheduledExecutorService getScheduledService() {
         int threadNumber = Integer.parseInt(environment.getProperty("THREAD_NUMBER"));
         ScheduledExecutorService configs = Executors.newScheduledThreadPool(threadNumber);
@@ -292,4 +293,12 @@ public class WebApplicationContextConfig implements WebMvcConfigurer {
     public SimpleDateFormat getSimpleDate(){
         return new SimpleDateFormat("yyyy-MM-dd");
     }
+
+    @Bean(name="executorService")
+    public ExecutorService getThreadPool() {
+        int threadNumber = Integer.parseInt(environment.getProperty("THREAD_NUMBER"));
+        ExecutorService executor = Executors.newFixedThreadPool(threadNumber);
+        return executor;
+    }
+
 }

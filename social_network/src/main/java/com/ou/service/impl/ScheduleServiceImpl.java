@@ -5,6 +5,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import com.ou.service.interfaces.ScheduleService;
 @Service
 public class ScheduleServiceImpl implements ScheduleService{
     @Autowired
+    @Qualifier("scheduledExecutorService")
     private ScheduledExecutorService service;
 
     @Autowired
