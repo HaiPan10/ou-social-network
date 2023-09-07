@@ -20,8 +20,8 @@ export const endpoints = {
 }
 
 export const authAPI = () => axios.create({
-    baseURL: "http://127.0.0.1:8080/social_network/api",
-    // baseURL: "http://34.128.93.41:80/api",
+    // baseURL: "http://127.0.0.1:8080/social_network/api",
+    baseURL: "http://34.101.166.192:80/api",
     headers: {
         "Authorization": `Bearer ${ load("access-token") }`
     }
@@ -42,6 +42,6 @@ export const authAPI = () => axios.create({
   
 
 export default axios.create({
-    baseURL: 'http://127.0.0.1:8080/social_network/api',
-    // baseURL: "http://34.128.93.41:80/api",
+    // baseURL: 'http://127.0.0.1:8080/social_network/api',
+    baseURL: "http://34.101.166.192:80/api",
 })
