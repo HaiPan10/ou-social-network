@@ -6,11 +6,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.persistence.EntityGraph;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -37,7 +35,6 @@ import com.ou.pojo.Post;
 import com.ou.pojo.PostInvitation;
 import com.ou.pojo.PostInvitationUser;
 import com.ou.pojo.PostSurvey;
-import com.ou.pojo.Response;
 import com.ou.pojo.User;
 import com.ou.repository.interfaces.PostRepository;
 
@@ -475,7 +472,7 @@ public class PostRepositoryImpl implements PostRepository {
         predicates.add(builder.isNull(joinInvitation.get("id")));
 
         criteriaQuery.multiselect(expression, builder.count(root.get("id")))
-                .where(predicates.toArray(Predicate[]::new)).groupBy(expression);
+                .where(predicates.toArray(Predicate[]::new)).groupBy(expression).orderBy(builder.asc(expression));
 
         Query query = session.createQuery(criteriaQuery);
 

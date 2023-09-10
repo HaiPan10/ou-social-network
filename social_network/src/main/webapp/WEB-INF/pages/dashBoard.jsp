@@ -205,14 +205,18 @@
             var selectedText = $(this).text();
             if (selectedText === "Tháng") {
                 $("#containerDropDownYear").show();
+                var year = $("#dropDownYear").text();
                 var requestParams = new URLSearchParams();
                 requestParams.append("byMonth", "true");
+                requestParams.append("year", year)
                 stat(months, requestParams, statUserApi);
 
             } else if (selectedText === "Quý") {
                 $("#containerDropDownYear").show();
+                var year = $("#dropDownYear").text();
                 var requestParams = new URLSearchParams();
                 requestParams.append("byQuarter", "true");
+                requestParams.append("year", year)
                 stat(quarter, requestParams, statUserApi);
             } else if (selectedText === "Năm") {
                 $("#containerDropDownYear").hide();
@@ -243,13 +247,17 @@
             var selectedText = $(this).text();
             if (selectedText === "Tháng") {
                 $("#containerDropDownPostYear").show();
+                var year = $("#dropDownPostYear").text();
                 var requestParams = new URLSearchParams();
                 requestParams.append("byMonth", "true");
+                requestParams.append("year", year)
                 checkPostType(months, requestParams);
             } else if (selectedText === "Quý") {
                 $("#containerDropDownPostYear").show();
+                var year = $("#dropDownPostYear").text();
                 var requestParams = new URLSearchParams();
                 requestParams.append("byQuarter", "true");
+                requestParams.append("year", year)
                 checkPostType(quarter, requestParams);
             } else if (selectedText === "Năm") {
                 $("#containerDropDownPostYear").hide();
@@ -370,7 +378,7 @@
 
     async function fetchData() {
 
-        await fetch(statUserApi)
+        await fetch(statPostApi)
             .then(res => {
                 if (res.ok) {
                     return res.json();

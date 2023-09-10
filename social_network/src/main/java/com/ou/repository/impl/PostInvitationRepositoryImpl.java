@@ -76,7 +76,7 @@ public class PostInvitationRepositoryImpl implements PostInvitationRepository {
         }
 
         criteriaQuery.multiselect(expression, builder.count(root.get("id")))
-                .where(predicates.toArray(Predicate[]::new)).groupBy(expression);
+                .where(predicates.toArray(Predicate[]::new)).groupBy(expression).orderBy(builder.asc(expression));
 
         Query query = session.createQuery(criteriaQuery);
 
