@@ -39,7 +39,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3"></div>
                 </div>
             </c:otherwise>
         </c:choose>
@@ -64,7 +63,7 @@
             plugins: {
                 legend: {
                     display: true,
-                    position: 'right'
+                    position: 'top'
                 },
                 // title: {
                 //   display: true,
